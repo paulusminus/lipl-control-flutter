@@ -7,8 +7,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:lipl_test/dal/dal.dart';
-import 'package:lipl_test/ui/ui.dart';
+import 'package:lipl_bloc/dal/dal.dart';
+import 'package:lipl_bloc/ui/ui.dart';
 
 void main() {
   testWidgets('Counter increments smoke test', (WidgetTester tester) async {

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:lipl_test/bloc/bloc.dart';
-import 'package:lipl_test/model/model.dart';
+import 'package:lipl_bloc/bloc/bloc.dart';
+import 'package:lipl_bloc/model/model.dart';
 
 class PlaylistSummariesList extends StatelessWidget {
   const PlaylistSummariesList(this.fullState);

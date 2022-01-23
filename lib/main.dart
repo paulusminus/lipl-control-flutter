@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:lipl_test/dal/dal.dart';
-import 'package:lipl_test/ui/ui.dart';
+import 'package:lipl_bloc/dal/dal.dart';
+import 'package:lipl_bloc/ui/ui.dart';
 import 'constant.dart';
 
 Dal getDal(bool useFake) => useFake

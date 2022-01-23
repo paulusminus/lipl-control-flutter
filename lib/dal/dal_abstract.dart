@@ -1,6 +1,6 @@
 import 'dart:core';
 
-import 'package:lipl_test/model/model.dart';
+import 'package:lipl_bloc/model/model.dart';
 
 abstract class DalException implements Exception {}
 

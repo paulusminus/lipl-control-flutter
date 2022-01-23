@@ -2,8 +2,8 @@ import 'dart:convert';
 import 'dart:core';
 
 import 'package:http/http.dart';
-import 'package:lipl_test/dal/dal.dart';
-import 'package:lipl_test/model/model.dart';
+import 'package:lipl_bloc/dal/dal.dart';
+import 'package:lipl_bloc/model/model.dart';
 
 const String GET = 'GET';
 const String PUT = 'PUT';

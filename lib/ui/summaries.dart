@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:lipl_test/bloc/bloc.dart';
-import 'package:lipl_test/model/model.dart';
-import 'package:lipl_test/ui/ui.dart';
+import 'package:lipl_bloc/bloc/bloc.dart';
+import 'package:lipl_bloc/model/model.dart';
+import 'package:lipl_bloc/ui/ui.dart';
 
 class Summaries extends StatelessWidget {
   @override

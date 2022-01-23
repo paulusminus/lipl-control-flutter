@@ -1,4 +1,4 @@
-import 'package:lipl_test/model/model.dart';
+import 'package:lipl_bloc/model/model.dart';
 
 List<Lyric> fakeLyrics() => <Lyric>[
       const Lyric(

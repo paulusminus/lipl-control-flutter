@@ -3,8 +3,8 @@ import 'dart:core';
 import 'dart:typed_data';
 
 import 'package:bs58/bs58.dart'; // ignore: import_of_legacy_library_into_null_safe
-import 'package:lipl_test/dal/dal.dart';
-import 'package:lipl_test/model/model.dart';
+import 'package:lipl_bloc/dal/dal.dart';
+import 'package:lipl_bloc/model/model.dart';
 import 'package:uuid/uuid.dart'; // ignore: import_of_legacy_library_into_null_safe
 
 List<T> toList<T>(String json, T Function(Map<String, dynamic>) f) =>
