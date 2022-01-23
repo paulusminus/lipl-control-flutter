@@ -1,7 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:lipl_test/model/model.dart';
 import 'package:lipl_test/dal/dal.dart';
+import 'package:lipl_test/model/model.dart';
 
 enum Status {
   uninitialized,

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lipl_test/bloc/bloc.dart';
 import 'package:lipl_test/dal/dal.dart';
@@ -18,7 +17,7 @@ class App extends StatelessWidget {
           primarySwatch: Colors.blue,
         ),
         home: MultiBlocProvider(
-          providers: [
+          providers: <BlocProvider<Cubit<Object>>>[
             BlocProvider<FullCubit>(
               create: (BuildContext context) => FullCubit(dal: dal),
             ),

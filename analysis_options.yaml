@@ -28,7 +28,7 @@ analyzer:
     # treat missing returns as a warning (not a hint)
     missing_return: warning
     # allow having TODOs in the code
-    todo: ignore
+    # todo: ignore
     # allow self-reference to deprecated members (we do this because otherwise we have
     # to annotate every member in every test, assert, etc, when we deprecate something)
     deprecated_member_use_from_same_package: ignore
@@ -43,6 +43,7 @@ analyzer:
     - "lib/i18n/messages_*.dart"
     - "lib/src/http/**"
     - "test_fixes/**"
+    - "lib/model/*.g.dart"
 
 linter:
   rules:

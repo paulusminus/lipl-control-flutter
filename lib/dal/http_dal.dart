@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:core';
 
-import 'package:http/http.dart'; // ignore: import_of_legacy_library_into_null_safe
+import 'package:http/http.dart';
 import 'package:lipl_test/dal/dal.dart';
 import 'package:lipl_test/model/model.dart';
 

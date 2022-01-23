@@ -15,7 +15,9 @@ class Summaries extends StatelessWidget {
       return Scaffold(
         appBar: AppBar(title: const Text('Lipl'), actions: <Widget>[
           DropdownButton<String>(
-            onChanged: (String? value) => {},
+            onChanged: (String? value) {
+              debugPrint(value);
+            },
             value: '',
             icon: const Icon(Icons.arrow_downward),
             items: <DropdownMenuItem<String>>[

@@ -1,5 +1,3 @@
-// @dart=2.9
-
 import 'package:flutter/material.dart';
 import 'package:lipl_test/dal/dal.dart';
 import 'package:lipl_test/ui/ui.dart';
