@@ -68,7 +68,15 @@ class HttpDal implements Dal {
     final Response response = await client.get(uri);
     final List<Map<String, dynamic>> json =
         jsonDecode(response.body) as List<Map<String, dynamic>>;
-    return json.map((Map<String, dynamic> e) => Lyric.fromJson(e)).toList();
+    final List<Lyric> lyrics = json
+        .map(
+          (Map<String, dynamic> e) => Lyric.fromJson(e),
+        )
+        .toList();
+    lyrics.sort(
+      (Lyric a, Lyric b) => a.title.compareTo(b.title),
+    );
+    return lyrics;
   }
 
   @override
@@ -107,7 +115,15 @@ class HttpDal implements Dal {
     final Response response = await client.get(uri);
     final List<Map<String, dynamic>> json =
         jsonDecode(response.body) as List<Map<String, dynamic>>;
-    return json.map((Map<String, dynamic> e) => Playlist.fromJson(e)).toList();
+    final List<Playlist> playlists = json
+        .map(
+          (Map<String, dynamic> e) => Playlist.fromJson(e),
+        )
+        .toList();
+    playlists.sort(
+      (Playlist a, Playlist b) => a.title.compareTo(b.title),
+    );
+    return playlists;
   }
 
   @override

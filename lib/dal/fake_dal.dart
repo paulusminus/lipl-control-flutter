@@ -2,10 +2,10 @@ import 'dart:convert';
 import 'dart:core';
 import 'dart:typed_data';
 
-import 'package:bs58/bs58.dart'; // ignore: import_of_legacy_library_into_null_safe
+import 'package:bs58/bs58.dart';
 import 'package:lipl_bloc/dal/dal.dart';
 import 'package:lipl_bloc/model/model.dart';
-import 'package:uuid/uuid.dart'; // ignore: import_of_legacy_library_into_null_safe
+import 'package:uuid/uuid.dart';
 
 List<T> toList<T>(String json, T Function(Map<String, dynamic>) f) =>
     (jsonDecode(json) as List<Map<String, dynamic>>).map(f).toList();
@@ -36,8 +36,8 @@ String newId(Uuid uuid) {
 
 class FakeDal implements Dal {
   final Uuid uuid = const Uuid();
-  List<Lyric> lyrics = fakeLyrics();
-  List<Playlist> playlists = fakePlaylists();
+  List<Lyric> lyrics = fakeLyricsSortedByTitle();
+  List<Playlist> playlists = fakePlaylistsSortedByTitle();
 
   @override
   Future<List<Summary>> getLyricSummaries() => Future<List<Summary>>.value(

@@ -17,6 +17,11 @@ class Lyric {
   final List<List<String>> parts;
 
   Map<String, dynamic> toJson() => _$LyricToJson(this);
+
+  @override
+  String toString() {
+    return 'Lyric: $title';
+  }
 }
 
 @JsonSerializable()

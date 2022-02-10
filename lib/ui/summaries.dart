@@ -1,40 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:lipl_bloc/bloc/bloc.dart';
-import 'package:lipl_bloc/model/model.dart';
+import 'package:lipl_bloc/data/bloc/data_bloc.dart';
 import 'package:lipl_bloc/ui/ui.dart';
 
 class Summaries extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final FullCubit fullCubit = BlocProvider.of<FullCubit>(context);
-    fullCubit.load();
-
-    return BlocBuilder<FullCubit, FullState>(
-        builder: (BuildContext context, FullState summariesState) {
+    return BlocBuilder<DataBloc, DataState>(
+        builder: (BuildContext context, DataState state) {
       return Scaffold(
-        appBar: AppBar(title: const Text('Lipl'), actions: <Widget>[
-          DropdownButton<String>(
-            onChanged: (String? value) {
-              debugPrint(value);
-            },
-            value: '',
-            icon: const Icon(Icons.arrow_downward),
-            items: <DropdownMenuItem<String>>[
-              const DropdownMenuItem<String>(child: Text('Alles'), value: ''),
-              ...summariesState.playlists
-                  .map((Playlist p) => DropdownMenuItem<String>(
-                        child: Text(p.title),
-                        value: p.id,
-                      ))
-                  .toList()
-            ],
-          ),
-        ]),
-        drawer: Drawer(
-          child: PlaylistSummariesList(summariesState),
+        appBar: AppBar(
+          title: const Text('Lipl'),
+          actions: <Widget>[
+            PlaylistFilter(),
+          ],
         ),
-        body: LyricList(summariesState),
+        drawer: const Drawer(
+          child: PlaylistSummariesList(),
+        ),
+        body: const LyricList(),
       );
     });
   }

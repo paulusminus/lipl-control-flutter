@@ -1,4 +1,21 @@
+import 'package:lipl_bloc/dal/dal.dart';
 import 'package:lipl_bloc/model/model.dart';
+
+List<Lyric> fakeLyricsSortedByTitle() {
+  final List<Lyric> lyrics = fakeLyrics();
+  lyrics.sort(
+    (Lyric a, Lyric b) => a.title.compareTo(b.title),
+  );
+  return lyrics;
+}
+
+List<Playlist> fakePlaylistsSortedByTitle() {
+  final List<Playlist> playlists = fakePlaylists();
+  playlists.sort(
+    (Playlist a, Playlist b) => a.title.compareTo(b.title),
+  );
+  return playlists;
+}
 
 List<Lyric> fakeLyrics() => <Lyric>[
       const Lyric(

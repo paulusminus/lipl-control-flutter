@@ -1,4 +1,6 @@
+import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:lipl_bloc/bloc_observer.dart';
 import 'package:lipl_bloc/dal/dal.dart';
 import 'package:lipl_bloc/ui/ui.dart';
 import 'constant.dart';
@@ -11,6 +13,13 @@ Dal getDal(bool useFake) => useFake
       );
 
 void main() {
-  final Dal dal = getDal(true);
-  runApp(App(dal: dal));
+  BlocOverrides.runZoned(
+    () {
+      final Dal dal = getDal(true);
+      runApp(
+        AppRepository(dal: dal),
+      );
+    },
+    blocObserver: MyBlocObserver(),
+  );
 }

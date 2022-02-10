@@ -18,6 +18,11 @@ class Playlist {
   final List<String> members;
 
   Map<String, dynamic> toJson() => _$PlaylistToJson(this);
+
+  @override
+  String toString() {
+    return 'Playlist: $title';
+  }
 }
 
 @JsonSerializable()
