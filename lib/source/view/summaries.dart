@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:lipl_bloc/data/bloc/data_bloc.dart';
-import 'package:lipl_bloc/ui/ui.dart';
+import 'package:lipl_bloc/source/bloc/source_bloc.dart';
+import 'package:lipl_bloc/source/view/view.dart';
 
 class Summaries extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<DataBloc, DataState>(
-        builder: (BuildContext context, DataState state) {
+    return BlocBuilder<SourceBloc, SourceState>(
+        builder: (BuildContext context, SourceState state) {
       return Scaffold(
         appBar: AppBar(
           title: const Text('Lipl'),
           actions: <Widget>[
-            PlaylistFilter(),
+            PlaylistDropdown(),
           ],
         ),
         drawer: const Drawer(

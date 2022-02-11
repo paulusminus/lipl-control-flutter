@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:lipl_bloc/data/bloc/data_bloc.dart';
 import 'package:lipl_bloc/model/model.dart';
+import 'package:lipl_bloc/source/bloc/source_bloc.dart';
 
 class LyricList extends StatelessWidget {
   const LyricList();
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<DataBloc, DataState>(
-        builder: (BuildContext context, DataState state) {
-      return (state.status == DataStatus.success)
+    return BlocBuilder<SourceBloc, SourceState>(
+        builder: (BuildContext context, SourceState state) {
+      return (state.status == SourceStatus.success)
           ? ListView(
               children: state
                   .selectedLyrics()
