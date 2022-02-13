@@ -36,13 +36,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.8.2"
-  base_x:
-    dependency: transitive
-    description:
-      name: base_x
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.0.0"
   bloc:
     dependency: "direct main"
     description:
@@ -57,13 +50,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.1.0"
-  bs58:
-    dependency: "direct main"
-    description:
-      name: bs58
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.0.2"
   build:
     dependency: transitive
     description:
@@ -197,6 +183,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.2.1"
+  dio:
+    dependency: transitive
+    description:
+      name: dio
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "4.0.4"
   equatable:
     dependency: "direct main"
     description:
@@ -327,6 +320,15 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "6.1.4"
+  lipl_repo:
+    dependency: "direct main"
+    description:
+      path: "."
+      ref: "v0.3"
+      resolved-ref: cb58caa4c988db60d17c1c970f417fca5f7a5208
+      url: "git://paulmin.nl/dart/lipl-repo.git"
+    source: git
+    version: "0.2.0"
   logging:
     dependency: transitive
     description:
@@ -432,6 +434,20 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.2.0"
+  retrofit:
+    dependency: transitive
+    description:
+      name: retrofit
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "3.0.1+1"
+  rxdart:
+    dependency: transitive
+    description:
+      name: rxdart
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.27.3"
   shelf:
     dependency: transitive
     description:
@@ -487,7 +503,7 @@ packages:
     source: hosted
     version: "2.1.0"
   stream_transform:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: stream_transform
       url: "https://pub.dartlang.org"
@@ -535,13 +551,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.3.0"
-  uuid:
-    dependency: "direct main"
-    description:
-      name: uuid
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "3.0.5"
   vector_math:
     dependency: transitive
     description:
@@ -585,5 +594,5 @@ packages:
     source: hosted
     version: "3.1.0"
 sdks:
-  dart: ">=2.16.0-100.0.dev <3.0.0"
+  dart: ">=2.16.1 <3.0.0"
   flutter: ">=1.16.0"
