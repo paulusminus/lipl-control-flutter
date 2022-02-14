@@ -378,6 +378,15 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.2"
+  parts:
+    dependency: "direct main"
+    description:
+      path: "."
+      ref: "v0.2"
+      resolved-ref: a57766d93549a94205320676c96d44c513ee22ab
+      url: "git://paulmin.nl/dart/parts.git"
+    source: git
+    version: "1.0.0"
   path:
     dependency: transitive
     description:
