@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lipl_bloc/edit_lyric/view/edit_lyric_page.dart';
 import 'package:lipl_bloc/source/bloc/source_bloc.dart';
 import 'package:lipl_repo/lipl_repo.dart';
 
@@ -63,7 +64,15 @@ class LyricList extends StatelessWidget {
                                       ),
                                       TextButton.icon(
                                         icon: const Icon(Icons.edit),
-                                        onPressed: () {},
+                                        onPressed: () {
+                                          Navigator.of(context).push(
+                                            EditLyricPage.route(
+                                              id: lyric.data.id,
+                                              title: lyric.data.title,
+                                              parts: lyric.data.parts,
+                                            ),
+                                          );
+                                        },
                                         label: const Text('Wijzig'),
                                       ),
                                       const SizedBox(
