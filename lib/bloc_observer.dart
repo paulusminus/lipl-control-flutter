@@ -1,29 +1,30 @@
-// ignore_for_file: always_specify_types
-
 import 'package:bloc/bloc.dart';
+import 'package:logging/logging.dart';
 
-class MyBlocObserver extends BlocObserver {
+final Logger log = Logger('$LiplBlocObserver');
+
+class LiplBlocObserver extends BlocObserver {
   @override
-  void onCreate(BlocBase bloc) {
+  void onCreate(BlocBase<dynamic> bloc) {
     super.onCreate(bloc);
-    print('onCreate -- ${bloc.runtimeType}');
+    log.info('onCreate -- ${bloc.runtimeType}');
   }
 
   @override
-  void onChange(BlocBase bloc, Change change) {
+  void onChange(BlocBase<dynamic> bloc, Change<dynamic> change) {
     super.onChange(bloc, change);
-    print('onChange -- ${bloc.runtimeType}, $change');
+    log.info('onChange -- ${bloc.runtimeType}, $change');
   }
 
   @override
-  void onError(BlocBase bloc, Object error, StackTrace stackTrace) {
-    print('onError -- ${bloc.runtimeType}, $error');
+  void onError(BlocBase<dynamic> bloc, Object error, StackTrace stackTrace) {
+    log.info('onError -- ${bloc.runtimeType}, $error');
     super.onError(bloc, error, stackTrace);
   }
 
   @override
-  void onClose(BlocBase bloc) {
+  void onClose(BlocBase<dynamic> bloc) {
     super.onClose(bloc);
-    print('onClose -- ${bloc.runtimeType}');
+    log.info('onClose -- ${bloc.runtimeType}');
   }
 }

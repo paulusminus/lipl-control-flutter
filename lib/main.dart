@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:bloc/bloc.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lipl_bloc/app/app.dart';
@@ -14,7 +15,7 @@ Future<void> main() async {
   });
 
   WidgetsFlutterBinding.ensureInitialized();
-  if (Platform.isAndroid) {
+  if (Platform.isAndroid && kDebugMode) {
     final ByteData data =
         await PlatformAssetBundle().load('assets/ca/lets-encrypt-r3.pem');
     SecurityContext.defaultContext
@@ -27,6 +28,6 @@ Future<void> main() async {
         const AppRepository(),
       );
     },
-    blocObserver: MyBlocObserver(),
+    blocObserver: LiplBlocObserver(),
   );
 }
