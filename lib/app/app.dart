@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:lipl_bloc/list/bloc/list_bloc.dart';
 import 'package:lipl_bloc/source/bloc/source_bloc.dart';
 import 'package:lipl_bloc/source/view/view.dart';
 import 'package:lipl_repo/lipl_repo.dart';
@@ -27,18 +26,10 @@ class AppRepository extends StatelessWidget {
 
 class AppProvider extends StatelessWidget {
   @override
-  Widget build(BuildContext context) => MultiBlocProvider(
-        providers: <BlocProvider<Object?>>[
-          BlocProvider<SourceBloc>(
-            create: (BuildContext context) =>
-                SourceBloc(liplRestStorage: context.read<LiplRestStorage>())
-                  ..add(const SourceSubscriptionRequested()),
-          ),
-          BlocProvider<ListBloc>(
-            create: (BuildContext context) =>
-                ListBloc(context.read<SourceBloc>()),
-          ),
-        ],
+  Widget build(BuildContext context) => BlocProvider<SourceBloc>(
+        create: (BuildContext context) =>
+            SourceBloc(liplRestStorage: context.read<LiplRestStorage>())
+              ..add(const SourceSubscriptionRequested()),
         child: App(),
       );
 }
@@ -51,7 +42,7 @@ class App extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: Summaries(),
+      home: const LyricList(),
     );
   }
 }

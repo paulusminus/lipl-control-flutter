@@ -20,6 +20,7 @@ dependencies:
     git:
       url: git://paulmin.nl/dart/lipl-repo.git
       ref: v0.3
+  logging: ^1.0.2
   parts: 
     git:
       url: git://paulmin.nl/dart/parts.git
@@ -35,3 +36,6 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+
+  assets:
+    - assets/ca/lets-encrypt-r3.pem
