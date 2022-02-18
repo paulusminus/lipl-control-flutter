@@ -336,11 +336,11 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: "v0.4"
-      resolved-ref: c277deb5e62c167f1e7f7d11f3c4da8c46721bf4
+      ref: "v0.5"
+      resolved-ref: "7d19ce3f3c347d7100d9bf888cc699f5e701de81"
       url: "git://paulmin.nl/dart/lipl-repo.git"
     source: git
-    version: "0.2.0"
+    version: "0.5.0"
   logging:
     dependency: "direct main"
     description:

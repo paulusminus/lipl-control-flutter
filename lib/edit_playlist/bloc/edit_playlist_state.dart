@@ -14,15 +14,15 @@ class EditPlaylistState extends Equatable {
     this.status = EditPlaylistStatus.initial,
     this.id,
     this.title = '',
-    this.members = const <Summary>[],
-    this.lyrics = const <Summary>[],
+    this.members = const <Lyric>[],
+    this.lyrics = const <Lyric>[],
   });
 
   final EditPlaylistStatus status;
   final String? id;
   final String title;
-  final List<Summary> members;
-  final List<Summary> lyrics;
+  final List<Lyric> members;
+  final List<Lyric> lyrics;
 
   bool get isNewLyric => id == null;
 
@@ -30,13 +30,14 @@ class EditPlaylistState extends Equatable {
     EditPlaylistStatus? status,
     String? id,
     String? title,
-    List<Summary>? members,
+    List<Lyric>? members,
   }) =>
       EditPlaylistState(
         status: status ?? this.status,
         id: id ?? this.id,
         title: title ?? this.title,
         members: members ?? this.members,
+        lyrics: lyrics,
       );
 
   @override

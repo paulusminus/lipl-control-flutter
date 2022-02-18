@@ -22,8 +22,8 @@ class EditPlaylistMembersItemDeleted extends EditPlaylistEvent {
 }
 
 class EditPlaylistMembersItemAdded extends EditPlaylistEvent {
-  const EditPlaylistMembersItemAdded(this.summary);
-  final Summary summary;
+  const EditPlaylistMembersItemAdded(this.lyric);
+  final Lyric lyric;
 }
 
 class EditPlaylistMembersChanged extends EditPlaylistEvent {
