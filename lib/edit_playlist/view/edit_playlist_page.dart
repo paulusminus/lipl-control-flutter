@@ -118,9 +118,18 @@ class _MembersField extends StatelessWidget {
           shrinkWrap: true,
           children: state.members
               .map(
-                (Summary summary) => ListTile(
+                (Summary summary) => Dismissible(
                   key: Key('editPlaylistView_members_item_${summary.id}'),
-                  title: Text(summary.title),
+                  onDismissed: (DismissDirection direction) {
+                    if (direction == DismissDirection.endToStart) {
+                      context
+                          .read<EditPlaylistBloc>()
+                          .add(EditPlaylistMembersItemDeleted(summary.id));
+                    }
+                  },
+                  child: ListTile(
+                    title: Text(summary.title),
+                  ),
                 ),
               )
               .toList(),

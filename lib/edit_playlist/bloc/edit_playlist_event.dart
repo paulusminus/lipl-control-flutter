@@ -16,6 +16,11 @@ class EditPlaylistTitleChanged extends EditPlaylistEvent {
   List<Object?> get props => <Object?>[title];
 }
 
+class EditPlaylistMembersItemDeleted extends EditPlaylistEvent {
+  const EditPlaylistMembersItemDeleted(this.id);
+  final String id;
+}
+
 class EditPlaylistMembersChanged extends EditPlaylistEvent {
   const EditPlaylistMembersChanged(this.oldIndex, this.newIndex);
 

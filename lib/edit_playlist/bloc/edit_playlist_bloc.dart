@@ -5,7 +5,6 @@ import 'package:lipl_repo/lipl_repo.dart';
 part 'edit_playlist_event.dart';
 part 'edit_playlist_state.dart';
 
-// TODO(paul): fix problem with ordering after saving
 class EditPlaylistBloc extends Bloc<EditPlaylistEvent, EditPlaylistState> {
   EditPlaylistBloc({
     required LiplRestStorage liplRestStorage,
@@ -23,8 +22,22 @@ class EditPlaylistBloc extends Bloc<EditPlaylistEvent, EditPlaylistState> {
     on<EditPlaylistTitleChanged>(_onTitleChanged);
     on<EditPlaylistMembersChanged>(_onMembersChanged);
     on<EditPlaylistSubmitted>(_onSubmitted);
+    on<EditPlaylistMembersItemDeleted>(_onMembersItemDeleted);
   }
   final LiplRestStorage _liplRestStorage;
+
+  void _onMembersItemDeleted(
+    EditPlaylistMembersItemDeleted event,
+    Emitter<EditPlaylistState> emit,
+  ) {
+    emit(
+      state.copyWith(
+        members: state.members
+            .where((Summary summary) => summary.id != event.id)
+            .toList(),
+      ),
+    );
+  }
 
   void _onTitleChanged(
     EditPlaylistTitleChanged event,
