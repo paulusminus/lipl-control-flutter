@@ -8,8 +8,12 @@ import 'package:lipl_repo/lipl_repo.dart';
 class EditPlaylistPage extends StatelessWidget {
   const EditPlaylistPage({Key? key}) : super(key: key);
 
-  static Route<void> route(
-      {String? id, String? title, List<Summary>? members}) {
+  static Route<void> route({
+    String? id,
+    String? title,
+    List<Summary>? members,
+    List<Summary>? lyrics,
+  }) {
     return MaterialPageRoute<void>(
       fullscreenDialog: true,
       builder: (BuildContext context) => BlocProvider<EditPlaylistBloc>(
@@ -18,6 +22,7 @@ class EditPlaylistPage extends StatelessWidget {
           id: id,
           title: title,
           members: members,
+          lyrics: lyrics,
         ),
         child: const EditPlaylistPage(),
       ),
@@ -68,6 +73,7 @@ class EditLyricView extends StatelessWidget {
             children: const <Widget>[
               _TitleField(),
               _MembersField(),
+              _MembersAddField(),
             ],
           ),
         ),
@@ -140,6 +146,56 @@ class _MembersField extends StatelessWidget {
           },
         );
       },
+    );
+  }
+}
+
+class _MembersAddField extends StatelessWidget {
+  const _MembersAddField({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<EditPlaylistBloc, EditPlaylistState>(
+      builder: (BuildContext context, EditPlaylistState state) =>
+          Autocomplete<Summary>(
+        displayStringForOption: (Summary option) => option.title,
+        optionsBuilder: (TextEditingValue textEditingValue) {
+          if (textEditingValue.text.trim() == '') {
+            return const Iterable<Summary>.empty();
+          }
+          return state.lyrics.where(
+            (Summary summary) => summary.title.toLowerCase().contains(
+                  textEditingValue.text.toLowerCase(),
+                ),
+          );
+        },
+        fieldViewBuilder: (
+          BuildContext context,
+          TextEditingController textEditingController,
+          FocusNode fieldFocusNode,
+          VoidCallback onFieldSubmitted,
+        ) {
+          return TextFormField(
+            key: const Key('editPlaylistView_members_addFormField'),
+            controller: textEditingController,
+            focusNode: fieldFocusNode,
+            decoration: const InputDecoration(
+              labelText: 'Toevoegen',
+              // hintText: textEditingController.text,
+            ),
+            onFieldSubmitted: (String value) {
+              log.info('Field submitted');
+              textEditingController.clear();
+              onFieldSubmitted();
+            },
+          );
+        },
+        onSelected: (Summary summary) {
+          context.read<EditPlaylistBloc>().add(
+                EditPlaylistMembersItemAdded(summary),
+              );
+        },
+      ),
     );
   }
 }

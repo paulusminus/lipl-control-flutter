@@ -21,6 +21,11 @@ class EditPlaylistMembersItemDeleted extends EditPlaylistEvent {
   final String id;
 }
 
+class EditPlaylistMembersItemAdded extends EditPlaylistEvent {
+  const EditPlaylistMembersItemAdded(this.summary);
+  final Summary summary;
+}
+
 class EditPlaylistMembersChanged extends EditPlaylistEvent {
   const EditPlaylistMembersChanged(this.oldIndex, this.newIndex);
 

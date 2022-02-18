@@ -11,18 +11,21 @@ class EditPlaylistBloc extends Bloc<EditPlaylistEvent, EditPlaylistState> {
     required String? id,
     required String? title,
     required List<Summary>? members,
+    required List<Summary>? lyrics,
   })  : _liplRestStorage = liplRestStorage,
         super(
           EditPlaylistState(
             id: id,
             title: title ?? '',
             members: members ?? <Summary>[],
+            lyrics: lyrics ?? <Summary>[],
           ),
         ) {
     on<EditPlaylistTitleChanged>(_onTitleChanged);
     on<EditPlaylistMembersChanged>(_onMembersChanged);
     on<EditPlaylistSubmitted>(_onSubmitted);
     on<EditPlaylistMembersItemDeleted>(_onMembersItemDeleted);
+    on<EditPlaylistMembersItemAdded>(_onMembersItemAdded);
   }
   final LiplRestStorage _liplRestStorage;
 
@@ -36,6 +39,15 @@ class EditPlaylistBloc extends Bloc<EditPlaylistEvent, EditPlaylistState> {
             .where((Summary summary) => summary.id != event.id)
             .toList(),
       ),
+    );
+  }
+
+  void _onMembersItemAdded(
+    EditPlaylistMembersItemAdded event,
+    Emitter<EditPlaylistState> emit,
+  ) {
+    emit(
+      state.copyWith(members: <Summary>[...state.members, event.summary]),
     );
   }
 

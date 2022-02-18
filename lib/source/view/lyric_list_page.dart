@@ -92,22 +92,28 @@ class LyricList extends StatelessWidget {
                                 onPressed: (Playlist playlist) {
                                   Navigator.of(context).push(
                                     EditPlaylistPage.route(
-                                      id: playlist.id,
-                                      title: playlist.title,
-                                      members: <Summary>[
-                                        ...playlist.members
+                                        id: playlist.id,
+                                        title: playlist.title,
+                                        members: <Summary>[
+                                          ...playlist.members
+                                              .map(
+                                                (String lyricId) =>
+                                                    state.lyrics.firstWhere(
+                                                  (Lyric lyric) =>
+                                                      lyric.id == lyricId,
+                                                  orElse: null,
+                                                ),
+                                              )
+                                              .where((Lyric? lyric) =>
+                                                  lyric != null)
+                                        ],
+                                        lyrics: state.lyrics
                                             .map(
-                                              (String lyricId) =>
-                                                  state.lyrics.firstWhere(
-                                                (Lyric lyric) =>
-                                                    lyric.id == lyricId,
-                                                orElse: null,
-                                              ),
+                                              (Lyric lyric) => Summary(
+                                                  id: lyric.id,
+                                                  title: lyric.title),
                                             )
-                                            .where(
-                                                (Lyric? lyric) => lyric != null)
-                                      ],
-                                    ),
+                                            .toList()),
                                   );
                                 },
                               ),
