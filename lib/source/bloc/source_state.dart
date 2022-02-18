@@ -14,7 +14,6 @@ class SourceState extends Equatable {
     this.status = SourceStatus.initial,
     this.lyrics = const <Lyric>[],
     this.playlists = const <Playlist>[],
-    this.selectedPlaylist,
     this.selectedTab = SelectedTab.lyrics,
   });
 
@@ -29,22 +28,18 @@ class SourceState extends Equatable {
   final SourceStatus status;
   final List<Lyric> lyrics;
   final List<Playlist> playlists;
-  final Playlist? selectedPlaylist;
   final SelectedTab selectedTab;
 
   SourceState copyWith({
     SourceStatus Function()? status,
     List<Lyric> Function()? lyrics,
     List<Playlist> Function()? playlists,
-    Playlist? Function()? selectedPlaylist,
     SelectedTab Function()? selectedTab,
   }) {
     return SourceState(
       status: status == null ? this.status : status(),
       lyrics: lyrics == null ? this.lyrics : lyrics(),
       playlists: playlists == null ? this.playlists : playlists(),
-      selectedPlaylist:
-          selectedPlaylist == null ? this.selectedPlaylist : selectedPlaylist(),
       selectedTab: selectedTab == null ? this.selectedTab : selectedTab(),
     );
   }
@@ -58,19 +53,6 @@ class SourceState extends Equatable {
         .toList();
   }
 
-  List<Lyric> selectedLyrics() => selectedPlaylist == null
-      ? lyrics
-      : selectedPlaylist!.members
-          .map(
-            (String lyricId) => lyrics.firstWhere(
-              (Lyric lyric) => lyric.id == lyricId,
-              orElse: null,
-            ),
-          )
-          .where((Lyric? lyric) => lyric != null)
-          .toList();
-
   @override
-  List<Object?> get props =>
-      <Object?>[status, lyrics, playlists, selectedPlaylist, selectedTab];
+  List<Object?> get props => <Object?>[status, lyrics, playlists, selectedTab];
 }

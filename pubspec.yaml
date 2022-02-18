@@ -18,7 +18,7 @@ dependencies:
   lipl_repo: 
     git:
       url: git://paulmin.nl/dart/lipl-repo.git
-      ref: v0.3
+      ref: v0.4
   logging: ^1.0.2
   parts: 
     git:

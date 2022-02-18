@@ -16,7 +16,6 @@ class SourceBloc extends Bloc<SourceEvent, SourceState> {
           const SourceState(),
         ) {
     on<SourceSubscriptionRequested>(_onSubscriptionRequested);
-    on<SourcePlaylistSelected>(_onPlaylistSelected);
     on<SourceTabChanged>(_onTabChanged);
   }
 
@@ -48,15 +47,6 @@ class SourceBloc extends Bloc<SourceEvent, SourceState> {
       onError: (_, __) => state.copyWith(
         status: () => SourceStatus.failure,
       ),
-    );
-  }
-
-  void _onPlaylistSelected(
-    SourcePlaylistSelected event,
-    Emitter<SourceState> emit,
-  ) {
-    emit(
-      state.copyWith(selectedPlaylist: () => event.playlist),
     );
   }
 }

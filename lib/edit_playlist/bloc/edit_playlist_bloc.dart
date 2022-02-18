@@ -5,6 +5,7 @@ import 'package:lipl_repo/lipl_repo.dart';
 part 'edit_playlist_event.dart';
 part 'edit_playlist_state.dart';
 
+// TODO(paul): fix problem with ordering after saving
 class EditPlaylistBloc extends Bloc<EditPlaylistEvent, EditPlaylistState> {
   EditPlaylistBloc({
     required LiplRestStorage liplRestStorage,
