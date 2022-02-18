@@ -3,22 +3,29 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lipl_bloc/source/bloc/source_bloc.dart';
 import 'package:lipl_bloc/source/view/view.dart';
 import 'package:lipl_repo/lipl_repo.dart';
-import 'package:rxdart/rxdart.dart';
+import 'package:preferences_local_storage/preferences_local_storage.dart';
 
 class AppRepository extends StatelessWidget {
-  const AppRepository();
+  const AppRepository({required this.preferencesLocalStorage});
+
+  final PreferencesLocalStorage<Credentials> preferencesLocalStorage;
 
   @override
   Widget build(BuildContext context) {
-    final Credentials credentials = Credentials(
-      username: 'paul',
-      password: 'CumGranoSalis',
+    final LiplRestStorage liplRestStorage = LiplRestStorage(
+      preferencesLocalStorage
+          .get()
+          .where(
+            (Credentials? credentials) => credentials != null,
+          )
+          .map(
+            (Credentials? credentials) => credentials!,
+          )
+          .listen((_) {}),
     );
 
-    final ValueStream<Credentials> stream =
-        BehaviorSubject<Credentials>.seeded(credentials).stream;
     return RepositoryProvider<LiplRestStorage>.value(
-      value: LiplRestStorage(stream.listen((_) {})),
+      value: liplRestStorage,
       child: AppProvider(),
     );
   }

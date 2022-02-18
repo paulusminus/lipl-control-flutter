@@ -1,9 +1,12 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:lipl_repo/lipl_repo.dart';
+import 'package:logging/logging.dart';
 
 part 'source_event.dart';
 part 'source_state.dart';
+
+final Logger log = Logger('$SourceBloc');
 
 class SourceBloc extends Bloc<SourceEvent, SourceState> {
   SourceBloc({
@@ -14,10 +17,18 @@ class SourceBloc extends Bloc<SourceEvent, SourceState> {
         ) {
     on<SourceSubscriptionRequested>(_onSubscriptionRequested);
     on<SourcePlaylistSelected>(_onPlaylistSelected);
-    on<SourceLyricToggleExpanded>(_onSourceLyricToggleExpanded);
+    on<SourceTabChanged>(_onTabChanged);
   }
 
   final LiplRestStorage _liplRestStorage;
+
+  void _onTabChanged(
+    SourceTabChanged event,
+    Emitter<SourceState> emit,
+  ) {
+    log.info('Handling on tab changed');
+    emit(state.copyWith(selectedTab: () => event.tab));
+  }
 
   Future<void> _onSubscriptionRequested(
     SourceSubscriptionRequested event,
@@ -31,27 +42,11 @@ class SourceBloc extends Bloc<SourceEvent, SourceState> {
       _liplRestStorage.getData(),
       onData: (Data data) => state.copyWith(
         status: () => SourceStatus.success,
-        lyrics: () => data.lyrics
-            .map((Lyric lyric) => Expandable<Lyric>(data: lyric))
-            .toList(),
+        lyrics: () => data.lyrics,
         playlists: () => data.playlists,
       ),
       onError: (_, __) => state.copyWith(
         status: () => SourceStatus.failure,
-      ),
-    );
-  }
-
-  void _onSourceLyricToggleExpanded(
-      SourceLyricToggleExpanded event, Emitter<SourceState> emit) {
-    emit(
-      state.copyWith(
-        lyrics: () => state.lyrics
-            .map(
-              (Expandable<Lyric> lyric) =>
-                  lyric.data.id == event.id ? lyric.toggled() : lyric,
-            )
-            .toList(),
       ),
     );
   }

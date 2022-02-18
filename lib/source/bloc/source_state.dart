@@ -7,28 +7,15 @@ enum SourceStatus {
   failure,
 }
 
-class Expandable<T> extends Equatable {
-  const Expandable({required this.data, this.expanded = false});
-  final T data;
-  final bool expanded;
-
-  Expandable<T> copyWith(T? t, bool? expanded) => Expandable<T>(
-        data: t ?? data,
-        expanded: expanded ?? this.expanded,
-      );
-
-  Expandable<T> toggled() => Expandable<T>(data: data, expanded: !expanded);
-
-  @override
-  List<Object?> get props => <Object?>[data, expanded];
-}
+enum SelectedTab { lyrics, playlists }
 
 class SourceState extends Equatable {
   const SourceState({
     this.status = SourceStatus.initial,
-    this.lyrics = const <Expandable<Lyric>>[],
+    this.lyrics = const <Lyric>[],
     this.playlists = const <Playlist>[],
     this.selectedPlaylist,
+    this.selectedTab = SelectedTab.lyrics,
   });
 
   factory SourceState.loading() => const SourceState().copyWith(
@@ -40,15 +27,17 @@ class SourceState extends Equatable {
       );
 
   final SourceStatus status;
-  final List<Expandable<Lyric>> lyrics;
+  final List<Lyric> lyrics;
   final List<Playlist> playlists;
   final Playlist? selectedPlaylist;
+  final SelectedTab selectedTab;
 
   SourceState copyWith({
     SourceStatus Function()? status,
-    List<Expandable<Lyric>> Function()? lyrics,
+    List<Lyric> Function()? lyrics,
     List<Playlist> Function()? playlists,
     Playlist? Function()? selectedPlaylist,
+    SelectedTab Function()? selectedTab,
   }) {
     return SourceState(
       status: status == null ? this.status : status(),
@@ -56,31 +45,32 @@ class SourceState extends Equatable {
       playlists: playlists == null ? this.playlists : playlists(),
       selectedPlaylist:
           selectedPlaylist == null ? this.selectedPlaylist : selectedPlaylist(),
+      selectedTab: selectedTab == null ? this.selectedTab : selectedTab(),
     );
   }
 
   List<String> lyricTitles(Playlist playlist) {
     return lyrics
         .where(
-          (Expandable<Lyric> lyric) => playlist.members.contains(lyric.data.id),
+          (Lyric lyric) => playlist.members.contains(lyric.id),
         )
-        .map((Expandable<Lyric> lyric) => lyric.data.title)
+        .map((Lyric lyric) => lyric.title)
         .toList();
   }
 
-  List<Expandable<Lyric>> selectedLyrics() => selectedPlaylist == null
+  List<Lyric> selectedLyrics() => selectedPlaylist == null
       ? lyrics
       : selectedPlaylist!.members
           .map(
             (String lyricId) => lyrics.firstWhere(
-              (Expandable<Lyric> lyric) => lyric.data.id == lyricId,
+              (Lyric lyric) => lyric.id == lyricId,
               orElse: null,
             ),
           )
-          .where((Expandable<Lyric>? lyric) => lyric != null)
+          .where((Lyric? lyric) => lyric != null)
           .toList();
 
   @override
   List<Object?> get props =>
-      <Object?>[status, lyrics, playlists, selectedPlaylist];
+      <Object?>[status, lyrics, playlists, selectedPlaylist, selectedTab];
 }

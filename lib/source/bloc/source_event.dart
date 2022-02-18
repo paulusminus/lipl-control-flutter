@@ -11,12 +11,12 @@ class SourceSubscriptionRequested extends SourceEvent {
   const SourceSubscriptionRequested();
 }
 
-class SourceLyricToggleExpanded extends SourceEvent {
-  const SourceLyricToggleExpanded({required this.id});
-  final String id;
+class SourceTabChanged extends SourceEvent {
+  const SourceTabChanged({required this.tab});
+  final SelectedTab tab;
 
   @override
-  List<Object?> get props => <Object?>[id];
+  List<Object?> get props => <Object?>[tab];
 }
 
 class SourcePlaylistSelected extends SourceEvent {

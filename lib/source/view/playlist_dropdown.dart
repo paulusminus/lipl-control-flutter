@@ -17,8 +17,14 @@ class PlaylistDropdown extends StatelessWidget {
       onChanged: onSelectPlaylist,
       value: selectedPlaylist,
       icon: const Icon(Icons.arrow_downward),
+      style: const TextStyle(color: Colors.white),
+      dropdownColor: Colors.blue,
+      iconEnabledColor: Colors.white,
       items: <DropdownMenuItem<Playlist?>>[
-        const DropdownMenuItem<Playlist?>(child: Text('Alles'), value: null),
+        const DropdownMenuItem<Playlist?>(
+          child: Text('Alles'),
+          value: null,
+        ),
         ...playlists
             .map(
               (Playlist playlist) => DropdownMenuItem<Playlist?>(
