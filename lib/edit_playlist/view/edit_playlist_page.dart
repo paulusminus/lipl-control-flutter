@@ -4,6 +4,9 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lipl_bloc/edit_playlist/bloc/edit_playlist_bloc.dart';
 import 'package:lipl_repo/lipl_repo.dart';
+import 'package:logging/logging.dart';
+
+final Logger log = Logger('$EditPlaylistPage');
 
 class EditPlaylistPage extends StatelessWidget {
   const EditPlaylistPage({Key? key}) : super(key: key);
@@ -11,8 +14,8 @@ class EditPlaylistPage extends StatelessWidget {
   static Route<void> route({
     String? id,
     String? title,
-    List<Summary>? members,
-    List<Summary>? lyrics,
+    List<Lyric>? members,
+    List<Lyric>? lyrics,
   }) {
     return MaterialPageRoute<void>(
       fullscreenDialog: true,
@@ -157,14 +160,14 @@ class _MembersAddField extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<EditPlaylistBloc, EditPlaylistState>(
       builder: (BuildContext context, EditPlaylistState state) =>
-          Autocomplete<Summary>(
+          Autocomplete<Lyric>(
         displayStringForOption: (Summary option) => option.title,
         optionsBuilder: (TextEditingValue textEditingValue) {
           if (textEditingValue.text.trim() == '') {
-            return const Iterable<Summary>.empty();
+            return const Iterable<Lyric>.empty();
           }
           return state.lyrics.where(
-            (Summary summary) => summary.title.toLowerCase().contains(
+            (Lyric lyric) => lyric.title.toLowerCase().contains(
                   textEditingValue.text.toLowerCase(),
                 ),
           );
@@ -181,18 +184,17 @@ class _MembersAddField extends StatelessWidget {
             focusNode: fieldFocusNode,
             decoration: const InputDecoration(
               labelText: 'Toevoegen',
-              // hintText: textEditingController.text,
             ),
             onFieldSubmitted: (String value) {
-              log.info('Field submitted');
-              textEditingController.clear();
+              log.info('Value $value submitted');
+              // textEditingController.clear();
               onFieldSubmitted();
             },
           );
         },
-        onSelected: (Summary summary) {
+        onSelected: (Lyric lyric) {
           context.read<EditPlaylistBloc>().add(
-                EditPlaylistMembersItemAdded(summary),
+                EditPlaylistMembersItemAdded(lyric),
               );
         },
       ),
