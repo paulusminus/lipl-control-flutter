@@ -41,6 +41,7 @@ class LyricList extends StatelessWidget {
                                   Navigator.of(context).push(
                                     PlayPage.route(
                                       lyricParts: <Lyric>[lyric].toLyricParts(),
+                                      title: lyric.title,
                                     ),
                                   );
                                 },
@@ -97,6 +98,7 @@ class LyricList extends StatelessWidget {
                                           )
                                           .toList()
                                           .toLyricParts(),
+                                      title: playlist.title,
                                     ),
                                   );
                                 },
