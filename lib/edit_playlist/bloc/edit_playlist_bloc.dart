@@ -22,6 +22,7 @@ class EditPlaylistBloc extends Bloc<EditPlaylistEvent, EditPlaylistState> {
           ),
         ) {
     on<EditPlaylistTitleChanged>(_onTitleChanged);
+    on<EditPlaylistSearchChanged>(_onSearchChanged);
     on<EditPlaylistMembersChanged>(_onMembersChanged);
     on<EditPlaylistSubmitted>(_onSubmitted);
     on<EditPlaylistMembersItemDeleted>(_onMembersItemDeleted);
@@ -56,6 +57,13 @@ class EditPlaylistBloc extends Bloc<EditPlaylistEvent, EditPlaylistState> {
     Emitter<EditPlaylistState> emit,
   ) {
     emit(state.copyWith(title: event.title));
+  }
+
+  void _onSearchChanged(
+    EditPlaylistSearchChanged event,
+    Emitter<EditPlaylistState> emit,
+  ) {
+    emit(state.copyWith(search: event.search.trim()));
   }
 
   void _onMembersChanged(

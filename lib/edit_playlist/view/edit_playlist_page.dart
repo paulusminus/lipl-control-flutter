@@ -162,7 +162,9 @@ class _MembersAddField extends StatelessWidget {
       builder: (BuildContext context, EditPlaylistState state) =>
           Autocomplete<Lyric>(
         displayStringForOption: (Summary option) => option.title,
-        optionsBuilder: (TextEditingValue textEditingValue) {
+        optionsBuilder: (
+          TextEditingValue textEditingValue,
+        ) {
           if (textEditingValue.text.trim() == '') {
             return const Iterable<Lyric>.empty();
           }

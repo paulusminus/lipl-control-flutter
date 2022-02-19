@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lipl_bloc/edit_lyric/view/edit_lyric_page.dart';
 import 'package:lipl_bloc/edit_playlist/view/view.dart';
+import 'package:lipl_bloc/play/play.dart';
 import 'package:lipl_bloc/source/bloc/source_bloc.dart';
 import 'package:lipl_bloc/widget/widget.dart';
 import 'package:lipl_repo/lipl_repo.dart';
@@ -19,24 +20,7 @@ class LyricList extends StatelessWidget {
           return Scaffold(
             appBar: AppBar(
               title: const Text('Lipl'),
-              actions: <Widget>[
-                PopupMenuButton<String>(
-                  icon: const Icon(Icons.add),
-                  itemBuilder: (BuildContext context) =>
-                      <PopupMenuItem<String>>[
-                    PopupMenuItem<String>(
-                      child: const Text('Tekst'),
-                      onTap: () {},
-                      value: 'Tekst',
-                    ),
-                    PopupMenuItem<String>(
-                      child: const Text('Afspeelllijst'),
-                      onTap: () {},
-                      value: 'Afspeellijst',
-                    ),
-                  ],
-                ),
-              ],
+              actions: const <Widget>[],
             ),
             body: (state.status == SourceStatus.success)
                 ? SingleChildScrollView(
@@ -50,6 +34,19 @@ class LyricList extends StatelessWidget {
                             selectTitle: renderLyricTitle,
                             selectSummary: renderLyricSummary,
                             buttons: <ButtonData<Lyric>>[
+                              ButtonData<Lyric>(
+                                label: 'play',
+                                onPressed: (Lyric lyric) {
+                                  log.info('Play request Lyric ${lyric.title}');
+                                  Navigator.of(context).push(
+                                    PlayPage.route(
+                                      lyricParts: <Lyric>[lyric].toLyricParts(),
+                                    ),
+                                  );
+                                },
+                                enabled: (Lyric lyric) =>
+                                    lyric.parts.isNotEmpty,
+                              ),
                               ButtonData<Lyric>(
                                 label: 'delete',
                                 onPressed: (Lyric lyric) {
@@ -80,6 +77,32 @@ class LyricList extends StatelessWidget {
                             selectSummary: (Playlist playlist) =>
                                 renderPlaylistSummary(playlist, state.lyrics),
                             buttons: <ButtonData<Playlist>>[
+                              ButtonData<Playlist>(
+                                label: 'play',
+                                onPressed: (Playlist playlist) {
+                                  log.info(
+                                      'Playlist play ${playlist.title} requested');
+                                  Navigator.of(context).push(
+                                    PlayPage.route(
+                                      lyricParts: playlist.members
+                                          .map(
+                                            (String id) =>
+                                                state.lyrics.firstWhere(
+                                              (Lyric lyric) => lyric.id == id,
+                                              orElse: null,
+                                            ),
+                                          )
+                                          .where(
+                                            (Lyric? lyric) => lyric != null,
+                                          )
+                                          .toList()
+                                          .toLyricParts(),
+                                    ),
+                                  );
+                                },
+                                enabled: (Playlist playlist) =>
+                                    playlist.members.isNotEmpty,
+                              ),
                               ButtonData<Playlist>(
                                 label: 'delete',
                                 onPressed: (Playlist playlist) {

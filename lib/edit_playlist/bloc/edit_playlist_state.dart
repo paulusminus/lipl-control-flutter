@@ -14,6 +14,7 @@ class EditPlaylistState extends Equatable {
     this.status = EditPlaylistStatus.initial,
     this.id,
     this.title = '',
+    this.search = '',
     this.members = const <Lyric>[],
     this.lyrics = const <Lyric>[],
   });
@@ -21,6 +22,7 @@ class EditPlaylistState extends Equatable {
   final EditPlaylistStatus status;
   final String? id;
   final String title;
+  final String? search;
   final List<Lyric> members;
   final List<Lyric> lyrics;
 
@@ -30,12 +32,14 @@ class EditPlaylistState extends Equatable {
     EditPlaylistStatus? status,
     String? id,
     String? title,
+    String? search,
     List<Lyric>? members,
   }) =>
       EditPlaylistState(
         status: status ?? this.status,
         id: id ?? this.id,
         title: title ?? this.title,
+        search: search ?? this.search,
         members: members ?? this.members,
         lyrics: lyrics,
       );

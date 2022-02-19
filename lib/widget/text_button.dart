@@ -6,9 +6,11 @@ TextButton textButton<T>({
   required ButtonData<T> buttonData,
 }) =>
     TextButton(
-      onPressed: () {
-        buttonData.onPressed(item);
-      },
+      onPressed: buttonData.enabled(item)
+          ? () {
+              buttonData.onPressed(item);
+            }
+          : null,
       child: Text(
         buttonData.label.toUpperCase(),
         style: const TextStyle(
