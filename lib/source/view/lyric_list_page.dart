@@ -1,10 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:lipl_bloc/edit_lyric/view/edit_lyric_page.dart';
-import 'package:lipl_bloc/edit_playlist/view/view.dart';
+import 'package:lipl_bloc/edit_lyric/edit_lyric.dart';
+import 'package:lipl_bloc/edit_playlist/edit_playlist.dart';
 import 'package:lipl_bloc/play/play.dart';
-import 'package:lipl_bloc/source/bloc/source_bloc.dart';
+import 'package:lipl_bloc/source/source.dart';
 import 'package:lipl_bloc/widget/widget.dart';
 import 'package:lipl_repo/lipl_repo.dart';
 import 'package:logging/logging.dart';

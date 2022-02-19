@@ -2,8 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:lipl_bloc/edit_lyric/bloc/edit_lyric_bloc.dart';
 import 'package:lipl_repo/lipl_repo.dart';
+import '../bloc/edit_lyric_bloc.dart';
 
 class EditLyricPage extends StatelessWidget {
   const EditLyricPage({Key? key}) : super(key: key);

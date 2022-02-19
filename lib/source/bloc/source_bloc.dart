@@ -1,12 +1,9 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:lipl_repo/lipl_repo.dart';
-import 'package:logging/logging.dart';
 
 part 'source_event.dart';
 part 'source_state.dart';
-
-final Logger log = Logger('$SourceBloc');
 
 class SourceBloc extends Bloc<SourceEvent, SourceState> {
   SourceBloc({
