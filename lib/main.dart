@@ -30,8 +30,8 @@ Future<void> main() async {
   final SharedPreferences sharedPreferences =
       await SharedPreferences.getInstance();
 
-  await sharedPreferences.setString(
-      'credentials', '{"username":"$USERNAME","password":"$PASSWORD"}');
+  // await sharedPreferences.setString(
+  //     'credentials', '{"username":"$USERNAME","password":"$PASSWORD"}');
 
   BlocOverrides.runZoned(
     () {
@@ -39,13 +39,13 @@ Future<void> main() async {
         AppRepository(
           preferencesLocalStorage: PreferencesLocalStorage<Credentials>(
             serializer: (Credentials c) => jsonEncode(<String, dynamic>{
-              'username': c.username,
-              'password': c.password,
+              USERNAME_KEY: c.username,
+              PASSWORD_KEY: c.password,
             }).toString(),
             deserializer: (String s) {
               final Map<String, dynamic> json = jsonDecode(s);
               return Credentials(
-                  username: json['username'], password: json['password']);
+                  username: json[USERNAME_KEY], password: json[PASSWORD_KEY]);
             },
             key: 'credentials',
             sharedPreferences: sharedPreferences,

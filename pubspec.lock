@@ -336,11 +336,11 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: "v0.5"
-      resolved-ref: "7d19ce3f3c347d7100d9bf888cc699f5e701de81"
+      ref: "v0.6"
+      resolved-ref: "769532d97e3530bee9189c0e118087346d08016a"
       url: "git://paulmin.nl/dart/lipl-repo.git"
     source: git
-    version: "0.5.0"
+    version: "0.6.0"
   logging:
     dependency: "direct main"
     description:
@@ -459,8 +459,8 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: "v0.1"
-      resolved-ref: "2fe688f0d436d6305fb0f400a6fd21b6e260a941"
+      ref: "v0.2"
+      resolved-ref: "4e8929401e06f9f420af8a78f2860ceea24ef6c4"
       url: "git://paulmin.nl/dart/preferences-local-storage.git"
     source: git
     version: "0.1.0"

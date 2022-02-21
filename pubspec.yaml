@@ -18,7 +18,7 @@ dependencies:
   lipl_repo: 
     git:
       url: git://paulmin.nl/dart/lipl-repo.git
-      ref: v0.5
+      ref: v0.6
   logging: ^1.0.2
   parts: 
     git:
@@ -27,7 +27,7 @@ dependencies:
   preferences_local_storage:
     git:
       url: git://paulmin.nl/dart/preferences-local-storage.git
-      ref: v0.1
+      ref: v0.2
   shared_preferences: ^2.0.13
 
 dev_dependencies:

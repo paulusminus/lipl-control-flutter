@@ -39,7 +39,7 @@ class PlayPage extends StatelessWidget {
                 (LyricPart lyricPart) => Center(
                   child: ListTile(
                     title: Text(
-                        '${lyricPart.title} (${lyricPart.current} / ${lyricPart.total}}'),
+                        '${lyricPart.title} (${lyricPart.current} / ${lyricPart.total})'),
                     subtitle: Text(lyricPart.text),
                   ),
                 ),

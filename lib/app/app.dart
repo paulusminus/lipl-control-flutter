@@ -13,19 +13,18 @@ class AppRepository extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final LiplRestStorage liplRestStorage = LiplRestStorage(
-      preferencesLocalStorage
-          .get()
-          .where(
-            (Credentials? credentials) => credentials != null,
-          )
-          .map(
-            (Credentials? credentials) => credentials!,
-          )
-          .listen((_) {}),
+      preferencesLocalStorage.get().listen((_) {}),
     );
 
-    return RepositoryProvider<LiplRestStorage>.value(
-      value: liplRestStorage,
+    return MultiRepositoryProvider(
+      providers: <RepositoryProvider<Object>>[
+        RepositoryProvider<LiplRestStorage>.value(
+          value: liplRestStorage,
+        ),
+        RepositoryProvider<PreferencesLocalStorage<Credentials>>.value(
+          value: preferencesLocalStorage,
+        )
+      ],
       child: AppProvider(),
     );
   }

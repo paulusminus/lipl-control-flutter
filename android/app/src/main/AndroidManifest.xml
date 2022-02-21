@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.lipl_test">
+    package="nl.paulmin.lipl">
    <application
-        android:label="lipl_test"
+        android:label="Lipl"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"

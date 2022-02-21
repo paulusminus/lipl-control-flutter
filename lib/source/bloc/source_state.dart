@@ -5,6 +5,7 @@ enum SourceStatus {
   loading,
   success,
   failure,
+  noCredentials,
 }
 
 enum SelectedTab { lyrics, playlists }

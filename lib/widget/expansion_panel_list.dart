@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lipl_bloc/widget/widget.dart';
 
-ExpansionPanelList expansionPanelList<T>({
+SingleChildScrollView expansionPanelList<T>({
   Key? key,
   required List<T> items,
   required Callback<T, String> selectId,
@@ -9,38 +9,40 @@ ExpansionPanelList expansionPanelList<T>({
   required Callback<T, Widget> selectSummary,
   required List<ButtonData<T>> buttons,
 }) =>
-    ExpansionPanelList.radio(
-      children: items
-          .map(
-            (T item) => ExpansionPanelRadio(
-              canTapOnHeader: true,
-              value: selectId(item),
-              headerBuilder: (_, __) => selectTitle(item),
-              body: Column(
-                children: <Widget>[
-                  selectSummary(item),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: <Widget>[
-                      ...buttons
-                          .map(
-                            (ButtonData<T> buttonData) => textButton<T>(
-                              item: item,
-                              buttonData: buttonData,
-                            ),
-                          )
-                          .toList(),
-                      const SizedBox(
-                        width: 10,
-                      ),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 15,
-                  ),
-                ],
+    SingleChildScrollView(
+      child: ExpansionPanelList.radio(
+        children: items
+            .map(
+              (T item) => ExpansionPanelRadio(
+                canTapOnHeader: true,
+                value: selectId(item),
+                headerBuilder: (_, __) => selectTitle(item),
+                body: Column(
+                  children: <Widget>[
+                    selectSummary(item),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: <Widget>[
+                        ...buttons
+                            .map(
+                              (ButtonData<T> buttonData) => textButton<T>(
+                                item: item,
+                                buttonData: buttonData,
+                              ),
+                            )
+                            .toList(),
+                        const SizedBox(
+                          width: 10,
+                        ),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 15,
+                    ),
+                  ],
+                ),
               ),
-            ),
-          )
-          .toList(),
+            )
+            .toList(),
+      ),
     );

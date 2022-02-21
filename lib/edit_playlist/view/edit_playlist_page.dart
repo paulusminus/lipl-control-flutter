@@ -57,7 +57,7 @@ class EditLyricView extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(isNew ? 'Nieuwe tekst' : 'Wijzigen tekst'),
+        title: Text(isNew ? 'Nieuwe afspeellijst' : 'Wijzigen afspeellijst'),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: status.isLoadingOrSuccess
