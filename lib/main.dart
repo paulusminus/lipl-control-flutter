@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lipl_bloc/app/app.dart';
 import 'package:lipl_bloc/bloc_observer.dart';
-import 'package:lipl_bloc/constant.dart';
 import 'package:lipl_repo/lipl_repo.dart';
 import 'package:logging/logging.dart';
 import 'package:preferences_local_storage/preferences_local_storage.dart';
@@ -38,15 +37,8 @@ Future<void> main() async {
       runApp(
         AppRepository(
           preferencesLocalStorage: PreferencesLocalStorage<Credentials>(
-            serializer: (Credentials c) => jsonEncode(<String, dynamic>{
-              USERNAME_KEY: c.username,
-              PASSWORD_KEY: c.password,
-            }).toString(),
-            deserializer: (String s) {
-              final Map<String, dynamic> json = jsonDecode(s);
-              return Credentials(
-                  username: json[USERNAME_KEY], password: json[PASSWORD_KEY]);
-            },
+            serializer: (Credentials c) => c.toJson().toString(),
+            deserializer: (String s) => Credentials.fromJson(jsonDecode(s)),
             key: 'credentials',
             sharedPreferences: sharedPreferences,
           ),

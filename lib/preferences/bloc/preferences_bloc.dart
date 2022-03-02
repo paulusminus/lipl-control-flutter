@@ -19,6 +19,7 @@ class PreferencesBloc extends Bloc<PreferencesEvent, PreferencesState> {
         ) {
     on<PreferencesEventUsernameChanged>(_onUsernameChanged);
     on<PreferencesEventPasswordChanged>(_onPasswordChanged);
+    on<PreferencesEventLoaded>(_onLoaded);
     on<PreferencesEventSubmitted>(_onSubmitted);
     preferencesLocalStorage.get().listen((Credentials? credentials) {
       add(
@@ -36,6 +37,10 @@ class PreferencesBloc extends Bloc<PreferencesEvent, PreferencesState> {
   }
 
   final PreferencesLocalStorage<Credentials> _preferencesLocalStorage;
+
+  void _onLoaded(PreferencesEventLoaded event, Emitter<PreferencesState> emit) {
+    log.info('loaded');
+  }
 
   void _onUsernameChanged(
       PreferencesEventUsernameChanged event, Emitter<PreferencesState> emit) {

@@ -121,35 +121,36 @@ class _MembersField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<EditPlaylistBloc, EditPlaylistState>(
-      builder: (BuildContext context, EditPlaylistState state) {
-        return ReorderableListView(
-          key: const Key('editPlaylistView_members_reordableFormField'),
-          shrinkWrap: true,
-          children: state.members
-              .map(
-                (Summary summary) => Dismissible(
-                  key: Key('editPlaylistView_members_item_${summary.id}'),
-                  onDismissed: (DismissDirection direction) {
-                    if (direction == DismissDirection.endToStart) {
-                      context
-                          .read<EditPlaylistBloc>()
-                          .add(EditPlaylistMembersItemDeleted(summary.id));
-                    }
-                  },
-                  child: ListTile(
-                    title: Text(summary.title),
-                  ),
-                ),
-              )
-              .toList(),
-          onReorder: (int oldIndex, int newIndex) {
-            context.read<EditPlaylistBloc>().add(
-                  EditPlaylistMembersChanged(oldIndex, newIndex),
-                );
+        builder: (BuildContext context, EditPlaylistState state) {
+      return ReorderableListView.builder(
+        buildDefaultDragHandles: false,
+        key: const Key('editPlaylistView_members_reordableFormField'),
+        shrinkWrap: true,
+        itemCount: state.members.length,
+        itemBuilder: (BuildContext context, int index) => Dismissible(
+          key: Key('editPlaylistView_members_item_${state.members[index].id}'),
+          onDismissed: (DismissDirection direction) {
+            if (direction == DismissDirection.endToStart) {
+              context
+                  .read<EditPlaylistBloc>()
+                  .add(EditPlaylistMembersItemDeleted(state.members[index].id));
+            }
           },
-        );
-      },
-    );
+          child: ListTile(
+            leading: ReorderableDragStartListener(
+              index: index,
+              child: const Icon(Icons.drag_handle),
+            ),
+            title: Text(state.members[index].title),
+          ),
+        ),
+        onReorder: (int oldIndex, int newIndex) {
+          context.read<EditPlaylistBloc>().add(
+                EditPlaylistMembersChanged(oldIndex, newIndex),
+              );
+        },
+      );
+    });
   }
 }
 
@@ -189,7 +190,6 @@ class _MembersAddField extends StatelessWidget {
             ),
             onFieldSubmitted: (String value) {
               log.info('Value $value submitted');
-              // textEditingController.clear();
               onFieldSubmitted();
             },
           );
