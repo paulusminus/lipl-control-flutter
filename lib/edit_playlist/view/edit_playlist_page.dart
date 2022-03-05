@@ -69,19 +69,17 @@ class EditLyricView extends StatelessWidget {
             ? const CupertinoActivityIndicator()
             : const Icon(Icons.save),
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            children: const <Widget>[
-              _TitleField(),
-              _MembersAddField(),
-              _MembersField(),
-              SizedBox(
-                height: 60.0,
-              ),
-            ],
-          ),
+      body: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          children: const <Widget>[
+            _TitleField(),
+            _MembersAddField(),
+            _MembersField(),
+            SizedBox(
+              height: 60.0,
+            ),
+          ],
         ),
       ),
     );

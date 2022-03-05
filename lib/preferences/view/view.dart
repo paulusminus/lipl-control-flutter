@@ -114,7 +114,7 @@ class _PasswordField extends StatelessWidget {
           initialValue: state.password,
           decoration: InputDecoration(
             enabled: state.status == PreferencesStatus.initial,
-            labelText: 'Gebruikersnaam',
+            labelText: 'Wachtwoord',
             hintText: state.password,
           ),
           obscureText: true,
