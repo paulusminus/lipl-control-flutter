@@ -75,8 +75,11 @@ class EditLyricView extends StatelessWidget {
           child: Column(
             children: const <Widget>[
               _TitleField(),
-              _MembersField(),
               _MembersAddField(),
+              _MembersField(),
+              SizedBox(
+                height: 60.0,
+              ),
             ],
           ),
         ),
@@ -92,23 +95,25 @@ class _TitleField extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<EditPlaylistBloc, EditPlaylistState>(
       builder: (BuildContext context, EditPlaylistState state) {
-        return TextFormField(
-          key: const Key('editPlaylistView_title_textFormField'),
-          initialValue: state.title,
-          decoration: InputDecoration(
-            enabled: !state.status.isLoadingOrSuccess,
-            labelText: 'Titel',
-            hintText: state.title,
+        return Form(
+          child: TextFormField(
+            key: const Key('editPlaylistView_title_textFormField'),
+            initialValue: state.title,
+            decoration: InputDecoration(
+              enabled: !state.status.isLoadingOrSuccess,
+              labelText: 'Titel',
+              hintText: state.title,
+            ),
+            maxLength: 50,
+            inputFormatters: <TextInputFormatter>[
+              LengthLimitingTextInputFormatter(50),
+            ],
+            onChanged: (String value) {
+              context
+                  .read<EditPlaylistBloc>()
+                  .add(EditPlaylistTitleChanged(value));
+            },
           ),
-          maxLength: 50,
-          inputFormatters: <TextInputFormatter>[
-            LengthLimitingTextInputFormatter(50),
-          ],
-          onChanged: (String value) {
-            context
-                .read<EditPlaylistBloc>()
-                .add(EditPlaylistTitleChanged(value));
-          },
         );
       },
     );
@@ -139,7 +144,7 @@ class _MembersField extends StatelessWidget {
           child: ListTile(
             leading: ReorderableDragStartListener(
               index: index,
-              child: const Icon(Icons.drag_handle),
+              child: const Icon(Icons.drag_indicator),
             ),
             title: Text(state.members[index].title),
           ),
@@ -154,52 +159,65 @@ class _MembersField extends StatelessWidget {
   }
 }
 
-class _MembersAddField extends StatelessWidget {
+class _MembersAddField extends StatefulWidget {
   const _MembersAddField({Key? key}) : super(key: key);
+
+  @override
+  State<StatefulWidget> createState() => _MembersAddFieldState();
+}
+
+class _MembersAddFieldState extends State<_MembersAddField> {
+  final GlobalKey<FormState> _globalKey = GlobalKey<FormState>();
+  final FocusNode _focusNode = FocusNode();
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<EditPlaylistBloc, EditPlaylistState>(
-      builder: (BuildContext context, EditPlaylistState state) =>
-          Autocomplete<Lyric>(
-        displayStringForOption: (Summary option) => option.title,
-        optionsBuilder: (
-          TextEditingValue textEditingValue,
-        ) {
-          if (textEditingValue.text.trim() == '') {
-            return const Iterable<Lyric>.empty();
-          }
-          return state.lyrics.where(
-            (Lyric lyric) => lyric.title.toLowerCase().contains(
-                  textEditingValue.text.toLowerCase(),
+      builder: (BuildContext context, EditPlaylistState state) {
+        return Form(
+          key: _globalKey,
+          child: Column(
+            children: <Widget>[
+              TextFormField(
+                key: const Key('__autocomplete_lyric__textFormField'),
+                keyboardType: TextInputType.text,
+                focusNode: _focusNode,
+                initialValue: '',
+                autocorrect: false,
+                enableSuggestions: false,
+                enableIMEPersonalizedLearning: false,
+                decoration: const InputDecoration(
+                  label: Text('Tekst toevoegen'),
                 ),
-          );
-        },
-        fieldViewBuilder: (
-          BuildContext context,
-          TextEditingController textEditingController,
-          FocusNode fieldFocusNode,
-          VoidCallback onFieldSubmitted,
-        ) {
-          return TextFormField(
-            key: const Key('editPlaylistView_members_addFormField'),
-            controller: textEditingController,
-            focusNode: fieldFocusNode,
-            decoration: const InputDecoration(
-              labelText: 'Toevoegen',
-            ),
-            onFieldSubmitted: (String value) {
-              log.info('Value $value submitted');
-              onFieldSubmitted();
-            },
-          );
-        },
-        onSelected: (Lyric lyric) {
-          context.read<EditPlaylistBloc>().add(
-                EditPlaylistMembersItemAdded(lyric),
-              );
-        },
-      ),
+                onChanged: (String value) {
+                  context
+                      .read<EditPlaylistBloc>()
+                      .add(EditPlaylistSearchChanged(value));
+                },
+              ),
+              if (state.filtered.isNotEmpty && state.filtered.length <= 3)
+                ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: state.filtered.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return ListTile(
+                      title: Text(state.filtered[index].title),
+                      onTap: () {
+                        context.read<EditPlaylistBloc>().add(
+                              EditPlaylistMembersItemAdded(
+                                state.filtered[index],
+                              ),
+                            );
+                        _globalKey.currentState?.reset();
+                        _focusNode.requestFocus();
+                      },
+                    );
+                  },
+                ),
+            ],
+          ),
+        );
+      },
     );
   }
 }

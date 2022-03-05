@@ -29,30 +29,28 @@ class LyricList extends StatelessWidget {
             appBar: AppBar(
               title: const Text('Lipl'),
               actions: <Widget>[
-                IconButton(
-                  icon: const Icon(Icons.text_snippet),
-                  onPressed: state.selectedTab == SelectedTab.playlists
-                      ? () {
-                          context.read<SourceBloc>().add(
-                                const SourceTabChanged(
-                                  tab: SelectedTab.lyrics,
-                                ),
-                              );
-                        }
-                      : null,
-                ),
-                IconButton(
-                  icon: const Icon(Icons.folder),
-                  onPressed: state.selectedTab == SelectedTab.lyrics
-                      ? () {
-                          context.read<SourceBloc>().add(
-                                const SourceTabChanged(
-                                  tab: SelectedTab.playlists,
-                                ),
-                              );
-                        }
-                      : null,
-                ),
+                if (state.selectedTab == SelectedTab.playlists)
+                  IconButton(
+                    icon: const Icon(Icons.text_snippet),
+                    onPressed: () {
+                      context.read<SourceBloc>().add(
+                            const SourceTabChanged(
+                              tab: SelectedTab.lyrics,
+                            ),
+                          );
+                    },
+                  ),
+                if (state.selectedTab == SelectedTab.lyrics)
+                  IconButton(
+                    icon: const Icon(Icons.folder),
+                    onPressed: () {
+                      context.read<SourceBloc>().add(
+                            const SourceTabChanged(
+                              tab: SelectedTab.playlists,
+                            ),
+                          );
+                    },
+                  ),
               ],
             ),
             body: BlocListener<SourceBloc, SourceState>(
@@ -178,8 +176,18 @@ Widget renderLyricList(BuildContext context, List<Lyric> lyrics) =>
         ),
         ButtonData<Lyric>(
           label: 'delete',
-          onPressed: (Lyric lyric) {
-            log.info('Delete request Lyric ${lyric.title}');
+          onPressed: (Lyric lyric) async {
+            if (await confirm(
+              context,
+              title: const Text('Bevestigen'),
+              content: Text('${lyric.title} verwijderen?'),
+            )) {
+              context.read<SourceBloc>().add(
+                    SourceLyricDeletionRequested(
+                      id: lyric.id,
+                    ),
+                  );
+            }
           },
         ),
         ButtonData<Lyric>(
@@ -232,8 +240,18 @@ Widget renderPlaylistList(
         ),
         ButtonData<Playlist>(
           label: 'delete',
-          onPressed: (Playlist playlist) {
-            log.info('Playlist delete ${playlist.title} requested');
+          onPressed: (Playlist playlist) async {
+            if (await confirm(
+              context,
+              title: const Text('Bevestigen'),
+              content: Text('${playlist.title} verwijderen?'),
+            )) {
+              context.read<SourceBloc>().add(
+                    SourcePlaylistDeletionRequested(
+                      id: playlist.id,
+                    ),
+                  );
+            }
           },
         ),
         ButtonData<Playlist>(

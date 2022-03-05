@@ -1,8 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:lipl_repo/lipl_repo.dart';
-// import 'package:preferences_local_storage/preferences_local_storage.dart';
-// import 'package:rxdart/rxdart.dart';
 
 part 'source_event.dart';
 part 'source_state.dart';
@@ -10,18 +8,31 @@ part 'source_state.dart';
 class SourceBloc extends Bloc<SourceEvent, SourceState> {
   SourceBloc({
     required LiplRestStorage liplRestStorage,
-    // required PreferencesLocalStorage<Credentials> preferencesLocalStorage,
   })  : _liplRestStorage = liplRestStorage,
-        // _preferencesLocalStorage = preferencesLocalStorage,
         super(
           const SourceState(),
         ) {
     on<SourceSubscriptionRequested>(_onSubscriptionRequested);
     on<SourceTabChanged>(_onTabChanged);
+    on<SourcePlaylistDeletionRequested>(_onPlaylistDeletionRequested);
+    on<SourceLyricDeletionRequested>(_onLyricDeletionRequested);
   }
 
   final LiplRestStorage _liplRestStorage;
-  // final PreferencesLocalStorage<Credentials> _preferencesLocalStorage;
+
+  Future<void> _onPlaylistDeletionRequested(
+    SourcePlaylistDeletionRequested event,
+    Emitter<SourceState> emit,
+  ) async {
+    await _liplRestStorage.deletePlaylist(event.id);
+  }
+
+  Future<void> _onLyricDeletionRequested(
+    SourceLyricDeletionRequested event,
+    Emitter<SourceState> emit,
+  ) async {
+    await _liplRestStorage.deleteLyric(event.id);
+  }
 
   void _onTabChanged(
     SourceTabChanged event,

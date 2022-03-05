@@ -22,11 +22,18 @@ class EditPlaylistState extends Equatable {
   final EditPlaylistStatus status;
   final String? id;
   final String title;
-  final String? search;
+  final String search;
   final List<Lyric> members;
   final List<Lyric> lyrics;
 
   bool get isNewLyric => id == null;
+
+  List<Lyric> get filtered => lyrics
+      .where(
+        (Lyric lyric) =>
+            lyric.title.toLowerCase().contains(search.toLowerCase()),
+      )
+      .toList();
 
   EditPlaylistState copyWith({
     EditPlaylistStatus? status,
@@ -45,5 +52,12 @@ class EditPlaylistState extends Equatable {
       );
 
   @override
-  List<Object?> get props => <Object?>[status, id, title, members, lyrics];
+  List<Object?> get props => <Object?>[
+        status,
+        id,
+        title,
+        search,
+        members,
+        lyrics,
+      ];
 }

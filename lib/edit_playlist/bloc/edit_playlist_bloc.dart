@@ -48,7 +48,8 @@ class EditPlaylistBloc extends Bloc<EditPlaylistEvent, EditPlaylistState> {
     Emitter<EditPlaylistState> emit,
   ) {
     emit(
-      state.copyWith(members: <Lyric>[...state.members, event.lyric]),
+      state.copyWith(
+          members: <Lyric>[...state.members, event.lyric], search: ''),
     );
   }
 
@@ -63,7 +64,7 @@ class EditPlaylistBloc extends Bloc<EditPlaylistEvent, EditPlaylistState> {
     EditPlaylistSearchChanged event,
     Emitter<EditPlaylistState> emit,
   ) {
-    emit(state.copyWith(search: event.search.trim()));
+    emit(state.copyWith(search: event.search));
   }
 
   void _onMembersChanged(
@@ -71,8 +72,11 @@ class EditPlaylistBloc extends Bloc<EditPlaylistEvent, EditPlaylistState> {
     Emitter<EditPlaylistState> emit,
   ) {
     final List<Lyric> members = <Lyric>[...state.members];
+
     final Lyric removed = members.removeAt(event.oldIndex);
-    members.insert(event.newIndex, removed);
+    members.insert(
+        event.newIndex < event.oldIndex ? event.newIndex : event.newIndex - 1,
+        removed);
     emit(state.copyWith(members: members));
   }
 
