@@ -16,14 +16,7 @@ class LyricList extends StatelessWidget {
   const LyricList();
 
   @override
-  Widget build(BuildContext context) => BlocConsumer<SourceBloc, SourceState>(
-        listener: (BuildContext context, SourceState state) {
-          if (state.status == SourceStatus.noCredentials) {
-            log.info('No credentials');
-            ScaffoldMessenger.of(context)
-                .showSnackBar(const SnackBar(content: Text('No Credentials')));
-          }
-        },
+  Widget build(BuildContext context) => BlocBuilder<SourceBloc, SourceState>(
         builder: (BuildContext context, SourceState state) {
           return Scaffold(
             appBar: AppBar(
