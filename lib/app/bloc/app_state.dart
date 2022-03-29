@@ -1,6 +1,6 @@
-part of 'source_bloc.dart';
+part of 'app_bloc.dart';
 
-enum SourceStatus {
+enum AppStatus {
   initial,
   loading,
   success,
@@ -10,34 +10,34 @@ enum SourceStatus {
 
 enum SelectedTab { lyrics, playlists }
 
-class SourceState extends Equatable {
-  const SourceState({
-    this.status = SourceStatus.initial,
+class AppState extends Equatable {
+  const AppState({
+    this.status = AppStatus.initial,
     this.lyrics = const <Lyric>[],
     this.playlists = const <Playlist>[],
     this.selectedTab = SelectedTab.lyrics,
   });
 
-  factory SourceState.loading() => const SourceState().copyWith(
-        status: () => SourceStatus.loading,
+  factory AppState.loading() => const AppState().copyWith(
+        status: () => AppStatus.loading,
       );
 
-  factory SourceState.failure() => const SourceState().copyWith(
-        status: () => SourceStatus.failure,
+  factory AppState.failure() => const AppState().copyWith(
+        status: () => AppStatus.failure,
       );
 
-  final SourceStatus status;
+  final AppStatus status;
   final List<Lyric> lyrics;
   final List<Playlist> playlists;
   final SelectedTab selectedTab;
 
-  SourceState copyWith({
-    SourceStatus Function()? status,
+  AppState copyWith({
+    AppStatus Function()? status,
     List<Lyric> Function()? lyrics,
     List<Playlist> Function()? playlists,
     SelectedTab Function()? selectedTab,
   }) {
-    return SourceState(
+    return AppState(
       status: status == null ? this.status : status(),
       lyrics: lyrics == null ? this.lyrics : lyrics(),
       playlists: playlists == null ? this.playlists : playlists(),

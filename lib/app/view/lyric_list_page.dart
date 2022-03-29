@@ -1,11 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lipl_bloc/app/app.dart';
 import 'package:lipl_bloc/edit_lyric/edit_lyric.dart';
 import 'package:lipl_bloc/edit_playlist/edit_playlist.dart';
+import 'package:lipl_bloc/edit_preferences/edit_preferences.dart';
 import 'package:lipl_bloc/play/play.dart';
-import 'package:lipl_bloc/preferences/view/view.dart';
-import 'package:lipl_bloc/source/source.dart';
 import 'package:lipl_bloc/widget/widget.dart';
 import 'package:lipl_repo/lipl_repo.dart';
 import 'package:logging/logging.dart';
@@ -16,8 +16,8 @@ class LyricList extends StatelessWidget {
   const LyricList();
 
   @override
-  Widget build(BuildContext context) => BlocBuilder<SourceBloc, SourceState>(
-        builder: (BuildContext context, SourceState state) {
+  Widget build(BuildContext context) => BlocBuilder<AppBloc, AppState>(
+        builder: (BuildContext context, AppState state) {
           return Scaffold(
             appBar: AppBar(
               title: const Text('Lipl'),
@@ -26,8 +26,8 @@ class LyricList extends StatelessWidget {
                   IconButton(
                     icon: const Icon(Icons.text_snippet),
                     onPressed: () {
-                      context.read<SourceBloc>().add(
-                            const SourceTabChanged(
+                      context.read<AppBloc>().add(
+                            const AppTabChanged(
                               tab: SelectedTab.lyrics,
                             ),
                           );
@@ -37,8 +37,8 @@ class LyricList extends StatelessWidget {
                   IconButton(
                     icon: const Icon(Icons.folder),
                     onPressed: () {
-                      context.read<SourceBloc>().add(
-                            const SourceTabChanged(
+                      context.read<AppBloc>().add(
+                            const AppTabChanged(
                               tab: SelectedTab.playlists,
                             ),
                           );
@@ -46,11 +46,11 @@ class LyricList extends StatelessWidget {
                   ),
               ],
             ),
-            body: BlocListener<SourceBloc, SourceState>(
-              listenWhen: (SourceState previous, SourceState current) =>
+            body: BlocListener<AppBloc, AppState>(
+              listenWhen: (AppState previous, AppState current) =>
                   current.status != previous.status,
-              listener: (BuildContext context, SourceState state) {
-                if (state.status == SourceStatus.noCredentials) {
+              listener: (BuildContext context, AppState state) {
+                if (state.status == AppStatus.noCredentials) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
                       content: const Text('No Credentials'),
@@ -58,7 +58,7 @@ class LyricList extends StatelessWidget {
                         label: 'Voorkeuren',
                         onPressed: () {
                           Navigator.of(context).push(
-                            PreferencesPage.route(),
+                            EditPreferencesPage.route(),
                           );
                         },
                       ),
@@ -67,7 +67,7 @@ class LyricList extends StatelessWidget {
                   );
                 }
               },
-              child: state.status == SourceStatus.success
+              child: state.status == AppStatus.success
                   ? IndexedStack(
                       index: state.selectedTab.index,
                       children: <Widget>[
@@ -175,8 +175,8 @@ Widget renderLyricList(BuildContext context, List<Lyric> lyrics) =>
               title: const Text('Bevestigen'),
               content: Text('${lyric.title} verwijderen?'),
             )) {
-              context.read<SourceBloc>().add(
-                    SourceLyricDeletionRequested(
+              context.read<AppBloc>().add(
+                    AppLyricDeletionRequested(
                       id: lyric.id,
                     ),
                   );
@@ -239,8 +239,8 @@ Widget renderPlaylistList(
               title: const Text('Bevestigen'),
               content: Text('${playlist.title} verwijderen?'),
             )) {
-              context.read<SourceBloc>().add(
-                    SourcePlaylistDeletionRequested(
+              context.read<AppBloc>().add(
+                    AppPlaylistDeletionRequested(
                       id: playlist.id,
                     ),
                   );
