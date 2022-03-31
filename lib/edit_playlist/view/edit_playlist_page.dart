@@ -64,23 +64,23 @@ class EditLyricView extends StatelessWidget {
             : () {
                 final EditPlaylistState state =
                     context.read<EditPlaylistBloc>().state;
-                if (state.isNewLyric) {
+                if (isNew) {
                   final PlaylistPost playlistPost = PlaylistPost(
                       title: state.title,
                       members: state.members
                           .map(
-                            (Lyric lyric) => lyric.title,
+                            (Lyric lyric) => lyric.id,
                           )
                           .toList());
                   context.read<LiplRestBloc>().add(
-                      LiplRestEventPostPlaylist(playlistPost: playlistPost));
+                        LiplRestEventPostPlaylist(playlistPost: playlistPost),
+                      );
                 } else {
                   final Playlist playlist = Playlist(
                     id: state.id,
                     title: state.title,
-                    members: state.members
-                        .map((Lyric lyric) => lyric.title)
-                        .toList(),
+                    members:
+                        state.members.map((Lyric lyric) => lyric.id).toList(),
                   );
                   context
                       .read<LiplRestBloc>()

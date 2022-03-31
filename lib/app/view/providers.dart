@@ -28,6 +28,12 @@ class LiplPreferences extends Equatable {
     );
   }
 
+  factory LiplPreferences.blank() => const LiplPreferences(
+        username: '',
+        password: '',
+        baseUrl: '',
+      );
+
   final String username;
   final String password;
   final String baseUrl;
@@ -135,11 +141,7 @@ class BlocProviders extends StatelessWidget {
         BlocProvider<EditPreferencesBloc<LiplPreferences>>(
           create: (_) => EditPreferencesBloc<LiplPreferences>(
             changes: preferencesBloc.stream,
-            defaultValue: const LiplPreferences(
-              username: '',
-              password: '',
-              baseUrl: '',
-            ),
+            defaultValue: LiplPreferences.blank(),
           ),
         ),
         BlocProvider<LiplRestBloc>(create: (_) => liplRestBloc),

@@ -32,6 +32,9 @@ class EditPreferencesPage extends StatelessWidget {
                 children: <Widget>[
                   TextFormField(
                     initialValue: state.preferences.username,
+                    enableSuggestions: false,
+                    autocorrect: false,
+                    keyboardType: TextInputType.text,
                     decoration: const InputDecoration(labelText: 'Username'),
                     onChanged: (String value) {
                       context.read<EditPreferencesBloc<LiplPreferences>>().add(
@@ -44,7 +47,13 @@ class EditPreferencesPage extends StatelessWidget {
                   ),
                   TextFormField(
                     initialValue: state.preferences.password,
-                    decoration: const InputDecoration(labelText: 'Password'),
+                    obscureText: true,
+                    enableSuggestions: false,
+                    autocorrect: false,
+                    keyboardType: TextInputType.text,
+                    decoration: const InputDecoration(
+                      labelText: 'Password',
+                    ),
                     onChanged: (String value) {
                       context.read<EditPreferencesBloc<LiplPreferences>>().add(
                             EditPreferencesEventChange<LiplPreferences>(
@@ -56,6 +65,9 @@ class EditPreferencesPage extends StatelessWidget {
                   ),
                   TextFormField(
                     initialValue: state.preferences.baseUrl,
+                    enableSuggestions: false,
+                    autocorrect: false,
+                    keyboardType: TextInputType.url,
                     decoration: const InputDecoration(labelText: 'Base Url'),
                     onChanged: (String value) {
                       context.read<EditPreferencesBloc<LiplPreferences>>().add(

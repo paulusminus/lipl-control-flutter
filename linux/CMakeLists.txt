@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.10)
 project(runner LANGUAGES CXX)
 
-set(BINARY_NAME "Lipl")
+set(BINARY_NAME "lipl")
 set(APPLICATION_ID "nl.paulmin.Lipl")
 
 cmake_policy(SET CMP0063 NEW)

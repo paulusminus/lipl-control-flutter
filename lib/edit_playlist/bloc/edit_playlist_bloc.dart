@@ -29,7 +29,11 @@ class EditPlaylistBloc extends Bloc<EditPlaylistEvent, EditPlaylistState> {
 
   void _onSubmitted(
       EditPlaylistSubmitted event, Emitter<EditPlaylistState> emit) {
-    emit(state.copyWith(status: EditPlaylistStatus.succes));
+    emit(
+      state.copyWith(
+        status: EditPlaylistStatus.succes,
+      ),
+    );
   }
 
   void _onMembersItemDeleted(
@@ -39,7 +43,9 @@ class EditPlaylistBloc extends Bloc<EditPlaylistEvent, EditPlaylistState> {
     emit(
       state.copyWith(
         members: state.members
-            .where((Summary summary) => summary.id != event.id)
+            .where(
+              (Lyric lyric) => lyric.id != event.id,
+            )
             .toList(),
       ),
     );
@@ -77,8 +83,9 @@ class EditPlaylistBloc extends Bloc<EditPlaylistEvent, EditPlaylistState> {
 
     final Lyric removed = members.removeAt(event.oldIndex);
     members.insert(
-        event.newIndex < event.oldIndex ? event.newIndex : event.newIndex - 1,
-        removed);
+      event.newIndex < event.oldIndex ? event.newIndex : event.newIndex - 1,
+      removed,
+    );
     emit(state.copyWith(members: members));
   }
 }

@@ -2,6 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lipl_rest_bloc/lipl_rest_bloc.dart';
+import 'package:parts/parts.dart';
 import '../bloc/edit_lyric_bloc.dart';
 
 class EditLyricPage extends StatelessWidget {
@@ -52,8 +54,32 @@ class EditLyricView extends StatelessWidget {
       floatingActionButton: FloatingActionButton(
         onPressed: status.isLoadingOrSuccess
             ? null
-            : () =>
-                context.read<EditLyricBloc>().add(const EditLyricSubmitted()),
+            : () {
+                final LiplRestBloc liplRestBloc = context.read<LiplRestBloc>();
+                final EditLyricState state =
+                    context.read<EditLyricBloc>().state;
+                if (isNew) {
+                  liplRestBloc.add(
+                    LiplRestEventPostLyric(
+                      lyricPost: LyricPost(
+                        title: state.title,
+                        parts: toParts(state.text),
+                      ),
+                    ),
+                  );
+                } else {
+                  liplRestBloc.add(
+                    LiplRestEventPutLyric(
+                      lyric: Lyric(
+                        id: state.id,
+                        title: state.title,
+                        parts: toParts(state.text),
+                      ),
+                    ),
+                  );
+                }
+                context.read<EditLyricBloc>().add(const EditLyricSubmitted());
+              },
         child: status.isLoadingOrSuccess
             ? const CupertinoActivityIndicator()
             : const Icon(Icons.save),

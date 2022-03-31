@@ -11,9 +11,9 @@ extension PartsX on List<List<String>> {
 
 class EditLyricBloc extends Bloc<EditLyricEvent, EditLyricState> {
   EditLyricBloc({
-    required String? id,
-    required String? title,
-    required List<List<String>>? parts,
+    String? id,
+    String? title,
+    List<List<String>>? parts,
   }) : super(
           EditLyricState(
             id: id,
@@ -23,6 +23,11 @@ class EditLyricBloc extends Bloc<EditLyricEvent, EditLyricState> {
         ) {
     on<EditLyricTitleChanged>(_onTitleChanged);
     on<EditLyricTextChanged>(_onTextChanged);
+    on<EditLyricSubmitted>(_onSubmitted);
+  }
+
+  void _onSubmitted(EditLyricSubmitted event, Emitter<EditLyricState> emit) {
+    emit(state.copyWith(status: EditLyricStatus.succes));
   }
 
   void _onTitleChanged(
