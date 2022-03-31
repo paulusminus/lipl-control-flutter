@@ -10,6 +10,7 @@ SingleChildScrollView expansionPanelList<T>({
   required List<ButtonData<T>> buttons,
 }) =>
     SingleChildScrollView(
+      primary: false,
       child: ExpansionPanelList.radio(
         children: items
             .map(
