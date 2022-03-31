@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lipl_bloc/edit_playlist/bloc/edit_playlist_bloc.dart';
-import 'package:lipl_repo/lipl_repo.dart';
+import 'package:lipl_rest_bloc/lipl_rest_bloc.dart';
 import 'package:logging/logging.dart';
 
 final Logger log = Logger('$EditPlaylistPage');
@@ -21,7 +21,6 @@ class EditPlaylistPage extends StatelessWidget {
       fullscreenDialog: true,
       builder: (BuildContext context) => BlocProvider<EditPlaylistBloc>(
         create: (BuildContext context) => EditPlaylistBloc(
-          liplRestStorage: context.read<LiplRestStorage>(),
           id: id,
           title: title,
           members: members,
@@ -62,9 +61,35 @@ class EditLyricView extends StatelessWidget {
       floatingActionButton: FloatingActionButton(
         onPressed: status.isLoadingOrSuccess
             ? null
-            : () => context
-                .read<EditPlaylistBloc>()
-                .add(const EditPlaylistSubmitted()),
+            : () {
+                final EditPlaylistState state =
+                    context.read<EditPlaylistBloc>().state;
+                if (state.isNewLyric) {
+                  final PlaylistPost playlistPost = PlaylistPost(
+                      title: state.title,
+                      members: state.members
+                          .map(
+                            (Lyric lyric) => lyric.title,
+                          )
+                          .toList());
+                  context.read<LiplRestBloc>().add(
+                      LiplRestEventPostPlaylist(playlistPost: playlistPost));
+                } else {
+                  final Playlist playlist = Playlist(
+                    id: state.id,
+                    title: state.title,
+                    members: state.members
+                        .map((Lyric lyric) => lyric.title)
+                        .toList(),
+                  );
+                  context
+                      .read<LiplRestBloc>()
+                      .add(LiplRestEventPutPlaylist(playlist: playlist));
+                }
+                context
+                    .read<EditPlaylistBloc>()
+                    .add(const EditPlaylistSubmitted());
+              },
         child: status.isLoadingOrSuccess
             ? const CupertinoActivityIndicator()
             : const Icon(Icons.save),

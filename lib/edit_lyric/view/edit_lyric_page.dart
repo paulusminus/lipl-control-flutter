@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:lipl_repo/lipl_repo.dart';
 import '../bloc/edit_lyric_bloc.dart';
 
 class EditLyricPage extends StatelessWidget {
@@ -14,7 +13,6 @@ class EditLyricPage extends StatelessWidget {
       fullscreenDialog: true,
       builder: (BuildContext context) => BlocProvider<EditLyricBloc>(
         create: (BuildContext context) => EditLyricBloc(
-          liplRestStorage: context.read<LiplRestStorage>(),
           id: id,
           title: title,
           parts: parts,

@@ -1,4 +1,4 @@
-import 'package:lipl_repo/lipl_repo.dart';
+import 'package:lipl_rest_bloc/lipl_rest_bloc.dart';
 
 extension LyricX on Lyric {
   List<LyricPart> toLyricParts() {

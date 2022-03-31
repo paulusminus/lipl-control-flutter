@@ -1,19 +1,17 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:lipl_repo/lipl_repo.dart';
+import 'package:lipl_rest_bloc/lipl_rest_bloc.dart';
 
 part 'edit_playlist_event.dart';
 part 'edit_playlist_state.dart';
 
 class EditPlaylistBloc extends Bloc<EditPlaylistEvent, EditPlaylistState> {
   EditPlaylistBloc({
-    required LiplRestStorage liplRestStorage,
     required String? id,
     required String? title,
     required List<Lyric>? members,
     required List<Lyric>? lyrics,
-  })  : _liplRestStorage = liplRestStorage,
-        super(
+  }) : super(
           EditPlaylistState(
             id: id,
             title: title ?? '',
@@ -24,11 +22,15 @@ class EditPlaylistBloc extends Bloc<EditPlaylistEvent, EditPlaylistState> {
     on<EditPlaylistTitleChanged>(_onTitleChanged);
     on<EditPlaylistSearchChanged>(_onSearchChanged);
     on<EditPlaylistMembersChanged>(_onMembersChanged);
-    on<EditPlaylistSubmitted>(_onSubmitted);
     on<EditPlaylistMembersItemDeleted>(_onMembersItemDeleted);
     on<EditPlaylistMembersItemAdded>(_onMembersItemAdded);
+    on<EditPlaylistSubmitted>(_onSubmitted);
   }
-  final LiplRestStorage _liplRestStorage;
+
+  void _onSubmitted(
+      EditPlaylistSubmitted event, Emitter<EditPlaylistState> emit) {
+    emit(state.copyWith(status: EditPlaylistStatus.succes));
+  }
 
   void _onMembersItemDeleted(
     EditPlaylistMembersItemDeleted event,
@@ -78,63 +80,5 @@ class EditPlaylistBloc extends Bloc<EditPlaylistEvent, EditPlaylistState> {
         event.newIndex < event.oldIndex ? event.newIndex : event.newIndex - 1,
         removed);
     emit(state.copyWith(members: members));
-  }
-
-  Future<void> _onSubmitted(
-    EditPlaylistSubmitted event,
-    Emitter<EditPlaylistState> emit,
-  ) async {
-    if (state.isNewLyric) {
-      final PlaylistPost playlistPost = PlaylistPost(
-        title: state.title,
-        members: state.members.map((Summary summary) => summary.id).toList(),
-      );
-      final Playlist postedPlaylist =
-          await _liplRestStorage.postPlaylist(playlistPost);
-      emit(
-        state.copyWith(
-          status: EditPlaylistStatus.succes,
-          id: postedPlaylist.id,
-          title: postedPlaylist.title,
-          members: postedPlaylist.members
-              .map(
-                (String memberId) => state.members.firstWhere(
-                  (Summary summary) => summary.id == memberId,
-                  orElse: null,
-                ),
-              )
-              .where(
-                (Summary? summary) => summary != null,
-              )
-              .toList(),
-        ),
-      );
-    } else {
-      final Playlist playlist = Playlist(
-        id: state.id,
-        title: state.title,
-        members: state.members.map((Summary summary) => summary.id).toList(),
-      );
-      final Playlist puttedPlaylist =
-          await _liplRestStorage.putPlaylist(playlist);
-      emit(
-        state.copyWith(
-          status: EditPlaylistStatus.succes,
-          id: puttedPlaylist.id,
-          title: puttedPlaylist.title,
-          members: puttedPlaylist.members
-              .map(
-                (String memberId) => state.members.firstWhere(
-                  (Summary summary) => summary.id == memberId,
-                  orElse: null,
-                ),
-              )
-              .where(
-                (Summary? summary) => summary != null,
-              )
-              .toList(),
-        ),
-      );
-    }
   }
 }

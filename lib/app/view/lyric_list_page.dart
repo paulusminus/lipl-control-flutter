@@ -7,7 +7,7 @@ import 'package:lipl_bloc/edit_playlist/edit_playlist.dart';
 import 'package:lipl_bloc/edit_preferences/edit_preferences.dart';
 import 'package:lipl_bloc/play/play.dart';
 import 'package:lipl_bloc/widget/widget.dart';
-import 'package:lipl_repo/lipl_repo.dart';
+import 'package:lipl_rest_bloc/lipl_rest_bloc.dart';
 import 'package:logging/logging.dart';
 
 final Logger log = Logger('$LyricList');
@@ -16,90 +16,95 @@ class LyricList extends StatelessWidget {
   const LyricList();
 
   @override
-  Widget build(BuildContext context) => BlocBuilder<AppBloc, AppState>(
-        builder: (BuildContext context, AppState state) {
-          return Scaffold(
-            appBar: AppBar(
-              title: const Text('Lipl'),
-              actions: <Widget>[
-                if (state.selectedTab == SelectedTab.playlists)
-                  IconButton(
-                    icon: const Icon(Icons.text_snippet),
-                    onPressed: () {
-                      context.read<AppBloc>().add(
-                            const AppTabChanged(
-                              tab: SelectedTab.lyrics,
-                            ),
-                          );
-                    },
-                  ),
-                if (state.selectedTab == SelectedTab.lyrics)
-                  IconButton(
-                    icon: const Icon(Icons.folder),
-                    onPressed: () {
-                      context.read<AppBloc>().add(
-                            const AppTabChanged(
-                              tab: SelectedTab.playlists,
-                            ),
-                          );
-                    },
-                  ),
-              ],
-            ),
-            body: BlocListener<AppBloc, AppState>(
-              listenWhen: (AppState previous, AppState current) =>
-                  current.status != previous.status,
-              listener: (BuildContext context, AppState state) {
-                if (state.status == AppStatus.noCredentials) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: const Text('No Credentials'),
-                      action: SnackBarAction(
-                        label: 'Voorkeuren',
-                        onPressed: () {
-                          Navigator.of(context).push(
-                            EditPreferencesPage.route(),
-                          );
-                        },
-                      ),
-                      duration: const Duration(days: 365),
+  Widget build(BuildContext context) =>
+      BlocBuilder<LiplRestBloc, LiplRestState>(
+        builder: (BuildContext context, LiplRestState liplRestState) {
+          return BlocBuilder<SelectedTabBloc, SelectedTabState>(
+            builder:
+                (BuildContext context, SelectedTabState selectedTabState) =>
+                    Scaffold(
+              appBar: AppBar(
+                title: const Text('Lipl'),
+                actions: <Widget>[
+                  if (selectedTabState.selectedTab == SelectedTab.playlists)
+                    IconButton(
+                      icon: const Icon(Icons.text_snippet),
+                      onPressed: () {
+                        context.read<SelectedTabBloc>().add(
+                              const SelectedTabChanged(
+                                tab: SelectedTab.lyrics,
+                              ),
+                            );
+                      },
                     ),
-                  );
-                }
-              },
-              child: state.status == AppStatus.success
-                  ? IndexedStack(
-                      index: state.selectedTab.index,
-                      children: <Widget>[
-                        renderLyricList(
-                          context,
-                          state.lyrics,
+                  if (selectedTabState.selectedTab == SelectedTab.lyrics)
+                    IconButton(
+                      icon: const Icon(Icons.folder),
+                      onPressed: () {
+                        context.read<SelectedTabBloc>().add(
+                              const SelectedTabChanged(
+                                tab: SelectedTab.playlists,
+                              ),
+                            );
+                      },
+                    ),
+                ],
+              ),
+              body: BlocListener<LiplRestBloc, LiplRestState>(
+                listenWhen: (LiplRestState previous, LiplRestState current) =>
+                    current.status != previous.status,
+                listener: (BuildContext context, LiplRestState state) {
+                  if (state.status == LiplRestStatus.unauthorized) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: const Text('Unauthorized'),
+                        action: SnackBarAction(
+                          label: 'Voorkeuren',
+                          onPressed: () {
+                            Navigator.of(context).push(
+                              EditPreferencesPage.route(),
+                            );
+                          },
                         ),
-                        renderPlaylistList(
-                          context,
-                          state.playlists,
-                          state.lyrics,
-                        ),
-                      ],
-                    )
-                  : const Center(child: CupertinoActivityIndicator()),
-            ),
-            floatingActionButton: FloatingActionButton(
-              onPressed: () {
-                if (state.selectedTab == SelectedTab.lyrics) {
-                  log.info('Add lyric pressed');
-                  Navigator.of(context).push(
-                    EditLyricPage.route(),
-                  );
-                }
-                if (state.selectedTab == SelectedTab.playlists) {
-                  log.info('Add playlist pressed');
-                  Navigator.of(context).push(
-                    EditPlaylistPage.route(lyrics: state.lyrics),
-                  );
-                }
-              },
-              child: const Icon(Icons.add),
+                        duration: const Duration(days: 365),
+                      ),
+                    );
+                  }
+                },
+                child: liplRestState.status == LiplRestStatus.success
+                    ? IndexedStack(
+                        index: selectedTabState.selectedTab.index,
+                        children: <Widget>[
+                          renderLyricList(
+                            context,
+                            liplRestState.lyrics,
+                          ),
+                          renderPlaylistList(
+                            context,
+                            liplRestState.playlists,
+                            liplRestState.lyrics,
+                          ),
+                        ],
+                      )
+                    : const Center(child: CupertinoActivityIndicator()),
+              ),
+              floatingActionButton: FloatingActionButton(
+                onPressed: () {
+                  if (selectedTabState.selectedTab == SelectedTab.lyrics) {
+                    log.info('Add lyric pressed');
+                    Navigator.of(context).push(
+                      EditLyricPage.route(),
+                    );
+                  }
+                  if (selectedTabState.selectedTab == SelectedTab.playlists) {
+                    log.info('Add playlist pressed');
+                    Navigator.of(context).push(
+                      EditPlaylistPage.route(lyrics: liplRestState.lyrics),
+                    );
+                  }
+                },
+                child: const Icon(Icons.add),
+              ),
             ),
           );
         },
@@ -175,10 +180,8 @@ Widget renderLyricList(BuildContext context, List<Lyric> lyrics) =>
               title: const Text('Bevestigen'),
               content: Text('${lyric.title} verwijderen?'),
             )) {
-              context.read<AppBloc>().add(
-                    AppLyricDeletionRequested(
-                      id: lyric.id,
-                    ),
+              context.read<LiplRestBloc>().add(
+                    LiplRestEventDeleteLyric(id: lyric.id),
                   );
             }
           },
@@ -239,8 +242,8 @@ Widget renderPlaylistList(
               title: const Text('Bevestigen'),
               content: Text('${playlist.title} verwijderen?'),
             )) {
-              context.read<AppBloc>().add(
-                    AppPlaylistDeletionRequested(
+              context.read<LiplRestBloc>().add(
+                    LiplRestEventDeletePlaylist(
                       id: playlist.id,
                     ),
                   );
