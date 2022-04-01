@@ -5,7 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:lipl_rest_bloc/lipl_rest_bloc.dart';
 import 'package:parts/parts.dart';
-import '../bloc/edit_lyric_bloc.dart';
+import 'edit_lyric_cubit.dart';
 
 class EditLyricPage extends StatelessWidget {
   const EditLyricPage({Key? key}) : super(key: key);
@@ -14,8 +14,8 @@ class EditLyricPage extends StatelessWidget {
       {String? id, String? title, List<List<String>>? parts}) {
     return MaterialPageRoute<void>(
       fullscreenDialog: true,
-      builder: (BuildContext context) => BlocProvider<EditLyricBloc>(
-        create: (BuildContext context) => EditLyricBloc(
+      builder: (BuildContext context) => BlocProvider<EditLyricCubit>(
+        create: (BuildContext context) => EditLyricCubit(
           id: id,
           title: title,
           parts: parts,
@@ -27,7 +27,7 @@ class EditLyricPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<EditLyricBloc, EditLyricState>(
+    return BlocListener<EditLyricCubit, EditLyricState>(
       listenWhen: (EditLyricState previous, EditLyricState current) =>
           previous.status != current.status &&
           current.status == EditLyricStatus.succes,
@@ -45,9 +45,9 @@ class EditLyricView extends StatelessWidget {
   Widget build(BuildContext context) {
     final AppLocalizations l10n = AppLocalizations.of(context)!;
     final EditLyricStatus status =
-        context.select((EditLyricBloc bloc) => bloc.state.status);
+        context.select((EditLyricCubit cubit) => cubit.state.status);
     final bool isNew =
-        context.select((EditLyricBloc bloc) => bloc.state.id == null);
+        context.select((EditLyricCubit cubit) => cubit.state.id == null);
 
     return Scaffold(
       appBar: AppBar(
@@ -56,31 +56,28 @@ class EditLyricView extends StatelessWidget {
       floatingActionButton: FloatingActionButton(
         onPressed: status.isLoadingOrSuccess
             ? null
-            : () {
-                final LiplRestBloc liplRestBloc = context.read<LiplRestBloc>();
+            : () async {
+                final LiplRestCubit liplRestCubit =
+                    context.read<LiplRestCubit>();
                 final EditLyricState state =
-                    context.read<EditLyricBloc>().state;
+                    context.read<EditLyricCubit>().state;
                 if (isNew) {
-                  liplRestBloc.add(
-                    LiplRestEventPostLyric(
-                      lyricPost: LyricPost(
-                        title: state.title,
-                        parts: toParts(state.text),
-                      ),
+                  await liplRestCubit.postLyric(
+                    LyricPost(
+                      title: state.title,
+                      parts: toParts(state.text),
                     ),
                   );
                 } else {
-                  liplRestBloc.add(
-                    LiplRestEventPutLyric(
-                      lyric: Lyric(
-                        id: state.id,
-                        title: state.title,
-                        parts: toParts(state.text),
-                      ),
+                  await liplRestCubit.putLyric(
+                    Lyric(
+                      id: state.id,
+                      title: state.title,
+                      parts: toParts(state.text),
                     ),
                   );
                 }
-                context.read<EditLyricBloc>().add(const EditLyricSubmitted());
+                context.read<EditLyricCubit>().submitted();
               },
         child: status.isLoadingOrSuccess
             ? const CupertinoActivityIndicator()
@@ -107,7 +104,7 @@ class _TitleField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final AppLocalizations l10n = AppLocalizations.of(context)!;
-    return BlocBuilder<EditLyricBloc, EditLyricState>(
+    return BlocBuilder<EditLyricCubit, EditLyricState>(
       builder: (BuildContext context, EditLyricState state) {
         return TextFormField(
           key: const Key('editLyricView_title_textFormField'),
@@ -122,7 +119,7 @@ class _TitleField extends StatelessWidget {
             LengthLimitingTextInputFormatter(50),
           ],
           onChanged: (String value) {
-            context.read<EditLyricBloc>().add(EditLyricTitleChanged(value));
+            context.read<EditLyricCubit>().titleChanged(value);
           },
         );
       },
@@ -136,7 +133,7 @@ class _TextField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final AppLocalizations l10n = AppLocalizations.of(context)!;
-    return BlocBuilder<EditLyricBloc, EditLyricState>(
+    return BlocBuilder<EditLyricCubit, EditLyricState>(
       builder: (BuildContext context, EditLyricState state) {
         return TextFormField(
           key: const Key('editLyricView_text_textFormField'),
@@ -148,9 +145,7 @@ class _TextField extends StatelessWidget {
             hintText: state.text,
           ),
           onChanged: (String value) {
-            context.read<EditLyricBloc>().add(
-                  EditLyricTextChanged(value),
-                );
+            context.read<EditLyricCubit>().textChanged(value);
           },
         );
       },

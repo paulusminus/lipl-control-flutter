@@ -1,1 +1,1 @@
-export 'view/view.dart';
+export 'edit_lyric_page.dart';

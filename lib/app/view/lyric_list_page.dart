@@ -19,9 +19,9 @@ class LyricList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final AppLocalizations l10n = AppLocalizations.of(context)!;
-    return BlocBuilder<LiplRestBloc, LiplRestState>(
-      builder: (BuildContext context, LiplRestState liplRestState) {
-        return BlocBuilder<SelectedTabBloc, SelectedTabState>(
+    return BlocBuilder<LiplRestCubit, RestState>(
+      builder: (BuildContext context, RestState liplRestState) {
+        return BlocBuilder<SelectedTabCubit, SelectedTabState>(
           builder: (BuildContext context, SelectedTabState selectedTabState) =>
               Scaffold(
             appBar: AppBar(
@@ -31,31 +31,23 @@ class LyricList extends StatelessWidget {
                   IconButton(
                     icon: const Icon(Icons.text_snippet),
                     onPressed: () {
-                      context.read<SelectedTabBloc>().add(
-                            const SelectedTabChanged(
-                              tab: SelectedTab.lyrics,
-                            ),
-                          );
+                      context.read<SelectedTabCubit>().selectLyrics();
                     },
                   ),
                 if (selectedTabState.selectedTab == SelectedTab.lyrics)
                   IconButton(
                     icon: const Icon(Icons.folder),
                     onPressed: () {
-                      context.read<SelectedTabBloc>().add(
-                            const SelectedTabChanged(
-                              tab: SelectedTab.playlists,
-                            ),
-                          );
+                      context.read<SelectedTabCubit>().selectPlaylists();
                     },
                   ),
               ],
             ),
-            body: BlocListener<LiplRestBloc, LiplRestState>(
-              listenWhen: (LiplRestState previous, LiplRestState current) =>
+            body: BlocListener<LiplRestCubit, RestState>(
+              listenWhen: (RestState previous, RestState current) =>
                   current.status != previous.status,
-              listener: (BuildContext context, LiplRestState state) {
-                if (state.status == LiplRestStatus.unauthorized) {
+              listener: (BuildContext context, RestState state) {
+                if (state.status == RestStatus.unauthorized) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
                       content: Text(l10n.unauthorized),
@@ -72,7 +64,7 @@ class LyricList extends StatelessWidget {
                   );
                 }
               },
-              child: liplRestState.status == LiplRestStatus.success
+              child: liplRestState.status == RestStatus.success
                   ? IndexedStack(
                       index: selectedTabState.selectedTab.index,
                       children: <Widget>[
@@ -188,9 +180,7 @@ Widget renderLyricList(BuildContext context, List<Lyric> lyrics) {
             textOK: l10n.okButtonLabel,
             textCancel: l10n.cancelButtonLabel,
           )) {
-            context.read<LiplRestBloc>().add(
-                  LiplRestEventDeleteLyric(id: lyric.id),
-                );
+            await context.read<LiplRestCubit>().deleteLyric(lyric.id);
           }
         },
       ),
@@ -256,11 +246,7 @@ Widget renderPlaylistList(
             textOK: l10n.okButtonLabel,
             textCancel: l10n.cancelButtonLabel,
           )) {
-            context.read<LiplRestBloc>().add(
-                  LiplRestEventDeletePlaylist(
-                    id: playlist.id,
-                  ),
-                );
+            await context.read<LiplRestCubit>().deletePlaylist(playlist.id);
           }
         },
       ),

@@ -104,7 +104,7 @@ class BlocProviders extends StatelessWidget {
       ),
     );
 
-    final LiplRestBloc liplRestBloc = LiplRestBloc();
+    final LiplRestCubit liplRestCubit = LiplRestCubit();
     preferencesBloc.stream
         .where(
           (PreferencesState<LiplPreferences> preferences) =>
@@ -112,7 +112,7 @@ class BlocProviders extends StatelessWidget {
         )
         .distinct()
         .listen(
-      (PreferencesState<LiplPreferences> preferences) {
+      (PreferencesState<LiplPreferences> preferences) async {
         blocProvidersLog.info(l10n?.preferencesChanged ?? '');
         final Credentials? credentials = preferences.item == null
             ? null
@@ -123,12 +123,10 @@ class BlocProviders extends StatelessWidget {
                     username: preferences.item!.username,
                     password: preferences.item!.password,
                   );
-        liplRestBloc.add(
-          LiplRestEventLoad(
-            api: apiFromConfig(
-              credentials: credentials,
-              baseUrl: preferences.item?.baseUrl,
-            ),
+        liplRestCubit.load(
+          apiFromConfig(
+            credentials: credentials,
+            baseUrl: preferences.item?.baseUrl,
           ),
         );
       },
@@ -147,9 +145,9 @@ class BlocProviders extends StatelessWidget {
             defaultValue: LiplPreferences.blank(),
           ),
         ),
-        BlocProvider<LiplRestBloc>(create: (_) => liplRestBloc),
-        BlocProvider<SelectedTabBloc>(
-          create: (_) => SelectedTabBloc(),
+        BlocProvider<LiplRestCubit>(create: (_) => liplRestCubit),
+        BlocProvider<SelectedTabCubit>(
+          create: (_) => SelectedTabCubit(),
         ),
       ],
       child: App(),

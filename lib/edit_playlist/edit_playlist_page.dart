@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:lipl_bloc/edit_playlist/bloc/edit_playlist_bloc.dart';
+import 'package:lipl_bloc/edit_playlist/edit_playlist_cubit.dart';
 import 'package:lipl_rest_bloc/lipl_rest_bloc.dart';
 import 'package:logging/logging.dart';
 
@@ -20,8 +20,8 @@ class EditPlaylistPage extends StatelessWidget {
   }) {
     return MaterialPageRoute<void>(
       fullscreenDialog: true,
-      builder: (BuildContext context) => BlocProvider<EditPlaylistBloc>(
-        create: (BuildContext context) => EditPlaylistBloc(
+      builder: (BuildContext context) => BlocProvider<EditPlaylistCubit>(
+        create: (BuildContext context) => EditPlaylistCubit(
           id: id,
           title: title,
           members: members,
@@ -34,7 +34,7 @@ class EditPlaylistPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<EditPlaylistBloc, EditPlaylistState>(
+    return BlocListener<EditPlaylistCubit, EditPlaylistState>(
       listenWhen: (EditPlaylistState previous, EditPlaylistState current) =>
           previous.status != current.status &&
           current.status == EditPlaylistStatus.succes,
@@ -52,9 +52,9 @@ class EditLyricView extends StatelessWidget {
   Widget build(BuildContext context) {
     final AppLocalizations l10n = AppLocalizations.of(context)!;
     final EditPlaylistStatus status =
-        context.select((EditPlaylistBloc bloc) => bloc.state.status);
+        context.select((EditPlaylistCubit cubit) => cubit.state.status);
     final bool isNew =
-        context.select((EditPlaylistBloc bloc) => bloc.state.id == null);
+        context.select((EditPlaylistCubit cubit) => cubit.state.id == null);
 
     return Scaffold(
       appBar: AppBar(
@@ -63,9 +63,9 @@ class EditLyricView extends StatelessWidget {
       floatingActionButton: FloatingActionButton(
         onPressed: status.isLoadingOrSuccess
             ? null
-            : () {
+            : () async {
                 final EditPlaylistState state =
-                    context.read<EditPlaylistBloc>().state;
+                    context.read<EditPlaylistCubit>().state;
                 if (isNew) {
                   final PlaylistPost playlistPost = PlaylistPost(
                     title: state.title,
@@ -75,9 +75,9 @@ class EditLyricView extends StatelessWidget {
                         )
                         .toList(),
                   );
-                  context.read<LiplRestBloc>().add(
-                        LiplRestEventPostPlaylist(playlistPost: playlistPost),
-                      );
+                  await context
+                      .read<LiplRestCubit>()
+                      .postPlaylist(playlistPost);
                 } else {
                   final Playlist playlist = Playlist(
                     id: state.id,
@@ -85,13 +85,9 @@ class EditLyricView extends StatelessWidget {
                     members:
                         state.members.map((Lyric lyric) => lyric.id).toList(),
                   );
-                  context
-                      .read<LiplRestBloc>()
-                      .add(LiplRestEventPutPlaylist(playlist: playlist));
+                  await context.read<LiplRestCubit>().putPlaylist(playlist);
                 }
-                context
-                    .read<EditPlaylistBloc>()
-                    .add(const EditPlaylistSubmitted());
+                context.read<EditPlaylistCubit>().submitted();
               },
         child: status.isLoadingOrSuccess
             ? const CupertinoActivityIndicator()
@@ -120,7 +116,7 @@ class _TitleField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final AppLocalizations l10n = AppLocalizations.of(context)!;
-    return BlocBuilder<EditPlaylistBloc, EditPlaylistState>(
+    return BlocBuilder<EditPlaylistCubit, EditPlaylistState>(
       builder: (BuildContext context, EditPlaylistState state) {
         return Form(
           child: TextFormField(
@@ -136,9 +132,7 @@ class _TitleField extends StatelessWidget {
               LengthLimitingTextInputFormatter(50),
             ],
             onChanged: (String value) {
-              context
-                  .read<EditPlaylistBloc>()
-                  .add(EditPlaylistTitleChanged(value));
+              context.read<EditPlaylistCubit>().titleChanged(value);
             },
           ),
         );
@@ -152,7 +146,7 @@ class _MembersField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<EditPlaylistBloc, EditPlaylistState>(
+    return BlocBuilder<EditPlaylistCubit, EditPlaylistState>(
         builder: (BuildContext context, EditPlaylistState state) {
       return ReorderableListView.builder(
         buildDefaultDragHandles: false,
@@ -164,8 +158,8 @@ class _MembersField extends StatelessWidget {
           onDismissed: (DismissDirection direction) {
             if (direction == DismissDirection.endToStart) {
               context
-                  .read<EditPlaylistBloc>()
-                  .add(EditPlaylistMembersItemDeleted(state.members[index].id));
+                  .read<EditPlaylistCubit>()
+                  .membersItemDeleted(state.members[index].id);
             }
           },
           child: ListTile(
@@ -177,9 +171,7 @@ class _MembersField extends StatelessWidget {
           ),
         ),
         onReorder: (int oldIndex, int newIndex) {
-          context.read<EditPlaylistBloc>().add(
-                EditPlaylistMembersChanged(oldIndex, newIndex),
-              );
+          context.read<EditPlaylistCubit>().membersChanged(oldIndex, newIndex);
         },
       );
     });
@@ -200,7 +192,7 @@ class _MembersAddFieldState extends State<_MembersAddField> {
   @override
   Widget build(BuildContext context) {
     final AppLocalizations l10n = AppLocalizations.of(context)!;
-    return BlocBuilder<EditPlaylistBloc, EditPlaylistState>(
+    return BlocBuilder<EditPlaylistCubit, EditPlaylistState>(
       builder: (BuildContext context, EditPlaylistState state) {
         return Form(
           key: _globalKey,
@@ -218,9 +210,7 @@ class _MembersAddFieldState extends State<_MembersAddField> {
                   label: Text(l10n.addLyric),
                 ),
                 onChanged: (String value) {
-                  context
-                      .read<EditPlaylistBloc>()
-                      .add(EditPlaylistSearchChanged(value));
+                  context.read<EditPlaylistCubit>().searchChanged(value);
                 },
               ),
               if (state.filtered.isNotEmpty && state.filtered.length <= 3)
@@ -231,10 +221,8 @@ class _MembersAddFieldState extends State<_MembersAddField> {
                     return ListTile(
                       title: Text(state.filtered[index].title),
                       onTap: () {
-                        context.read<EditPlaylistBloc>().add(
-                              EditPlaylistMembersItemAdded(
-                                state.filtered[index],
-                              ),
+                        context.read<EditPlaylistCubit>().membersItemAdded(
+                              state.filtered[index],
                             );
                         _globalKey.currentState?.reset();
                         _focusNode.requestFocus();

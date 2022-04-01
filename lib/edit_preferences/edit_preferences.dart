@@ -90,7 +90,8 @@ class EditPreferencesPage extends StatelessWidget {
                                 .read<PreferencesBloc<LiplPreferences>>()
                                 .add(
                                   PreferencesEventChange<LiplPreferences>(
-                                      item: state.preferences),
+                                    item: state.preferences,
+                                  ),
                                 );
                           },
                   ),

@@ -1,4 +1,10 @@
-part of 'edit_lyric_bloc.dart';
+import 'package:bloc/bloc.dart';
+import 'package:equatable/equatable.dart';
+import 'package:parts/parts.dart';
+
+extension PartsX on List<List<String>> {
+  String intoText() => toText(this);
+}
 
 enum EditLyricStatus { initial, loading, succes, failure }
 
@@ -39,4 +45,30 @@ class EditLyricState extends Equatable {
 
   @override
   List<Object?> get props => <Object?>[status, id, title, text];
+}
+
+class EditLyricCubit extends Cubit<EditLyricState> {
+  EditLyricCubit({
+    String? id,
+    String? title,
+    List<List<String>>? parts,
+  }) : super(
+          EditLyricState(
+            id: id,
+            title: title ?? '',
+            text: parts == null ? '' : toText(parts),
+          ),
+        );
+
+  void submitted() {
+    emit(state.copyWith(status: EditLyricStatus.succes));
+  }
+
+  void titleChanged(String title) {
+    emit(state.copyWith(title: title));
+  }
+
+  void textChanged(String text) {
+    emit(state.copyWith(text: text));
+  }
 }

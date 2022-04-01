@@ -1,2 +1,2 @@
-export 'bloc/selected_tab_bloc.dart';
+export 'cubit/selected_tab_cubit.dart';
 export 'view/view.dart';
