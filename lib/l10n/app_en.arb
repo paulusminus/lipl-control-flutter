@@ -1,15 +1,15 @@
 {
-    "helloWorld": "Hello World!",
-    "@helloWorld": {
-        "description": "The conventional newborn programmer greeting"
+    "addLyric": "Add lyric",
+    "@addLyric": {
+        "description": "Add lyric"
     },
-    "liplTitle": "Lipl",
-    "@liplTitle": {
-        "description": "The title of the main program"
+    "baseUrlLabel": "Base URL",
+    "@baseUrlLabel": {
+        "description": "Base URL label"
     },
-    "preferencesChanged": "Preferences Changed",
-    "@preferencesChanged": {
-        "description": "Notice of changed preferences"
+    "cancelButtonLabel": "Cancel",
+    "@cancelButtonLabel": {
+        "description": "Cancel button label"
     },
     "confirm": "Confirm",
     "@confirm": {
@@ -19,18 +19,6 @@
     "@delete": {
         "description": "Delete"
     },
-    "unauthorized": "Unauthorized",
-    "@unauthorized": {
-        "description": "Access needs authentication"
-    },
-    "lyrics": "Lyrics",
-    "@lyrics": {
-        "description": "Lyrics"
-    },
-    "playButtonLabel": "play",
-    "@playButtonLabel": {
-        "description": "Play button title"
-    },
     "deleteButtonLabel": "delete",
     "@deleteButtonLabel": {
         "description": "Delete button label"
@@ -39,64 +27,72 @@
     "@editButtonLabel": {
         "decription": "Edit button label"
     },
-    "okButtonLabel": "Ok",
-    "@okButtonLabel": {
-        "descriptioni": "Ok button label"
-    },
-    "cancelButtonLabel": "Cancel",
-    "@cancelButtonLabel": {
-        "description": "Cancel button label"
-    },
-    "preferences": "Preferences",
-    "@preferences": {
-        "description": "Preference page title"
-    },
-    "newLyric": "New lyric",
-    "@newLyric": {
-        "description": "New lyric"
-    },
     "editLyric": "Edit lyric",
     "@editLyric": {
         "description": "Edit lyric"
-    },
-    "titleLabel": "Title",
-    "@titleLabel": {
-        "description": "Title label"
-    },
-    "textLabel": "Text",
-    "@textLabel": {
-        "description": "Text label"
-    },
-    "newPlaylist": "New playlist",
-    "@newPlaylist": {
-        "description": "New playlist"
     },
     "editPlaylist": "Edit playlist",
     "@editPlaylist": {
         "description": "Edit playlist"
     },
-    "addLyric": "Add lyric",
-    "@addLyric": {
-        "description": "Add lyric"
+    "liplTitle": "Lipl",
+    "@liplTitle": {
+        "description": "The title of the main program"
     },
-    "usernameLabel": "Username",
-    "@usernameLabel": {
-        "description": "Username label"
+    "lyrics": "Lyrics",
+    "@lyrics": {
+        "description": "Lyrics"
+    },
+    "newLyric": "New lyric",
+    "@newLyric": {
+        "description": "New lyric"
+    },
+    "newPlaylist": "New playlist",
+    "@newPlaylist": {
+        "description": "New playlist"
+    },
+    "okButtonLabel": "Ok",
+    "@okButtonLabel": {
+        "descriptioni": "Ok button label"
     },
     "passwordLabel": "Password",
     "@passwordLabel": {
         "description": "Password label"
     },
-    "baseUrlLabel": "Base URL",
-    "@baseUrlLabel": {
-        "description": "Base URL label"
+    "playButtonLabel": "play",
+    "@playButtonLabel": {
+        "description": "Play button title"
+    },
+    "playPageTitle": "Play",
+    "@playPageTitle": {
+        "description": "Play page titel"
+    },
+    "preferences": "Preferences",
+    "@preferences": {
+        "description": "Preference page title"
+    },
+    "preferencesChanged": "Preferences Changed",
+    "@preferencesChanged": {
+        "description": "Notice of changed preferences"
     },
     "saveButtonLabel": "Save",
     "@saveButtonLabel": {
         "description": "Save button label"
     },
-    "playPageTitle": "Play",
-    "@playPageTitle": {
-        "description": "Play page titel"
+    "textLabel": "Text",
+    "@textLabel": {
+        "description": "Text label"
+    },
+    "titleLabel": "Title",
+    "@titleLabel": {
+        "description": "Title label"
+    },
+    "unauthorized": "Unauthorized",
+    "@unauthorized": {
+        "description": "Access needs authentication"
+    },
+    "usernameLabel": "Username",
+    "@usernameLabel": {
+        "description": "Username label"
     }
 }

@@ -69,6 +69,19 @@ class EndAction extends Action<EndIntent> {
   }
 }
 
+class CloseIntent extends Intent {}
+
+class CloseAction extends Action<CloseIntent> {
+  CloseAction({required this.context});
+  final BuildContext context;
+
+  @override
+  Object? invoke(CloseIntent intent) {
+    Navigator.of(context).pop();
+    return null;
+  }
+}
+
 class PlayPage extends StatelessWidget {
   const PlayPage({Key? key, required this.lyricParts, required this.title})
       : super(key: key);
@@ -98,6 +111,7 @@ class PlayPage extends StatelessWidget {
         const SingleActivator(LogicalKeyboardKey.arrowRight): NextIntent(),
         const SingleActivator(LogicalKeyboardKey.home): HomeIntent(),
         const SingleActivator(LogicalKeyboardKey.end): EndIntent(),
+        const SingleActivator(LogicalKeyboardKey.escape): CloseIntent(),
       },
       child: Actions(
         actions: <Type, Action<Intent>>{
@@ -106,6 +120,7 @@ class PlayPage extends StatelessWidget {
           HomeIntent: HomeAction(controller: controller),
           EndIntent:
               EndAction(controller: controller, count: lyricParts.length),
+          CloseIntent: CloseAction(context: context),
         },
         child: Scaffold(
           appBar: AppBar(
@@ -118,10 +133,27 @@ class PlayPage extends StatelessWidget {
                 children: lyricParts
                     .map(
                       (LyricPart lyricPart) => Center(
-                        child: ListTile(
-                          title: Text(
-                              '${lyricPart.title} (${lyricPart.current} / ${lyricPart.total})'),
-                          subtitle: Text(lyricPart.text),
+                        child: RichText(
+                          text: TextSpan(
+                            text: lyricPart.text,
+                            style: const TextStyle(
+                              fontSize: 16,
+                              color: Colors.black,
+                              height: 1.2,
+                            ),
+                            children: <TextSpan>[
+                              TextSpan(
+                                text:
+                                    '\n\n${lyricPart.title} (${lyricPart.current} / ${lyricPart.total})',
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.normal,
+                                  fontSize: 14,
+                                  color: Colors.black,
+                                  height: 1.2,
+                                ),
+                              )
+                            ],
+                          ),
                         ),
                       ),
                     )
