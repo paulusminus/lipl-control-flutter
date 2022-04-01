@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:logging/logging.dart';
 import 'play.dart';
 
@@ -89,6 +90,7 @@ class PlayPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final AppLocalizations l10n = AppLocalizations.of(context)!;
     final PageController controller = PageController();
     return Shortcuts(
       shortcuts: <SingleActivator, Intent>{
@@ -107,17 +109,12 @@ class PlayPage extends StatelessWidget {
         },
         child: Scaffold(
           appBar: AppBar(
-            title: Text('Afspelen $title'),
+            title: Text('${l10n.playPageTitle} $title'),
           ),
           body: Focus(
             autofocus: true,
             child: PageView(
                 controller: controller,
-                onPageChanged: (int pageno) {
-                  final LyricPart page = lyricParts[pageno];
-                  log.info(
-                      'Page ${page.title} (${page.current} / ${page.total})');
-                },
                 children: lyricParts
                     .map(
                       (LyricPart lyricPart) => Center(

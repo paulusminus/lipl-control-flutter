@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:lipl_bloc/app/app.dart';
 import 'package:preferences_bloc/preferences_bloc.dart';
 
@@ -15,6 +16,7 @@ class EditPreferencesPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final AppLocalizations l10n = AppLocalizations.of(context)!;
     return BlocBuilder<EditPreferencesBloc<LiplPreferences>,
         EditPreferencesState<LiplPreferences>>(
       builder: (
@@ -23,7 +25,7 @@ class EditPreferencesPage extends StatelessWidget {
       ) {
         return Scaffold(
           appBar: AppBar(
-            title: const Text('Voorkeuren'),
+            title: Text(l10n.preferences),
           ),
           body: Center(
             child: Padding(
@@ -35,7 +37,7 @@ class EditPreferencesPage extends StatelessWidget {
                     enableSuggestions: false,
                     autocorrect: false,
                     keyboardType: TextInputType.text,
-                    decoration: const InputDecoration(labelText: 'Username'),
+                    decoration: InputDecoration(labelText: l10n.usernameLabel),
                     onChanged: (String value) {
                       context.read<EditPreferencesBloc<LiplPreferences>>().add(
                             EditPreferencesEventChange<LiplPreferences>(
@@ -51,8 +53,8 @@ class EditPreferencesPage extends StatelessWidget {
                     enableSuggestions: false,
                     autocorrect: false,
                     keyboardType: TextInputType.text,
-                    decoration: const InputDecoration(
-                      labelText: 'Password',
+                    decoration: InputDecoration(
+                      labelText: l10n.passwordLabel,
                     ),
                     onChanged: (String value) {
                       context.read<EditPreferencesBloc<LiplPreferences>>().add(
@@ -68,7 +70,7 @@ class EditPreferencesPage extends StatelessWidget {
                     enableSuggestions: false,
                     autocorrect: false,
                     keyboardType: TextInputType.url,
-                    decoration: const InputDecoration(labelText: 'Base Url'),
+                    decoration: InputDecoration(labelText: l10n.baseUrlLabel),
                     onChanged: (String value) {
                       context.read<EditPreferencesBloc<LiplPreferences>>().add(
                             EditPreferencesEventChange<LiplPreferences>(
@@ -80,7 +82,7 @@ class EditPreferencesPage extends StatelessWidget {
                   ),
                   const SizedBox(height: 10),
                   TextButton(
-                    child: const Text('SAVE'),
+                    child: Text(l10n.saveButtonLabel),
                     onPressed: !state.hasChanged
                         ? null
                         : () {

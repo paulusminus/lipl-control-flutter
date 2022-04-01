@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:lipl_bloc/edit_playlist/bloc/edit_playlist_bloc.dart';
 import 'package:lipl_rest_bloc/lipl_rest_bloc.dart';
 import 'package:logging/logging.dart';
@@ -49,6 +50,7 @@ class EditLyricView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final AppLocalizations l10n = AppLocalizations.of(context)!;
     final EditPlaylistStatus status =
         context.select((EditPlaylistBloc bloc) => bloc.state.status);
     final bool isNew =
@@ -56,7 +58,7 @@ class EditLyricView extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(isNew ? 'Nieuwe afspeellijst' : 'Wijzigen afspeellijst'),
+        title: Text(isNew ? l10n.newPlaylist : l10n.editPlaylist),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: status.isLoadingOrSuccess
@@ -66,12 +68,13 @@ class EditLyricView extends StatelessWidget {
                     context.read<EditPlaylistBloc>().state;
                 if (isNew) {
                   final PlaylistPost playlistPost = PlaylistPost(
-                      title: state.title,
-                      members: state.members
-                          .map(
-                            (Lyric lyric) => lyric.id,
-                          )
-                          .toList());
+                    title: state.title,
+                    members: state.members
+                        .map(
+                          (Lyric lyric) => lyric.id,
+                        )
+                        .toList(),
+                  );
                   context.read<LiplRestBloc>().add(
                         LiplRestEventPostPlaylist(playlistPost: playlistPost),
                       );
@@ -116,6 +119,7 @@ class _TitleField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final AppLocalizations l10n = AppLocalizations.of(context)!;
     return BlocBuilder<EditPlaylistBloc, EditPlaylistState>(
       builder: (BuildContext context, EditPlaylistState state) {
         return Form(
@@ -124,7 +128,7 @@ class _TitleField extends StatelessWidget {
             initialValue: state.title,
             decoration: InputDecoration(
               enabled: !state.status.isLoadingOrSuccess,
-              labelText: 'Titel',
+              labelText: l10n.titleLabel,
               hintText: state.title,
             ),
             maxLength: 50,
@@ -195,6 +199,7 @@ class _MembersAddFieldState extends State<_MembersAddField> {
 
   @override
   Widget build(BuildContext context) {
+    final AppLocalizations l10n = AppLocalizations.of(context)!;
     return BlocBuilder<EditPlaylistBloc, EditPlaylistState>(
       builder: (BuildContext context, EditPlaylistState state) {
         return Form(
@@ -209,8 +214,8 @@ class _MembersAddFieldState extends State<_MembersAddField> {
                 autocorrect: false,
                 enableSuggestions: false,
                 enableIMEPersonalizedLearning: false,
-                decoration: const InputDecoration(
-                  label: Text('Tekst toevoegen'),
+                decoration: InputDecoration(
+                  label: Text(l10n.addLyric),
                 ),
                 onChanged: (String value) {
                   context

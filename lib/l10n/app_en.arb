@@ -1,0 +1,102 @@
+{
+    "helloWorld": "Hello World!",
+    "@helloWorld": {
+        "description": "The conventional newborn programmer greeting"
+    },
+    "liplTitle": "Lipl",
+    "@liplTitle": {
+        "description": "The title of the main program"
+    },
+    "preferencesChanged": "Preferences Changed",
+    "@preferencesChanged": {
+        "description": "Notice of changed preferences"
+    },
+    "confirm": "Confirm",
+    "@confirm": {
+        "description": "Title of confirm dialog"
+    },
+    "delete": "Delete",
+    "@delete": {
+        "description": "Delete"
+    },
+    "unauthorized": "Unauthorized",
+    "@unauthorized": {
+        "description": "Access needs authentication"
+    },
+    "lyrics": "Lyrics",
+    "@lyrics": {
+        "description": "Lyrics"
+    },
+    "playButtonLabel": "play",
+    "@playButtonLabel": {
+        "description": "Play button title"
+    },
+    "deleteButtonLabel": "delete",
+    "@deleteButtonLabel": {
+        "description": "Delete button label"
+    },
+    "editButtonLabel": "edit",
+    "@editButtonLabel": {
+        "decription": "Edit button label"
+    },
+    "okButtonLabel": "Ok",
+    "@okButtonLabel": {
+        "descriptioni": "Ok button label"
+    },
+    "cancelButtonLabel": "Cancel",
+    "@cancelButtonLabel": {
+        "description": "Cancel button label"
+    },
+    "preferences": "Preferences",
+    "@preferences": {
+        "description": "Preference page title"
+    },
+    "newLyric": "New lyric",
+    "@newLyric": {
+        "description": "New lyric"
+    },
+    "editLyric": "Edit lyric",
+    "@editLyric": {
+        "description": "Edit lyric"
+    },
+    "titleLabel": "Title",
+    "@titleLabel": {
+        "description": "Title label"
+    },
+    "textLabel": "Text",
+    "@textLabel": {
+        "description": "Text label"
+    },
+    "newPlaylist": "New playlist",
+    "@newPlaylist": {
+        "description": "New playlist"
+    },
+    "editPlaylist": "Edit playlist",
+    "@editPlaylist": {
+        "description": "Edit playlist"
+    },
+    "addLyric": "Add lyric",
+    "@addLyric": {
+        "description": "Add lyric"
+    },
+    "usernameLabel": "Username",
+    "@usernameLabel": {
+        "description": "Username label"
+    },
+    "passwordLabel": "Password",
+    "@passwordLabel": {
+        "description": "Password label"
+    },
+    "baseUrlLabel": "Base URL",
+    "@baseUrlLabel": {
+        "description": "Base URL label"
+    },
+    "saveButtonLabel": "Save",
+    "@saveButtonLabel": {
+        "description": "Save button label"
+    },
+    "playPageTitle": "Play",
+    "@playPageTitle": {
+        "description": "Play page titel"
+    }
+}

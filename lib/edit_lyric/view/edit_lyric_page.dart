@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:lipl_rest_bloc/lipl_rest_bloc.dart';
 import 'package:parts/parts.dart';
 import '../bloc/edit_lyric_bloc.dart';
@@ -42,6 +43,7 @@ class EditLyricView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final AppLocalizations l10n = AppLocalizations.of(context)!;
     final EditLyricStatus status =
         context.select((EditLyricBloc bloc) => bloc.state.status);
     final bool isNew =
@@ -49,7 +51,7 @@ class EditLyricView extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(isNew ? 'Nieuwe tekst' : 'Wijzigen tekst'),
+        title: Text(isNew ? l10n.newLyric : l10n.editLyric),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: status.isLoadingOrSuccess
@@ -104,6 +106,7 @@ class _TitleField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final AppLocalizations l10n = AppLocalizations.of(context)!;
     return BlocBuilder<EditLyricBloc, EditLyricState>(
       builder: (BuildContext context, EditLyricState state) {
         return TextFormField(
@@ -111,7 +114,7 @@ class _TitleField extends StatelessWidget {
           initialValue: state.title,
           decoration: InputDecoration(
             enabled: !state.status.isLoadingOrSuccess,
-            labelText: 'Titel',
+            labelText: l10n.titleLabel,
             hintText: state.title,
           ),
           maxLength: 50,
@@ -132,6 +135,7 @@ class _TextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final AppLocalizations l10n = AppLocalizations.of(context)!;
     return BlocBuilder<EditLyricBloc, EditLyricState>(
       builder: (BuildContext context, EditLyricState state) {
         return TextFormField(
@@ -140,7 +144,7 @@ class _TextField extends StatelessWidget {
           initialValue: state.text,
           decoration: InputDecoration(
             enabled: !state.status.isLoadingOrSuccess,
-            labelText: 'Tekst',
+            labelText: l10n.textLabel,
             hintText: state.text,
           ),
           onChanged: (String value) {
