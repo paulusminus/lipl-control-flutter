@@ -1,8 +1,72 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:logging/logging.dart';
 import 'play.dart';
 
 final Logger log = Logger('$PlayPage');
+
+class PreviousIntent extends Intent {}
+
+class PreviousAction extends Action<PreviousIntent> {
+  PreviousAction({required this.controller});
+  final PageController controller;
+  @override
+  Object? invoke(PreviousIntent intent) async {
+    await controller.previousPage(
+      duration: const Duration(milliseconds: 200),
+      curve: Curves.easeInOut,
+    );
+    return null;
+  }
+}
+
+class NextIntent extends Intent {}
+
+class NextAction extends Action<NextIntent> {
+  NextAction({required this.controller});
+  final PageController controller;
+
+  @override
+  Object? invoke(NextIntent intent) async {
+    await controller.nextPage(
+      duration: const Duration(milliseconds: 200),
+      curve: Curves.easeInOut,
+    );
+    return null;
+  }
+}
+
+class HomeIntent extends Intent {}
+
+class HomeAction extends Action<HomeIntent> {
+  HomeAction({required this.controller});
+  final PageController controller;
+
+  @override
+  Object? invoke(HomeIntent intent) async {
+    await controller.animateToPage(0,
+        duration: const Duration(milliseconds: 200), curve: Curves.easeInOut);
+    return null;
+  }
+}
+
+class EndIntent extends Intent {}
+
+class EndAction extends Action<EndIntent> {
+  EndAction({required this.controller, required this.count});
+  final PageController controller;
+  final int count;
+
+  @override
+  Object? invoke(EndIntent intent) async {
+    await controller.animateToPage(
+      count - 1,
+      duration: const Duration(milliseconds: 200),
+      curve: Curves.easeInOut,
+    );
+    return null;
+  }
+}
 
 class PlayPage extends StatelessWidget {
   const PlayPage({Key? key, required this.lyricParts, required this.title})
@@ -25,26 +89,49 @@ class PlayPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Afspelen $title'),
+    final PageController controller = PageController();
+    return Shortcuts(
+      shortcuts: <SingleActivator, Intent>{
+        const SingleActivator(LogicalKeyboardKey.arrowLeft): PreviousIntent(),
+        const SingleActivator(LogicalKeyboardKey.arrowRight): NextIntent(),
+        const SingleActivator(LogicalKeyboardKey.home): HomeIntent(),
+        const SingleActivator(LogicalKeyboardKey.end): EndIntent(),
+      },
+      child: Actions(
+        actions: <Type, Action<Intent>>{
+          PreviousIntent: PreviousAction(controller: controller),
+          NextIntent: NextAction(controller: controller),
+          HomeIntent: HomeAction(controller: controller),
+          EndIntent:
+              EndAction(controller: controller, count: lyricParts.length),
+        },
+        child: Scaffold(
+          appBar: AppBar(
+            title: Text('Afspelen $title'),
+          ),
+          body: Focus(
+            autofocus: true,
+            child: PageView(
+                controller: controller,
+                onPageChanged: (int pageno) {
+                  final LyricPart page = lyricParts[pageno];
+                  log.info(
+                      'Page ${page.title} (${page.current} / ${page.total})');
+                },
+                children: lyricParts
+                    .map(
+                      (LyricPart lyricPart) => Center(
+                        child: ListTile(
+                          title: Text(
+                              '${lyricPart.title} (${lyricPart.current} / ${lyricPart.total})'),
+                          subtitle: Text(lyricPart.text),
+                        ),
+                      ),
+                    )
+                    .toList()),
+          ),
+        ),
       ),
-      body: PageView(
-          onPageChanged: (int pageno) {
-            final LyricPart page = lyricParts[pageno];
-            log.info('Page ${page.title} (${page.current} / ${page.total})');
-          },
-          children: lyricParts
-              .map(
-                (LyricPart lyricPart) => Center(
-                  child: ListTile(
-                    title: Text(
-                        '${lyricPart.title} (${lyricPart.current} / ${lyricPart.total})'),
-                    subtitle: Text(lyricPart.text),
-                  ),
-                ),
-              )
-              .toList()),
     );
   }
 }

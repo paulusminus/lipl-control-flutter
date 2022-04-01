@@ -177,8 +177,10 @@ Widget renderLyricList(BuildContext context, List<Lyric> lyrics) =>
           onPressed: (Lyric lyric) async {
             if (await confirm(
               context,
-              title: const Text('Bevestigen'),
-              content: Text('${lyric.title} verwijderen?'),
+              title: 'Bevestigen',
+              content: '${lyric.title} verwijderen?',
+              textOK: 'Ok',
+              textCancel: 'Annuleren',
             )) {
               context.read<LiplRestBloc>().add(
                     LiplRestEventDeleteLyric(id: lyric.id),
@@ -239,8 +241,10 @@ Widget renderPlaylistList(
           onPressed: (Playlist playlist) async {
             if (await confirm(
               context,
-              title: const Text('Bevestigen'),
-              content: Text('${playlist.title} verwijderen?'),
+              title: 'Bevestigen',
+              content: '${playlist.title} verwijderen?',
+              textOK: 'Ok',
+              textCancel: 'Annuleren',
             )) {
               context.read<LiplRestBloc>().add(
                     LiplRestEventDeletePlaylist(
