@@ -185,34 +185,15 @@ class _PlayPageState extends State<PlayPage> {
                 unselectedItemColor: Colors.black,
                 showUnselectedLabels: true,
                 onTap: (int item) {
-                  if (item == 0) {
-                    debugPrint('Go First');
-                    final Action<HomeIntent>? goHome =
-                        Actions.maybeFind<HomeIntent>(context);
-                    if (goHome != null)
-                      Actions.of(context).invokeAction(goHome, homeIntent);
-                  }
-                  if (item == 1) {
-                    final Action<PreviousIntent>? goPrevious =
-                        Actions.maybeFind<PreviousIntent>(context);
-                    if (goPrevious != null)
-                      Actions.of(context)
-                          .invokeAction(goPrevious, previousIntent);
-                  }
-                  if (item == 2) {
-                    debugPrint('Go Next');
-                    final Action<NextIntent>? goNext =
-                        Actions.maybeFind<NextIntent>(context);
-                    if (goNext != null)
-                      Actions.of(context).invokeAction(goNext, nextIntent);
-                  }
-                  if (item == 3) {
-                    debugPrint('Go Last');
-                    final Action<EndIntent>? goEnd =
-                        Actions.maybeFind<EndIntent>(context);
-                    if (goEnd != null)
-                      Actions.of(context).invokeAction(goEnd, endIntent);
-                  }
+                  Function()? createHandler<T extends Intent>(T t) =>
+                      Actions.handler<T>(context, t);
+                  <Function()?>[
+                    createHandler(homeIntent),
+                    createHandler(previousIntent),
+                    createHandler(nextIntent),
+                    createHandler(endIntent),
+                  ][item]
+                      ?.call();
                 },
                 items: <BottomNavigationBarItem>[
                   BottomNavigationBarItem(
