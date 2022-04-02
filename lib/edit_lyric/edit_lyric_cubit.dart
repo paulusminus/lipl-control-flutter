@@ -28,7 +28,7 @@ class EditLyricState extends Equatable {
   final String title;
   final String text;
 
-  bool get isNewLyric => id == null;
+  bool get isNew => id == null;
 
   EditLyricState copyWith({
     EditLyricStatus? status,

@@ -35,6 +35,14 @@
     "@editPlaylist": {
         "description": "Edit playlist"
     },
+    "first": "Begin",
+    "@first": {
+        "description": "Go to first item"
+    },
+    "last": "End",
+    "@last": {
+        "description": "Go to last item"
+    },
     "liplTitle": "Lipl",
     "@liplTitle": {
         "description": "The title of the main program"
@@ -50,6 +58,10 @@
     "newPlaylist": "New playlist",
     "@newPlaylist": {
         "description": "New playlist"
+    },
+    "next": "Next",
+    "@next": {
+        "description": "Go to next item"
     },
     "okButtonLabel": "Ok",
     "@okButtonLabel": {
@@ -74,6 +86,10 @@
     "preferencesChanged": "Preferences Changed",
     "@preferencesChanged": {
         "description": "Notice of changed preferences"
+    },
+    "previous": "Previous",
+    "@previous": {
+        "description": "Go to previous item"
     },
     "saveButtonLabel": "Save",
     "@saveButtonLabel": {

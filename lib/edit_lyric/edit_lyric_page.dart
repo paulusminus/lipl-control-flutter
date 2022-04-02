@@ -7,6 +7,48 @@ import 'package:lipl_rest_bloc/lipl_rest_bloc.dart';
 import 'package:parts/parts.dart';
 import 'edit_lyric_cubit.dart';
 
+class CloseIntent extends Intent {}
+
+class CloseAction extends Action<CloseIntent> {
+  CloseAction({required this.context});
+  final BuildContext context;
+  @override
+  Object? invoke(CloseIntent intent) {
+    context.read<EditLyricCubit>().submitted();
+    return null;
+  }
+}
+
+class SaveIntent extends Intent {}
+
+class SaveAction extends Action<SaveIntent> {
+  SaveAction({required this.context});
+  final BuildContext context;
+
+  @override
+  Object? invoke(SaveIntent intent) async {
+    final LiplRestCubit liplRestCubit = context.read<LiplRestCubit>();
+    final EditLyricState state = context.read<EditLyricCubit>().state;
+    if (state.isNew) {
+      await liplRestCubit.postLyric(
+        LyricPost(
+          title: state.title,
+          parts: toParts(state.text),
+        ),
+      );
+    } else {
+      await liplRestCubit.putLyric(
+        Lyric(
+          id: state.id,
+          title: state.title,
+          parts: toParts(state.text),
+        ),
+      );
+    }
+    return null;
+  }
+}
+
 class EditLyricPage extends StatelessWidget {
   const EditLyricPage({Key? key}) : super(key: key);
 
@@ -49,48 +91,42 @@ class EditLyricView extends StatelessWidget {
     final bool isNew =
         context.select((EditLyricCubit cubit) => cubit.state.id == null);
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(isNew ? l10n.newLyric : l10n.editLyric),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: status.isLoadingOrSuccess
-            ? null
-            : () async {
-                final LiplRestCubit liplRestCubit =
-                    context.read<LiplRestCubit>();
-                final EditLyricState state =
-                    context.read<EditLyricCubit>().state;
-                if (isNew) {
-                  await liplRestCubit.postLyric(
-                    LyricPost(
-                      title: state.title,
-                      parts: toParts(state.text),
-                    ),
-                  );
-                } else {
-                  await liplRestCubit.putLyric(
-                    Lyric(
-                      id: state.id,
-                      title: state.title,
-                      parts: toParts(state.text),
-                    ),
-                  );
-                }
-                context.read<EditLyricCubit>().submitted();
-              },
-        child: status.isLoadingOrSuccess
-            ? const CupertinoActivityIndicator()
-            : const Icon(Icons.save),
-      ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            children: const <Widget>[
-              _TitleField(),
-              _TextField(),
-            ],
+    return Shortcuts(
+      shortcuts: <SingleActivator, Intent>{
+        const SingleActivator(LogicalKeyboardKey.keyS, control: true):
+            SaveIntent(),
+        const SingleActivator(LogicalKeyboardKey.escape): CloseIntent(),
+      },
+      child: Actions(
+        actions: <Type, Action<Intent>>{
+          SaveIntent: SaveAction(context: context),
+          CloseIntent: CloseAction(context: context),
+        },
+        child: Scaffold(
+          appBar: AppBar(
+            title: Text(isNew ? l10n.newLyric : l10n.editLyric),
+          ),
+          floatingActionButton: FloatingActionButton(
+            onPressed: status.isLoadingOrSuccess
+                ? null
+                : Actions.handler(context, SaveIntent()),
+            child: status.isLoadingOrSuccess
+                ? const CupertinoActivityIndicator()
+                : const Icon(Icons.save),
+          ),
+          body: Focus(
+            autofocus: true,
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  children: const <Widget>[
+                    _TitleField(),
+                    _TextField(),
+                  ],
+                ),
+              ),
+            ),
           ),
         ),
       ),

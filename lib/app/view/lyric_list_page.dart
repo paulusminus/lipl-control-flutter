@@ -176,7 +176,7 @@ Widget renderLyricList(BuildContext context, List<Lyric> lyrics) {
           if (await confirm(
             context,
             title: l10n.confirm,
-            content: '${l10n.delete} ${lyric.title}?',
+            content: '${l10n.delete} "${lyric.title}"?',
             textOK: l10n.okButtonLabel,
             textCancel: l10n.cancelButtonLabel,
           )) {
@@ -242,7 +242,7 @@ Widget renderPlaylistList(
           if (await confirm(
             context,
             title: l10n.confirm,
-            content: '${l10n.delete} ${playlist.title}?',
+            content: '${l10n.delete} "${playlist.title}"?',
             textOK: l10n.okButtonLabel,
             textCancel: l10n.cancelButtonLabel,
           )) {
