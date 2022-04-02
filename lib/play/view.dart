@@ -165,10 +165,10 @@ class _PlayPageState extends State<PlayPage> {
                               children: <TextSpan>[
                                 TextSpan(
                                   text:
-                                      '\n\n${lyricPart.title} (${lyricPart.current} / ${lyricPart.total})',
+                                      '\n\n\n${lyricPart.title} (${lyricPart.current} / ${lyricPart.total})',
                                   style: const TextStyle(
                                     fontWeight: FontWeight.normal,
-                                    fontSize: 14,
+                                    fontStyle: FontStyle.italic,
                                     color: Colors.black,
                                     height: 1.2,
                                   ),
@@ -184,7 +184,7 @@ class _PlayPageState extends State<PlayPage> {
                 fixedColor: Colors.black,
                 unselectedItemColor: Colors.black,
                 showUnselectedLabels: true,
-                onTap: (int item) {
+                onTap: (int index) {
                   Function()? createHandler<T extends Intent>(T t) =>
                       Actions.handler<T>(context, t);
                   <Function()?>[
@@ -192,7 +192,7 @@ class _PlayPageState extends State<PlayPage> {
                     createHandler(previousIntent),
                     createHandler(nextIntent),
                     createHandler(endIntent),
-                  ][item]
+                  ][index]
                       ?.call();
                 },
                 items: <BottomNavigationBarItem>[
