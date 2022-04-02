@@ -1,7 +1,7 @@
 name: lipl_bloc
 description: A new Flutter project.
 publish_to: 'none'
-version: 1.0.1
+version: 1.1.0
 
 environment:
   sdk: ">=2.16.0 <3.0.0"
@@ -21,7 +21,7 @@ dependencies:
   lipl_rest_bloc: 
     git:
       url: git://paulmin.nl/dart/lipl-rest-bloc.git
-      ref: v0.4
+      ref: v0.5
   logging: ^1.0.2
   parts: 
     git:
