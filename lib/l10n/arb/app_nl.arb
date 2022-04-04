@@ -1,4 +1,5 @@
 {
+    "@@locale": "nl",
     "addLyric": "Tekst toevoegen",
     "baseUrlLabel": "Basis URL",
     "cancelButtonLabel": "Annuleren",

@@ -2,8 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:lipl_bloc/edit_playlist/edit_playlist_cubit.dart';
+import 'package:lipl_bloc/l10n/l10n.dart';
 import 'package:lipl_rest_bloc/lipl_rest_bloc.dart';
 import 'package:logging/logging.dart';
 
@@ -50,7 +50,7 @@ class EditLyricView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final AppLocalizations l10n = AppLocalizations.of(context)!;
+    final AppLocalizations l10n = context.l10n;
     final EditPlaylistStatus status =
         context.select((EditPlaylistCubit cubit) => cubit.state.status);
     final bool isNew =
@@ -115,7 +115,7 @@ class _TitleField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final AppLocalizations l10n = AppLocalizations.of(context)!;
+    final AppLocalizations l10n = context.l10n;
     return BlocBuilder<EditPlaylistCubit, EditPlaylistState>(
       builder: (BuildContext context, EditPlaylistState state) {
         return Form(
@@ -191,7 +191,7 @@ class _MembersAddFieldState extends State<_MembersAddField> {
 
   @override
   Widget build(BuildContext context) {
-    final AppLocalizations l10n = AppLocalizations.of(context)!;
+    final AppLocalizations l10n = context.l10n;
     return BlocBuilder<EditPlaylistCubit, EditPlaylistState>(
       builder: (BuildContext context, EditPlaylistState state) {
         return Form(

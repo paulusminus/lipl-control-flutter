@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:lipl_bloc/app/app.dart';
+import 'package:lipl_bloc/l10n/l10n.dart';
 import 'package:preferences_bloc/preferences_bloc.dart';
 
 class EditPreferencesPage extends StatelessWidget {
@@ -16,7 +16,7 @@ class EditPreferencesPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final AppLocalizations l10n = AppLocalizations.of(context)!;
+    final AppLocalizations l10n = context.l10n;
     return BlocBuilder<EditPreferencesBloc<LiplPreferences>,
         EditPreferencesState<LiplPreferences>>(
       builder: (

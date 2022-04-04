@@ -1,11 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:lipl_bloc/app/app.dart';
 import 'package:lipl_bloc/edit_lyric/edit_lyric.dart';
 import 'package:lipl_bloc/edit_playlist/edit_playlist.dart';
 import 'package:lipl_bloc/edit_preferences/edit_preferences.dart';
+import 'package:lipl_bloc/l10n/l10n.dart';
 import 'package:lipl_bloc/play/play.dart';
 import 'package:lipl_bloc/widget/widget.dart';
 import 'package:lipl_rest_bloc/lipl_rest_bloc.dart';
@@ -18,7 +18,7 @@ class LyricList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final AppLocalizations l10n = AppLocalizations.of(context)!;
+    final AppLocalizations l10n = context.l10n;
     return BlocBuilder<LiplRestCubit, RestState>(
       builder: (BuildContext context, RestState liplRestState) {
         return BlocBuilder<SelectedTabCubit, SelectedTabState>(
@@ -132,7 +132,7 @@ Widget renderPlaylistSummary(
   Playlist playlist,
   List<Lyric> lyrics,
 ) {
-  final AppLocalizations l10n = AppLocalizations.of(context)!;
+  final AppLocalizations l10n = context.l10n;
   return ListTile(
     title: Text(l10n.lyrics),
     subtitle: Text(
@@ -151,7 +151,7 @@ Widget renderPlaylistSummary(
 }
 
 Widget renderLyricList(BuildContext context, List<Lyric> lyrics) {
-  final AppLocalizations l10n = AppLocalizations.of(context)!;
+  final AppLocalizations l10n = context.l10n;
   return expansionPanelList<Lyric>(
     items: lyrics,
     selectId: selectLyricId,
@@ -205,7 +205,7 @@ Widget renderPlaylistList(
   List<Playlist> playlists,
   List<Lyric> lyrics,
 ) {
-  final AppLocalizations l10n = AppLocalizations.of(context)!;
+  final AppLocalizations l10n = context.l10n;
   return expansionPanelList<Playlist>(
     items: playlists,
     selectId: selectPlaylistId,

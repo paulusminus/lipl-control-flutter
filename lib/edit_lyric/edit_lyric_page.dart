@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:lipl_bloc/l10n/l10n.dart';
 import 'package:lipl_rest_bloc/lipl_rest_bloc.dart';
 import 'package:parts/parts.dart';
 import 'edit_lyric_cubit.dart';
@@ -85,7 +85,7 @@ class EditLyricView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final AppLocalizations l10n = AppLocalizations.of(context)!;
+    final AppLocalizations l10n = context.l10n;
     final EditLyricStatus status =
         context.select((EditLyricCubit cubit) => cubit.state.status);
     final bool isNew =
@@ -139,7 +139,7 @@ class _TitleField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final AppLocalizations l10n = AppLocalizations.of(context)!;
+    final AppLocalizations l10n = context.l10n;
     return BlocBuilder<EditLyricCubit, EditLyricState>(
       builder: (BuildContext context, EditLyricState state) {
         return TextFormField(
@@ -168,7 +168,7 @@ class _TextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final AppLocalizations l10n = AppLocalizations.of(context)!;
+    final AppLocalizations l10n = context.l10n;
     return BlocBuilder<EditLyricCubit, EditLyricState>(
       builder: (BuildContext context, EditLyricState state) {
         return TextFormField(

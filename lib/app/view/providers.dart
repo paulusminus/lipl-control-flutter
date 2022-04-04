@@ -4,9 +4,9 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:lipl_bloc/app/app.dart';
+import 'package:lipl_bloc/l10n/l10n.dart';
 import 'package:lipl_rest_bloc/lipl_rest_bloc.dart';
 import 'package:logging/logging.dart';
 import 'package:preferences_bloc/preferences_bloc.dart';
@@ -94,7 +94,6 @@ class PersistSharedPreferences<T> implements Persist<T> {
 class BlocProviders extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final AppLocalizations? l10n = AppLocalizations.of(context);
     final PreferencesBloc<LiplPreferences> preferencesBloc =
         PreferencesBloc<LiplPreferences>(
       persist: PersistSharedPreferences<LiplPreferences>(
@@ -113,7 +112,6 @@ class BlocProviders extends StatelessWidget {
         .distinct()
         .listen(
       (PreferencesState<LiplPreferences> preferences) async {
-        blocProvidersLog.info(l10n?.preferencesChanged ?? '');
         final Credentials? credentials = preferences.item == null
             ? null
             : preferences.item!.username.isEmpty ||

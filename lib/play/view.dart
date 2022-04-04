@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:lipl_bloc/l10n/l10n.dart';
 import 'package:logging/logging.dart';
 import 'play.dart';
 
@@ -110,7 +110,7 @@ class _PlayPageState extends State<PlayPage> {
 
   @override
   Widget build(BuildContext context) {
-    final AppLocalizations l10n = AppLocalizations.of(context)!;
+    final AppLocalizations l10n = context.l10n;
     final PageController controller = PageController();
 
     final PreviousIntent previousIntent = PreviousIntent();
