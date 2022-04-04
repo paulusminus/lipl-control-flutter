@@ -121,7 +121,7 @@ class BlocProviders extends StatelessWidget {
                     username: preferences.item!.username,
                     password: preferences.item!.password,
                   );
-        liplRestCubit.load(
+        await liplRestCubit.load(
           apiFromConfig(
             credentials: credentials,
             baseUrl: preferences.item?.baseUrl,

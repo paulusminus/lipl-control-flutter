@@ -1,31 +1,115 @@
 {
     "@@locale": "nl",
     "addLyric": "Tekst toevoegen",
+    "@addLyric": {
+        "description": "Wijzigen / nieuw afspeellijst tekst toevoegen label"
+    },
     "baseUrlLabel": "Basis URL",
+    "@baseUrlLabel": {
+        "description": "Voorkeuren Basis URL label"
+    },
     "cancelButtonLabel": "Annuleren",
+    "@cancelButtonLabel": {
+        "description": "Annuleren knop label"
+    },
     "confirm": "Bevestigen",
+    "@confirm": {
+        "description": "Titel van bevestigen dialoog"
+    },
     "delete": "Verwijder",
+    "@delete": {
+        "description": "Verwijder in bevestigen verwijderen dialoog"
+    },
     "deleteButtonLabel": "Verwijderen",
-    "first": "Begin",
+    "@deleteButtonLabel": {
+        "description": "Verwijder knop label"
+    },
     "editButtonLabel": "Wijzigen",
+    "@editButtonLabel": {
+        "decription": "Wijzigen knop label"
+    },
     "editLyric": "Tekst wijzigen",
+    "@editLyric": {
+        "description": "Wijzigen / nieuwe tekst titel"
+    },
     "editPlaylist": "Afspeellijst wijzigen",
+    "@editPlaylist": {
+        "description": "Wijzigen / nieuwe afspeellijst titel"
+    },
+    "first": "Begin",
+    "@first": {
+        "description": "Afspelen begin icoon label"
+    },
     "last": "Eind",
+    "@last": {
+        "description": "Afspelen eind icoon label"
+    },
     "liplTitle": "Lipl",
+    "@liplTitle": {
+        "description": "Titel van de applicatie"
+    },
     "lyrics": "Teksten",
+    "@lyrics": {
+        "description": "Teksten"
+    },
     "newLyric": "Nieuwe tekst",
+    "@newLyric": {
+        "description": "Nieuwe tekst"
+    },
     "newPlaylist": "Nieuwe afspeellijst",
+    "@newPlaylist": {
+        "description": "Nieuwe afspeellijst"
+    },
     "next": "Volgende",
+    "@next": {
+        "description": "Afspelen volgende icoon label"
+    },
     "okButtonLabel": "Ok",
+    "@okButtonLabel": {
+        "descriptioni": "Ok knop label"
+    },
     "passwordLabel": "Wachtwoord",
+    "@passwordLabel": {
+        "description": "Voorkeuren wachtwoord label"
+    },
     "playButtonLabel": "Afspelen",
+    "@playButtonLabel": {
+        "description": "Afspelen knop label"
+    },
     "playPageTitle": "Afspelen",
+    "@playPageTitle": {
+        "description": "Afspelen titel"
+    },
     "preferences": "Voorkeuren",
+    "@preferences": {
+        "description": "Voorkeuren pagina titel"
+    },
     "preferencesChanged": "Voorkeuren gewijzigd",
+    "@preferencesChanged": {
+        "description": "Log voorkeuren gewijzigd"
+    },
     "previous": "Vorige",
+    "@previous": {
+        "description": "Afspelen vorige knop label"
+    },
     "saveButtonLabel": "Opslaan",
+    "@saveButtonLabel": {
+        "description": "Opslaan knop label"
+    },
     "textLabel": "Tekst",
+    "@textLabel": {
+        "description": "Wijzigen tekst tekst label"
+    },
     "titleLabel": "Titel",
+    "@titleLabel": {
+        "description": "Wijzigen tekst c.q. afspeellijst pagina titel"
+    },
     "unauthorized": "Ongeauthoriseerd",
-    "usernameLabel": "Gebruikersnaam"
+    "@unauthorized": {
+        "description": "Toegang niet toegestaan"
+    },
+    "usernameLabel": "Gebruikersnaam",
+    "@usernameLabel": {
+        "description": "Voorkeuren gebruikersnaam label"
+    }
 }

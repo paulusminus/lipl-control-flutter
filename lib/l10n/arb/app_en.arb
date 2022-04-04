@@ -2,11 +2,11 @@
     "@@locale": "en",
     "addLyric": "Add lyric",
     "@addLyric": {
-        "description": "Add lyric"
+        "description": "Edit/new Playlist Add lyric label"
     },
     "baseUrlLabel": "Base URL",
     "@baseUrlLabel": {
-        "description": "Base URL label"
+        "description": "Preferences Base URL label"
     },
     "cancelButtonLabel": "Cancel",
     "@cancelButtonLabel": {
@@ -18,7 +18,7 @@
     },
     "delete": "Delete",
     "@delete": {
-        "description": "Delete"
+        "description": "Delete in confirmation delete dialog"
     },
     "deleteButtonLabel": "delete",
     "@deleteButtonLabel": {
@@ -30,19 +30,19 @@
     },
     "editLyric": "Edit lyric",
     "@editLyric": {
-        "description": "Edit lyric"
+        "description": "Edit / new Lyric title"
     },
     "editPlaylist": "Edit playlist",
     "@editPlaylist": {
-        "description": "Edit playlist"
+        "description": "Edit / new playlist title"
     },
     "first": "Begin",
     "@first": {
-        "description": "Go to first item"
+        "description": "Play first icon label"
     },
     "last": "End",
     "@last": {
-        "description": "Go to last item"
+        "description": "Play last icon label"
     },
     "liplTitle": "Lipl",
     "@liplTitle": {
@@ -62,7 +62,7 @@
     },
     "next": "Next",
     "@next": {
-        "description": "Go to next item"
+        "description": "Play next icon label"
     },
     "okButtonLabel": "Ok",
     "@okButtonLabel": {
@@ -70,19 +70,19 @@
     },
     "passwordLabel": "Password",
     "@passwordLabel": {
-        "description": "Password label"
+        "description": "Preferences password label"
     },
     "playButtonLabel": "play",
     "@playButtonLabel": {
-        "description": "Play button title"
+        "description": "Main play button label"
     },
     "playPageTitle": "Play",
     "@playPageTitle": {
-        "description": "Play page titel"
+        "description": "Play titel"
     },
     "preferences": "Preferences",
     "@preferences": {
-        "description": "Preference page title"
+        "description": "Preferences page title"
     },
     "preferencesChanged": "Preferences Changed",
     "@preferencesChanged": {
@@ -90,7 +90,7 @@
     },
     "previous": "Previous",
     "@previous": {
-        "description": "Go to previous item"
+        "description": "Play previous icon label"
     },
     "saveButtonLabel": "Save",
     "@saveButtonLabel": {
@@ -98,11 +98,11 @@
     },
     "textLabel": "Text",
     "@textLabel": {
-        "description": "Text label"
+        "description": "Edit Lyric text label"
     },
     "titleLabel": "Title",
     "@titleLabel": {
-        "description": "Title label"
+        "description": "Edit Lyric c.q. Playlist title label"
     },
     "unauthorized": "Unauthorized",
     "@unauthorized": {
@@ -110,6 +110,6 @@
     },
     "usernameLabel": "Username",
     "@usernameLabel": {
-        "description": "Username label"
+        "description": "Preferences username label"
     }
 }
