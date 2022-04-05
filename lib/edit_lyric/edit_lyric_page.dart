@@ -10,7 +10,7 @@ import 'edit_lyric_cubit.dart';
 class CloseIntent extends Intent {}
 
 class CloseAction extends Action<CloseIntent> {
-  CloseAction({required this.context});
+  CloseAction(this.context);
   final BuildContext context;
   @override
   Object? invoke(CloseIntent intent) {
@@ -22,7 +22,7 @@ class CloseAction extends Action<CloseIntent> {
 class SaveIntent extends Intent {}
 
 class SaveAction extends Action<SaveIntent> {
-  SaveAction({required this.context});
+  SaveAction(this.context);
   final BuildContext context;
 
   @override
@@ -45,6 +45,7 @@ class SaveAction extends Action<SaveIntent> {
         ),
       );
     }
+    context.read<EditLyricCubit>().submitted();
     return null;
   }
 }
@@ -99,32 +100,34 @@ class EditLyricView extends StatelessWidget {
       },
       child: Actions(
         actions: <Type, Action<Intent>>{
-          SaveIntent: SaveAction(context: context),
-          CloseIntent: CloseAction(context: context),
+          SaveIntent: SaveAction(context),
+          CloseIntent: CloseAction(context),
         },
-        child: Scaffold(
-          appBar: AppBar(
-            title: Text(isNew ? l10n.newLyric : l10n.editLyric),
-          ),
-          floatingActionButton: FloatingActionButton(
-            onPressed: status.isLoadingOrSuccess
-                ? null
-                : Actions.handler(context, SaveIntent()),
-            child: status.isLoadingOrSuccess
-                ? const CupertinoActivityIndicator()
-                : const Icon(Icons.save),
-          ),
-          body: Focus(
+        child: Builder(
+          builder: (BuildContext context) => Focus(
             autofocus: true,
-            child: SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.all(16),
-                child: Column(
-                  children: const <Widget>[
-                    _TitleField(),
-                    _TextField(),
-                  ],
+            child: Scaffold(
+              appBar: AppBar(
+                title: Text(isNew ? l10n.newLyric : l10n.editLyric),
+              ),
+              body: SingleChildScrollView(
+                child: Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Column(
+                    children: const <Widget>[
+                      _TitleField(),
+                      _TextField(),
+                    ],
+                  ),
                 ),
+              ),
+              floatingActionButton: FloatingActionButton(
+                onPressed: status.isLoadingOrSuccess
+                    ? null
+                    : Actions.handler(context, SaveIntent()),
+                child: status.isLoadingOrSuccess
+                    ? const CupertinoActivityIndicator()
+                    : const Icon(Icons.save),
               ),
             ),
           ),

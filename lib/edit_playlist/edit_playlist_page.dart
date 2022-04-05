@@ -9,6 +9,7 @@ import 'package:logging/logging.dart';
 
 final Logger log = Logger('$EditPlaylistPage');
 
+// TODO(paul): KeyboardNavigation.
 class EditPlaylistPage extends StatelessWidget {
   const EditPlaylistPage({Key? key}) : super(key: key);
 
@@ -40,13 +41,13 @@ class EditPlaylistPage extends StatelessWidget {
           current.status == EditPlaylistStatus.succes,
       listener: (BuildContext context, EditPlaylistState state) =>
           Navigator.of(context).pop(),
-      child: const EditLyricView(),
+      child: const EditPlaylistView(),
     );
   }
 }
 
-class EditLyricView extends StatelessWidget {
-  const EditLyricView({Key? key}) : super(key: key);
+class EditPlaylistView extends StatelessWidget {
+  const EditPlaylistView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
