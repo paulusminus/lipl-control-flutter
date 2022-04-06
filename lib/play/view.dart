@@ -222,26 +222,29 @@ class _PlayPageState extends State<PlayPage> {
                   children: widget.lyricParts
                       .map(
                         (LyricPart lyricPart) => Center(
-                          child: RichText(
-                            text: TextSpan(
-                              text: lyricPart.text,
-                              style: const TextStyle(
-                                fontSize: 16,
-                                color: Colors.black,
-                                height: 1.2,
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: RichText(
+                              text: TextSpan(
+                                text: lyricPart.text,
+                                style: const TextStyle(
+                                  fontSize: 16,
+                                  color: Colors.black,
+                                  height: 1.2,
+                                ),
+                                children: <TextSpan>[
+                                  TextSpan(
+                                    text:
+                                        '\n\n\n${lyricPart.title} (${lyricPart.current} / ${lyricPart.total})',
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.normal,
+                                      fontStyle: FontStyle.italic,
+                                      color: Colors.black,
+                                      height: 1.2,
+                                    ),
+                                  )
+                                ],
                               ),
-                              children: <TextSpan>[
-                                TextSpan(
-                                  text:
-                                      '\n\n\n${lyricPart.title} (${lyricPart.current} / ${lyricPart.total})',
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.normal,
-                                    fontStyle: FontStyle.italic,
-                                    color: Colors.black,
-                                    height: 1.2,
-                                  ),
-                                )
-                              ],
                             ),
                           ),
                         ),
