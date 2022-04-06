@@ -30,6 +30,7 @@ class SelectDisplayServerView extends StatelessWidget {
         body: ListView(
           children: state.devices
               .map(
+                // ignore: always_specify_types
                 (device) => ListTile(
                   title: Text(device.name),
                   subtitle: Text(device.id),
