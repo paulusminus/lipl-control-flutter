@@ -18,6 +18,10 @@ dependencies:
   http: ^0.13.4
   intl: ^0.17.0
   json_annotation: ^4.4.0
+  lipl_ble:
+    git:
+      url: git://paulmin.nl/dart/lipl-ble.git
+      ref: v0.4
   lipl_rest_bloc: 
     git:
       url: git://paulmin.nl/dart/lipl-rest-bloc.git
@@ -32,6 +36,7 @@ dependencies:
       url: git://paulmin.nl/dart/preferences-bloc.git
       ref: v0.4
   shared_preferences: ^2.0.13
+  permission_handler: ^9.2.0
 
 dev_dependencies:
   build_runner: ^2.1.7

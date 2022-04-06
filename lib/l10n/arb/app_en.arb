@@ -96,6 +96,10 @@
     "@saveButtonLabel": {
         "description": "Save button label"
     },
+    "selectDisplayServerTitle": "Select display server",
+    "@selectDisplayServerTitle": {
+        "description": "Select display server page title"
+    },
     "textLabel": "Text",
     "@textLabel": {
         "description": "Edit Lyric text label"

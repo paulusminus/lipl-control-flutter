@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:lipl_ble/lipl_ble.dart';
 import 'package:lipl_bloc/app/app.dart';
 import 'package:lipl_bloc/l10n/l10n.dart';
 import 'package:lipl_rest_bloc/lipl_rest_bloc.dart';
@@ -132,14 +133,25 @@ class BlocProviders extends StatelessWidget {
 
     preferencesBloc.add(PreferencesEventLoad<LiplPreferences>());
 
+    final BleScanCubit bleScanCubit = BleScanCubit();
+
     return MultiBlocProvider(
       providers: <BlocProvider<dynamic>>[
-        BlocProvider<PreferencesBloc<LiplPreferences>>(
-          create: (_) => preferencesBloc,
+        BlocProvider<BleScanCubit>.value(value: bleScanCubit),
+        BlocProvider<BleConnectionCubit>.value(
+          value: BleConnectionCubit(
+            stream: bleScanCubit.stream
+                .map(
+                  (BleScanState state) => state.selectedDevice,
+                )
+                .distinct(),
+          ),
         ),
-        BlocProvider<LiplRestCubit>(create: (_) => liplRestCubit),
-        BlocProvider<SelectedTabCubit>(
-          create: (_) => SelectedTabCubit(),
+        BlocProvider<PreferencesBloc<LiplPreferences>>.value(
+            value: preferencesBloc),
+        BlocProvider<LiplRestCubit>.value(value: liplRestCubit),
+        BlocProvider<SelectedTabCubit>.value(
+          value: SelectedTabCubit(),
         ),
       ],
       child: App(),

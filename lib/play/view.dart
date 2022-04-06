@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lipl_ble/lipl_ble.dart';
 import 'package:lipl_bloc/l10n/l10n.dart';
 import 'package:logging/logging.dart';
 import 'play.dart';
@@ -94,15 +96,32 @@ class PlayPage extends StatefulWidget {
   }) {
     return MaterialPageRoute<void>(
       fullscreenDialog: true,
-      builder: (BuildContext context) => PlayPage(
-        lyricParts: lyricParts,
-        title: title,
-      ),
+      builder: (BuildContext context) {
+        updatePage(context, lyricParts)(0);
+        return PlayPage(
+          lyricParts: lyricParts,
+          title: title,
+        );
+      },
     );
   }
 
   @override
   State<StatefulWidget> createState() => _PlayPageState();
+}
+
+void Function(int) updatePage(
+    BuildContext context, List<LyricPart> lyricParts) {
+  return (int page) {
+    final BleConnectionCubit cubit = context.read<BleConnectionCubit>();
+    if (cubit.state.isConnected) {
+      final LyricPart part = lyricParts[page];
+      cubit.updateText(part.text);
+      cubit.updateStatus('${part.title} (${part.current} / ${part.total})');
+      cubit.writeText();
+      cubit.writeStatus();
+    }
+  };
 }
 
 class _PlayPageState extends State<PlayPage> {
@@ -145,6 +164,7 @@ class _PlayPageState extends State<PlayPage> {
               body: PageView(
                   controller: controller,
                   onPageChanged: (int page) {
+                    updatePage(context, widget.lyricParts)(page);
                     setState(
                       () {
                         current = page;

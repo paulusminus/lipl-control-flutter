@@ -66,8 +66,8 @@ class EditPlaylistPage extends StatelessWidget {
   }) {
     return MaterialPageRoute<void>(
       fullscreenDialog: true,
-      builder: (BuildContext context) => BlocProvider<EditPlaylistCubit>(
-        create: (BuildContext context) => EditPlaylistCubit(
+      builder: (_) => BlocProvider<EditPlaylistCubit>(
+        create: (_) => EditPlaylistCubit(
           id: id,
           title: title,
           members: members,

@@ -96,6 +96,10 @@
     "@saveButtonLabel": {
         "description": "Opslaan knop label"
     },
+    "selectDisplayServerTitle": "Selecteer display server",
+    "@selectDisplayServerTitle": {
+        "description": "Selecteer display server pagina titel"
+    },
     "textLabel": "Tekst",
     "@textLabel": {
         "description": "Wijzigen tekst tekst label"

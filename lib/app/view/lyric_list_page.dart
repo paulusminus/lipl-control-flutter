@@ -1,15 +1,18 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lipl_ble/lipl_ble.dart';
 import 'package:lipl_bloc/app/app.dart';
 import 'package:lipl_bloc/edit_lyric/edit_lyric.dart';
 import 'package:lipl_bloc/edit_playlist/edit_playlist.dart';
 import 'package:lipl_bloc/edit_preferences/edit_preferences.dart';
 import 'package:lipl_bloc/l10n/l10n.dart';
 import 'package:lipl_bloc/play/play.dart';
+import 'package:lipl_bloc/select_display_server/select_display_server.dart';
 import 'package:lipl_bloc/widget/widget.dart';
 import 'package:lipl_rest_bloc/lipl_rest_bloc.dart';
 import 'package:logging/logging.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 final Logger log = Logger('$LyricList');
 
@@ -27,6 +30,7 @@ class LyricList extends StatelessWidget {
             appBar: AppBar(
               title: Text(l10n.liplTitle),
               actions: <Widget>[
+                const BluetoothIndicator(),
                 if (selectedTabState.selectedTab == SelectedTab.playlists)
                   IconButton(
                     icon: const Icon(Icons.text_snippet),
@@ -274,4 +278,30 @@ Widget renderPlaylistList(
       ),
     ],
   );
+}
+
+class BluetoothIndicator extends StatelessWidget {
+  const BluetoothIndicator({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<BleConnectionCubit, BleConnectionState>(
+      builder: (BuildContext context, BleConnectionState state) => IconButton(
+        onPressed: () async {
+          if (!context.read<BleScanCubit>().state.permissionGranted) {
+            if (await Permission.bluetooth.request() ==
+                    PermissionStatus.granted &&
+                await Permission.location.request() ==
+                    PermissionStatus.granted) {
+              context.read<BleScanCubit>().permissionGranted();
+              await context.read<BleScanCubit>().start();
+              Navigator.of(context).push(SelectDisplayServerPage.route());
+            }
+          }
+        },
+        icon: Icon(
+            state.isConnected ? Icons.bluetooth_connected : Icons.bluetooth),
+      ),
+    );
+  }
 }
