@@ -85,10 +85,15 @@ class CloseAction extends Action<CloseIntent> {
 }
 
 class PlayPage extends StatefulWidget {
-  const PlayPage({Key? key, required this.lyricParts, required this.title})
-      : super(key: key);
+  const PlayPage({
+    Key? key,
+    required this.lyricParts,
+    required this.title,
+    required this.connected,
+  }) : super(key: key);
   final String title;
   final List<LyricPart> lyricParts;
+  final bool connected;
 
   static Route<void> route({
     required List<LyricPart> lyricParts,
@@ -97,10 +102,15 @@ class PlayPage extends StatefulWidget {
     return MaterialPageRoute<void>(
       fullscreenDialog: true,
       builder: (BuildContext context) {
-        updatePage(context, lyricParts)(0);
+        final bool connected =
+            context.read<BleConnectionCubit>().state.isConnected;
+        if (connected) {
+          updatePage(context, lyricParts)(0);
+        }
         return PlayPage(
           lyricParts: lyricParts,
           title: title,
+          connected: connected,
         );
       },
     );
@@ -122,6 +132,14 @@ void Function(int) updatePage(
       cubit.writeStatus();
     }
   };
+}
+
+void updateCommand(BuildContext context, String command) {
+  final BleConnectionCubit cubit = context.read<BleConnectionCubit>();
+  if (cubit.state.isConnected) {
+    cubit.updateCommand(command);
+    cubit.writeCommand();
+  }
 }
 
 class _PlayPageState extends State<PlayPage> {
@@ -160,11 +178,41 @@ class _PlayPageState extends State<PlayPage> {
             child: Scaffold(
               appBar: AppBar(
                 title: Text(widget.title),
+                actions: widget.connected
+                    ? <IconButton>[
+                        IconButton(
+                          onPressed: () {
+                            updateCommand(context, 'l');
+                          },
+                          icon: const Icon(Icons.light_mode),
+                        ),
+                        IconButton(
+                          onPressed: () {
+                            updateCommand(context, 'd');
+                          },
+                          icon: const Icon(Icons.dark_mode),
+                        ),
+                        IconButton(
+                          onPressed: () {
+                            updateCommand(context, '-');
+                          },
+                          icon: const Icon(Icons.remove),
+                        ),
+                        IconButton(
+                          onPressed: () {
+                            updateCommand(context, '+');
+                          },
+                          icon: const Icon(Icons.add),
+                        ),
+                      ]
+                    : null,
               ),
               body: PageView(
                   controller: controller,
                   onPageChanged: (int page) {
-                    updatePage(context, widget.lyricParts)(page);
+                    if (widget.connected) {
+                      updatePage(context, widget.lyricParts)(page);
+                    }
                     setState(
                       () {
                         current = page;
