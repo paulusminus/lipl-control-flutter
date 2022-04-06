@@ -104,6 +104,10 @@
     "@previous": {
         "description": "Afspelen vorige knop label"
     },
+    "poweroff": "Uitschakelen",
+    "@poweroff": {
+        "description": "Display server uitschakelen"
+    },
     "saveButtonLabel": "Opslaan",
     "@saveButtonLabel": {
         "description": "Opslaan knop label"

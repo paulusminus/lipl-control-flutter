@@ -197,6 +197,10 @@ class _PlayPageState extends State<PlayPage> {
                             child: Text(l10n.smaller),
                             value: '-',
                           ),
+                          PopupMenuItem<String>(
+                            child: Text(l10n.poweroff),
+                            value: 'o',
+                          ),
                         ],
                         onSelected: (String mode) {
                           updateCommand(context, mode);

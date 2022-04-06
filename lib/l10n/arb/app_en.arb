@@ -104,6 +104,10 @@
     "@previous": {
         "description": "Play previous icon label"
     },
+    "poweroff": "Poweroff",
+    "@poweroff": {
+        "description": "Poweroff display server"
+    },
     "saveButtonLabel": "Save",
     "@saveButtonLabel": {
         "description": "Save button label"
