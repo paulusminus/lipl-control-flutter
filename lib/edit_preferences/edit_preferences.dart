@@ -38,21 +38,13 @@ class SaveAction extends Action<SaveIntent> {
   }
 }
 
-// TODO(paul): EditPreferencesPage not initialized with shared preferences
 class EditPreferencesPage extends StatelessWidget {
   const EditPreferencesPage({Key? key}) : super(key: key);
 
   static Route<void> route() {
     return MaterialPageRoute<void>(
       fullscreenDialog: true,
-      builder: (BuildContext context) =>
-          BlocProvider<EditPreferencesBloc<LiplPreferences>>(
-        create: (BuildContext context) => EditPreferencesBloc<LiplPreferences>(
-          changes: context.read<PreferencesBloc<LiplPreferences>>().stream,
-          defaultValue: LiplPreferences.blank(),
-        ),
-        child: const EditPreferencesPage(),
-      ),
+      builder: (BuildContext context) => const EditPreferencesPage(),
     );
   }
 

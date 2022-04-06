@@ -1,3 +1,5 @@
+import 'dart:io' show Platform;
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -36,7 +38,8 @@ class LyricList extends StatelessWidget {
               ),
               title: Text(l10n.liplTitle),
               actions: <Widget>[
-                const BluetoothIndicator(),
+                if (Platform.isAndroid || Platform.isIOS)
+                  const BluetoothIndicator(),
                 if (selectedTabState.selectedTab == SelectedTab.playlists)
                   IconButton(
                     icon: const Icon(Icons.text_snippet),
@@ -294,7 +297,9 @@ class BluetoothIndicator extends StatelessWidget {
     return BlocBuilder<BleConnectionCubit, BleConnectionState>(
       builder: (BuildContext context, BleConnectionState state) => IconButton(
         onPressed: () async {
-          if (!context.read<BleScanCubit>().state.permissionGranted) {
+          final bool supported = Platform.isAndroid || Platform.isIOS;
+          if (supported &&
+              !context.read<BleScanCubit>().state.permissionGranted) {
             if (await Permission.bluetooth.request() ==
                     PermissionStatus.granted &&
                 await Permission.location.request() ==

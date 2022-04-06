@@ -137,7 +137,9 @@ class BlocProviders extends StatelessWidget {
 
     return MultiBlocProvider(
       providers: <BlocProvider<dynamic>>[
-        BlocProvider<BleScanCubit>.value(value: bleScanCubit),
+        BlocProvider<BleScanCubit>.value(
+          value: bleScanCubit,
+        ),
         BlocProvider<BleConnectionCubit>.value(
           value: BleConnectionCubit(
             stream: bleScanCubit.stream
@@ -148,8 +150,17 @@ class BlocProviders extends StatelessWidget {
           ),
         ),
         BlocProvider<PreferencesBloc<LiplPreferences>>.value(
-            value: preferencesBloc),
-        BlocProvider<LiplRestCubit>.value(value: liplRestCubit),
+          value: preferencesBloc,
+        ),
+        BlocProvider<EditPreferencesBloc<LiplPreferences>>.value(
+          value: EditPreferencesBloc<LiplPreferences>(
+            changes: preferencesBloc.stream,
+            defaultValue: LiplPreferences.blank(),
+          ),
+        ),
+        BlocProvider<LiplRestCubit>.value(
+          value: liplRestCubit,
+        ),
         BlocProvider<SelectedTabCubit>.value(
           value: SelectedTabCubit(),
         ),
