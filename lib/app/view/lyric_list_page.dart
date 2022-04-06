@@ -28,6 +28,12 @@ class LyricList extends StatelessWidget {
           builder: (BuildContext context, SelectedTabState selectedTabState) =>
               Scaffold(
             appBar: AppBar(
+              leading: IconButton(
+                icon: const Icon(Icons.settings),
+                onPressed: () {
+                  Navigator.of(context).push(EditPreferencesPage.route());
+                },
+              ),
               title: Text(l10n.liplTitle),
               actions: <Widget>[
                 const BluetoothIndicator(),
