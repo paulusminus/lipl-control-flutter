@@ -8,6 +8,10 @@
     "@baseUrlLabel": {
         "description": "Voorkeuren Basis URL label"
     },
+    "bigger": "Groter",
+    "@bigger": {
+        "description": "Groter lettertype op scherm"
+    },
     "cancelButtonLabel": "Annuleren",
     "@cancelButtonLabel": {
         "description": "Annuleren knop label"
@@ -15,6 +19,10 @@
     "confirm": "Bevestigen",
     "@confirm": {
         "description": "Titel van bevestigen dialoog"
+    },
+    "dark": "Donker",
+    "@dark": {
+        "description": "Donker thema op scherm"
     },
     "delete": "Verwijder",
     "@delete": {
@@ -43,6 +51,10 @@
     "last": "Eind",
     "@last": {
         "description": "Afspelen eind icoon label"
+    },
+    "light": "Licht",
+    "@light": {
+        "description": "Licht thema op scherm"
     },
     "liplTitle": "Lipl",
     "@liplTitle": {
@@ -99,6 +111,10 @@
     "selectDisplayServerTitle": "Selecteer display server",
     "@selectDisplayServerTitle": {
         "description": "Selecteer display server pagina titel"
+    },
+    "smaller": "Kleiner",
+    "@smaller": {
+        "description": "Kleiner letterype op scherm"
     },
     "textLabel": "Tekst",
     "@textLabel": {

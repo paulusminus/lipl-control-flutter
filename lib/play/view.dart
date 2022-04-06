@@ -178,34 +178,34 @@ class _PlayPageState extends State<PlayPage> {
             child: Scaffold(
               appBar: AppBar(
                 title: Text(widget.title),
-                actions: widget.connected
-                    ? <IconButton>[
-                        IconButton(
-                          onPressed: () {
-                            updateCommand(context, 'l');
-                          },
-                          icon: const Icon(Icons.light_mode),
+                actions: <Widget>[
+                  if (widget.connected)
+                    PopupMenuButton<String>(
+                      itemBuilder: (BuildContext context) =>
+                          <PopupMenuItem<String>>[
+                        PopupMenuItem<String>(
+                          child: Text(l10n.dark),
+                          value: 'd',
                         ),
-                        IconButton(
-                          onPressed: () {
-                            updateCommand(context, 'd');
-                          },
-                          icon: const Icon(Icons.dark_mode),
+                        PopupMenuItem<String>(
+                          child: Text(l10n.light),
+                          value: 'l',
                         ),
-                        IconButton(
-                          onPressed: () {
-                            updateCommand(context, '-');
-                          },
-                          icon: const Icon(Icons.remove),
+                        PopupMenuItem<String>(
+                          child: Text(l10n.bigger),
+                          value: '+',
                         ),
-                        IconButton(
-                          onPressed: () {
-                            updateCommand(context, '+');
-                          },
-                          icon: const Icon(Icons.add),
+                        PopupMenuItem<String>(
+                          child: Text(l10n.smaller),
+                          value: '-',
                         ),
-                      ]
-                    : null,
+                      ],
+                      onSelected: (String mode) {
+                        updateCommand(context, mode);
+                      },
+                      icon: const Icon(Icons.settings_display),
+                    ),
+                ],
               ),
               body: PageView(
                   controller: controller,
@@ -223,7 +223,7 @@ class _PlayPageState extends State<PlayPage> {
                       .map(
                         (LyricPart lyricPart) => Center(
                           child: Padding(
-                            padding: const EdgeInsets.all(8.0),
+                            padding: const EdgeInsets.all(12.0),
                             child: RichText(
                               text: TextSpan(
                                 text: lyricPart.text,

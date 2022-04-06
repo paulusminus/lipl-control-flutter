@@ -8,6 +8,10 @@
     "@baseUrlLabel": {
         "description": "Preferences Base URL label"
     },
+    "bigger": "Bigger",
+    "@bigger": {
+        "description": "Bigger font on display server"
+    },
     "cancelButtonLabel": "Cancel",
     "@cancelButtonLabel": {
         "description": "Cancel button label"
@@ -15,6 +19,10 @@
     "confirm": "Confirm",
     "@confirm": {
         "description": "Title of confirm dialog"
+    },
+    "dark": "Dark",
+    "@dark": {
+        "description": "Dark theme"
     },
     "delete": "Delete",
     "@delete": {
@@ -43,6 +51,10 @@
     "last": "End",
     "@last": {
         "description": "Play last icon label"
+    },
+    "light": "Light",
+    "@light": {
+        "description": "Light theme"
     },
     "liplTitle": "Lipl",
     "@liplTitle": {
@@ -99,6 +111,10 @@
     "selectDisplayServerTitle": "Select display server",
     "@selectDisplayServerTitle": {
         "description": "Select display server page title"
+    },
+    "smaller": "Smaller",
+    "@smaller": {
+        "description": "Smaller font on display server"
     },
     "textLabel": "Text",
     "@textLabel": {
