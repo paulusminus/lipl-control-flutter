@@ -137,12 +137,6 @@ class BlocProviders extends StatelessWidget {
         BlocProvider<PreferencesBloc<LiplPreferences>>(
           create: (_) => preferencesBloc,
         ),
-        BlocProvider<EditPreferencesBloc<LiplPreferences>>(
-          create: (_) => EditPreferencesBloc<LiplPreferences>(
-            changes: preferencesBloc.stream,
-            defaultValue: LiplPreferences.blank(),
-          ),
-        ),
         BlocProvider<LiplRestCubit>(create: (_) => liplRestCubit),
         BlocProvider<SelectedTabCubit>(
           create: (_) => SelectedTabCubit(),
