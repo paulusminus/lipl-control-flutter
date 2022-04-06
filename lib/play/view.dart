@@ -89,11 +89,9 @@ class PlayPage extends StatefulWidget {
     Key? key,
     required this.lyricParts,
     required this.title,
-    required this.connected,
   }) : super(key: key);
   final String title;
   final List<LyricPart> lyricParts;
-  final bool connected;
 
   static Route<void> route({
     required List<LyricPart> lyricParts,
@@ -110,7 +108,6 @@ class PlayPage extends StatefulWidget {
         return PlayPage(
           lyricParts: lyricParts,
           title: title,
-          connected: connected,
         );
       },
     );
@@ -172,120 +169,122 @@ class _PlayPageState extends State<PlayPage> {
           EndIntent: EndAction(controller, widget.lyricParts.length),
           CloseIntent: CloseAction(context),
         },
-        child: Builder(
-          builder: (BuildContext context) => Focus(
-            autofocus: true,
-            child: Scaffold(
-              appBar: AppBar(
-                title: Text(widget.title),
-                actions: <Widget>[
-                  if (widget.connected)
-                    PopupMenuButton<String>(
-                      itemBuilder: (BuildContext context) =>
-                          <PopupMenuItem<String>>[
-                        PopupMenuItem<String>(
-                          child: Text(l10n.dark),
-                          value: 'd',
-                        ),
-                        PopupMenuItem<String>(
-                          child: Text(l10n.light),
-                          value: 'l',
-                        ),
-                        PopupMenuItem<String>(
-                          child: Text(l10n.bigger),
-                          value: '+',
-                        ),
-                        PopupMenuItem<String>(
-                          child: Text(l10n.smaller),
-                          value: '-',
-                        ),
-                      ],
-                      onSelected: (String mode) {
-                        updateCommand(context, mode);
-                      },
-                      icon: const Icon(Icons.settings_display),
-                    ),
-                ],
-              ),
-              body: PageView(
-                  controller: controller,
-                  onPageChanged: (int page) {
-                    if (widget.connected) {
-                      updatePage(context, widget.lyricParts)(page);
-                    }
-                    setState(
-                      () {
-                        current = page;
-                      },
-                    );
-                  },
-                  children: widget.lyricParts
-                      .map(
-                        (LyricPart lyricPart) => Center(
-                          child: Padding(
-                            padding: const EdgeInsets.all(12.0),
-                            child: RichText(
-                              text: TextSpan(
-                                text: lyricPart.text,
-                                style: const TextStyle(
-                                  fontSize: 16,
-                                  color: Colors.black,
-                                  height: 1.2,
+        child: Focus(
+          autofocus: true,
+          child: BlocBuilder<BleConnectionCubit, BleConnectionState>(
+            builder: (BuildContext context, BleConnectionState state) {
+              return Scaffold(
+                appBar: AppBar(
+                  title: Text(widget.title),
+                  actions: <Widget>[
+                    if (state.isConnected)
+                      PopupMenuButton<String>(
+                        itemBuilder: (BuildContext context) =>
+                            <PopupMenuItem<String>>[
+                          PopupMenuItem<String>(
+                            child: Text(l10n.dark),
+                            value: 'd',
+                          ),
+                          PopupMenuItem<String>(
+                            child: Text(l10n.light),
+                            value: 'l',
+                          ),
+                          PopupMenuItem<String>(
+                            child: Text(l10n.bigger),
+                            value: '+',
+                          ),
+                          PopupMenuItem<String>(
+                            child: Text(l10n.smaller),
+                            value: '-',
+                          ),
+                        ],
+                        onSelected: (String mode) {
+                          updateCommand(context, mode);
+                        },
+                        icon: const Icon(Icons.settings_display),
+                      ),
+                  ],
+                ),
+                body: PageView(
+                    controller: controller,
+                    onPageChanged: (int page) {
+                      if (state.isConnected) {
+                        updatePage(context, widget.lyricParts)(page);
+                      }
+                      setState(
+                        () {
+                          current = page;
+                        },
+                      );
+                    },
+                    children: widget.lyricParts
+                        .map(
+                          (LyricPart lyricPart) => Center(
+                            child: Padding(
+                              padding: const EdgeInsets.all(12.0),
+                              child: RichText(
+                                text: TextSpan(
+                                  text: lyricPart.text,
+                                  style: const TextStyle(
+                                    fontSize: 16,
+                                    color: Colors.black,
+                                    height: 1.2,
+                                  ),
+                                  children: <TextSpan>[
+                                    TextSpan(
+                                      text:
+                                          '\n\n\n${lyricPart.title} (${lyricPart.current} / ${lyricPart.total})',
+                                      style: const TextStyle(
+                                        fontWeight: FontWeight.normal,
+                                        fontStyle: FontStyle.italic,
+                                        color: Colors.black,
+                                        height: 1.2,
+                                      ),
+                                    )
+                                  ],
                                 ),
-                                children: <TextSpan>[
-                                  TextSpan(
-                                    text:
-                                        '\n\n\n${lyricPart.title} (${lyricPart.current} / ${lyricPart.total})',
-                                    style: const TextStyle(
-                                      fontWeight: FontWeight.normal,
-                                      fontStyle: FontStyle.italic,
-                                      color: Colors.black,
-                                      height: 1.2,
-                                    ),
-                                  )
-                                ],
                               ),
                             ),
                           ),
-                        ),
-                      )
-                      .toList()),
-              bottomNavigationBar: BottomNavigationBar(
-                backgroundColor: Colors.grey.shade200,
-                fixedColor: Colors.black,
-                unselectedItemColor: Colors.black,
-                showUnselectedLabels: true,
-                onTap: (int index) {
-                  Function()? createHandler<T extends Intent>(T t) =>
-                      Actions.handler<T>(context, t);
-                  <Function()?>[
-                    createHandler(homeIntent),
-                    createHandler(previousIntent),
-                    createHandler(nextIntent),
-                    createHandler(endIntent),
-                  ][index]
-                      ?.call();
-                },
-                items: <BottomNavigationBarItem>[
-                  BottomNavigationBarItem(
-                    icon: const Icon(Icons.first_page),
-                    label: l10n.first,
-                  ),
-                  BottomNavigationBarItem(
-                    icon: const Icon(Icons.keyboard_arrow_left),
-                    label: l10n.previous,
-                  ),
-                  BottomNavigationBarItem(
-                    icon: const Icon(Icons.keyboard_arrow_right),
-                    label: l10n.next,
-                  ),
-                  BottomNavigationBarItem(
-                    icon: const Icon(Icons.last_page),
-                    label: l10n.last,
-                  ),
-                ],
-              ),
-            ),
+                        )
+                        .toList()),
+                bottomNavigationBar: BottomNavigationBar(
+                  backgroundColor: Colors.grey.shade200,
+                  fixedColor: Colors.black,
+                  unselectedItemColor: Colors.black,
+                  showUnselectedLabels: true,
+                  onTap: (int index) {
+                    Function()? createHandler<T extends Intent>(T t) =>
+                        Actions.handler<T>(context, t);
+                    <Function()?>[
+                      createHandler(homeIntent),
+                      createHandler(previousIntent),
+                      createHandler(nextIntent),
+                      createHandler(endIntent),
+                    ][index]
+                        ?.call();
+                  },
+                  items: <BottomNavigationBarItem>[
+                    BottomNavigationBarItem(
+                      icon: const Icon(Icons.first_page),
+                      label: l10n.first,
+                    ),
+                    BottomNavigationBarItem(
+                      icon: const Icon(Icons.keyboard_arrow_left),
+                      label: l10n.previous,
+                    ),
+                    BottomNavigationBarItem(
+                      icon: const Icon(Icons.keyboard_arrow_right),
+                      label: l10n.next,
+                    ),
+                    BottomNavigationBarItem(
+                      icon: const Icon(Icons.last_page),
+                      label: l10n.last,
+                    ),
+                  ],
+                ),
+              );
+            },
           ),
         ),
       ),
