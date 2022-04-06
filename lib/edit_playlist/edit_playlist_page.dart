@@ -9,7 +9,52 @@ import 'package:logging/logging.dart';
 
 final Logger log = Logger('$EditPlaylistPage');
 
-// TODO(paul): KeyboardNavigation.
+class SaveIntent extends Intent {}
+
+class SaveAction extends Action<SaveIntent> {
+  SaveAction(this.context, this.isNew);
+  final BuildContext context;
+  final bool isNew;
+
+  @override
+  Object? invoke(SaveIntent intent) async {
+    final EditPlaylistState state = context.read<EditPlaylistCubit>().state;
+    if (isNew) {
+      final PlaylistPost playlistPost = PlaylistPost(
+        title: state.title,
+        members: state.members
+            .map(
+              (Lyric lyric) => lyric.id,
+            )
+            .toList(),
+      );
+      await context.read<LiplRestCubit>().postPlaylist(playlistPost);
+    } else {
+      final Playlist playlist = Playlist(
+        id: state.id,
+        title: state.title,
+        members: state.members.map((Lyric lyric) => lyric.id).toList(),
+      );
+      await context.read<LiplRestCubit>().putPlaylist(playlist);
+    }
+    context.read<EditPlaylistCubit>().submitted();
+    return null;
+  }
+}
+
+class CloseIntent extends Intent {}
+
+class CloseAction extends Action<CloseIntent> {
+  CloseAction(this.context);
+  final BuildContext context;
+
+  @override
+  Object? invoke(CloseIntent intent) {
+    context.read<EditPlaylistCubit>().submitted();
+    return null;
+  }
+}
+
 class EditPlaylistPage extends StatelessWidget {
   const EditPlaylistPage({Key? key}) : super(key: key);
 
@@ -57,54 +102,44 @@ class EditPlaylistView extends StatelessWidget {
     final bool isNew =
         context.select((EditPlaylistCubit cubit) => cubit.state.id == null);
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(isNew ? l10n.newPlaylist : l10n.editPlaylist),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: status.isLoadingOrSuccess
-            ? null
-            : () async {
-                final EditPlaylistState state =
-                    context.read<EditPlaylistCubit>().state;
-                if (isNew) {
-                  final PlaylistPost playlistPost = PlaylistPost(
-                    title: state.title,
-                    members: state.members
-                        .map(
-                          (Lyric lyric) => lyric.id,
-                        )
-                        .toList(),
-                  );
-                  await context
-                      .read<LiplRestCubit>()
-                      .postPlaylist(playlistPost);
-                } else {
-                  final Playlist playlist = Playlist(
-                    id: state.id,
-                    title: state.title,
-                    members:
-                        state.members.map((Lyric lyric) => lyric.id).toList(),
-                  );
-                  await context.read<LiplRestCubit>().putPlaylist(playlist);
-                }
-                context.read<EditPlaylistCubit>().submitted();
-              },
-        child: status.isLoadingOrSuccess
-            ? const CupertinoActivityIndicator()
-            : const Icon(Icons.save),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          children: const <Widget>[
-            _TitleField(),
-            _MembersAddField(),
-            _MembersField(),
-            SizedBox(
-              height: 60.0,
+    return Shortcuts(
+      shortcuts: <SingleActivator, Intent>{
+        const SingleActivator(LogicalKeyboardKey.keyS, control: true):
+            SaveIntent(),
+        const SingleActivator(LogicalKeyboardKey.escape): CloseIntent(),
+      },
+      child: Actions(
+        actions: <Type, Action<Intent>>{
+          SaveIntent: SaveAction(context, isNew),
+          CloseIntent: CloseAction(context),
+        },
+        child: Builder(
+          builder: (BuildContext context) => Focus(
+            autofocus: true,
+            child: Scaffold(
+              appBar: AppBar(
+                title: Text(isNew ? l10n.newPlaylist : l10n.editPlaylist),
+              ),
+              body: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  children: const <Widget>[
+                    _TitleField(),
+                    _MembersAddField(),
+                    _MembersField(),
+                  ],
+                ),
+              ),
+              floatingActionButton: FloatingActionButton(
+                onPressed: status.isLoadingOrSuccess
+                    ? null
+                    : Actions.handler(context, SaveIntent()),
+                child: status.isLoadingOrSuccess
+                    ? const CupertinoActivityIndicator()
+                    : const Icon(Icons.save),
+              ),
             ),
-          ],
+          ),
         ),
       ),
     );
