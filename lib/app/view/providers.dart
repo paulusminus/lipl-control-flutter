@@ -13,6 +13,12 @@ import 'package:logging/logging.dart';
 import 'package:preferences_bloc/preferences_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+extension ContextExtension on BuildContext {
+  bool get isMobile =>
+      Theme.of(this).platform == TargetPlatform.android ||
+      Theme.of(this).platform == TargetPlatform.iOS;
+}
+
 final Logger blocProvidersLog = Logger('$BlocProviders');
 
 class LiplPreferences extends Equatable {
@@ -133,7 +139,17 @@ class BlocProviders extends StatelessWidget {
 
     preferencesBloc.add(PreferencesEventLoad<LiplPreferences>());
 
-    final BleScanCubit bleScanCubit = BleScanCubit();
+    final BleScanCubit bleScanCubit = context.isMobile
+        ? BleScanCubit(flutterReactiveBle: flutterReactiveBle())
+        : BleNoScanCubit();
+
+    final BleConnectionCubit bleConnectionCubit = context.isMobile
+        ? BleConnectionCubit(
+            flutterReactiveBle: flutterReactiveBle(),
+            stream: bleScanCubit.stream
+                .map((BleScanState state) => state.selectedDevice)
+                .distinct())
+        : BleNoConnectionCubit();
 
     return MultiBlocProvider(
       providers: <BlocProvider<dynamic>>[
@@ -141,13 +157,7 @@ class BlocProviders extends StatelessWidget {
           value: bleScanCubit,
         ),
         BlocProvider<BleConnectionCubit>.value(
-          value: BleConnectionCubit(
-            stream: bleScanCubit.stream
-                .map(
-                  (BleScanState state) => state.selectedDevice,
-                )
-                .distinct(),
-          ),
+          value: bleConnectionCubit,
         ),
         BlocProvider<PreferencesBloc<LiplPreferences>>.value(
           value: preferencesBloc,

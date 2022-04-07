@@ -10,14 +10,6 @@ class SelectedTabState extends Equatable {
 
   final SelectedTab selectedTab;
 
-  SelectedTabState copyWith({
-    SelectedTab? selectedTab,
-  }) {
-    return SelectedTabState(
-      selectedTab: selectedTab ?? this.selectedTab,
-    );
-  }
-
   @override
   List<Object?> get props => <Object?>[selectedTab];
 }
@@ -26,10 +18,10 @@ class SelectedTabCubit extends Cubit<SelectedTabState> {
   SelectedTabCubit() : super(const SelectedTabState());
 
   void selectLyrics() {
-    emit(state.copyWith(selectedTab: SelectedTab.lyrics));
+    emit(const SelectedTabState(selectedTab: SelectedTab.lyrics));
   }
 
   void selectPlaylists() {
-    emit(state.copyWith(selectedTab: SelectedTab.playlists));
+    emit(const SelectedTabState(selectedTab: SelectedTab.playlists));
   }
 }

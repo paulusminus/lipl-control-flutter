@@ -36,9 +36,7 @@ class LyricList extends StatelessWidget {
               ),
               title: Text(l10n.liplTitle),
               actions: <Widget>[
-                if (Theme.of(context).platform == TargetPlatform.android ||
-                    Theme.of(context).platform == TargetPlatform.iOS)
-                  const BluetoothIndicator(),
+                if (context.isMobile) const BluetoothIndicator(),
                 if (selectedTabState.selectedTab == SelectedTab.playlists)
                   IconButton(
                     icon: const Icon(Icons.text_snippet),
@@ -296,10 +294,7 @@ class BluetoothIndicator extends StatelessWidget {
     return BlocBuilder<BleConnectionCubit, BleConnectionState>(
       builder: (BuildContext context, BleConnectionState state) => IconButton(
         onPressed: () async {
-          final bool supported =
-              Theme.of(context).platform == TargetPlatform.android ||
-                  Theme.of(context).platform == TargetPlatform.iOS;
-          if (supported &&
+          if (context.isMobile &&
               !context.read<BleScanCubit>().state.permissionGranted) {
             if (await Permission.bluetooth.request() ==
                     PermissionStatus.granted &&
