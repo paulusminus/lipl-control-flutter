@@ -20,6 +20,10 @@
     "@confirm": {
         "description": "Title of confirm dialog"
     },
+    "confirmPoweroff": "Poweroff Display server?",
+    "@confirmPoweroff": {
+        "description": "Asking for confirmation to poweroff Display server"
+    },
     "dark": "Dark",
     "@dark": {
         "description": "Dark theme"

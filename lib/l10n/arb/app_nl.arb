@@ -20,6 +20,10 @@
     "@confirm": {
         "description": "Titel van bevestigen dialoog"
     },
+    "confirmPoweroff": "Uitschakelen Display server",
+    "@confirmPoweroff": {
+        "description": "Vragen om bevestiging uitschakelen Display server"
+    },
     "dark": "Donker",
     "@dark": {
         "description": "Donker thema op scherm"

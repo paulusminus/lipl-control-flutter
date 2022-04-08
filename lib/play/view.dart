@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lipl_ble/lipl_ble.dart';
 import 'package:lipl_bloc/l10n/l10n.dart';
+import 'package:lipl_bloc/widget/confirm.dart';
 import 'play.dart';
 
 class PreviousIntent extends Intent {}
@@ -199,8 +200,20 @@ class _PlayPageState extends State<PlayPage> {
                             value: 'o',
                           ),
                         ],
-                        onSelected: (String mode) {
-                          updateCommand(context, mode);
+                        onSelected: (String command) async {
+                          if (command == 'o') {
+                            if (await confirm(
+                              context,
+                              title: l10n.poweroff,
+                              content: l10n.confirmPoweroff,
+                              textOK: l10n.okButtonLabel,
+                              textCancel: l10n.cancelButtonLabel,
+                            )) {
+                              updateCommand(context, command);
+                            }
+                          } else {
+                            updateCommand(context, command);
+                          }
                         },
                         icon: const Icon(Icons.settings_display),
                       ),

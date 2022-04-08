@@ -124,7 +124,7 @@ class RepoProviders extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiRepositoryProvider(
       providers: <RepositoryProvider<Object>>[
-        RepositoryProvider<Logger>.value(value: Logger('$App')),
+        RepositoryProvider<Logger>(create: (_) => Logger('$App')),
       ],
       child: BlocProviders(),
     );
@@ -185,8 +185,8 @@ class BlocProviders extends StatelessWidget {
         BlocProvider<PreferencesBloc<LiplPreferences>>.value(
           value: preferencesBloc,
         ),
-        BlocProvider<EditPreferencesBloc<LiplPreferences>>.value(
-          value: EditPreferencesBloc<LiplPreferences>(
+        BlocProvider<EditPreferencesBloc<LiplPreferences>>(
+          create: (_) => EditPreferencesBloc<LiplPreferences>(
             changes: preferencesBloc.stream,
             defaultValue: LiplPreferences.blank(),
           ),
@@ -194,8 +194,8 @@ class BlocProviders extends StatelessWidget {
         BlocProvider<LiplRestCubit>.value(
           value: liplRestCubit,
         ),
-        BlocProvider<SelectedTabCubit>.value(
-          value: SelectedTabCubit(),
+        BlocProvider<SelectedTabCubit>(
+          create: (_) => SelectedTabCubit(),
         ),
       ],
       child: App(),
