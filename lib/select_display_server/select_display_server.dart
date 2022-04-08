@@ -37,20 +37,15 @@ class SelectDisplayServerView extends StatelessWidget {
                     return ListTile(
                       title: Text(device.name),
                       subtitle: Text(device.id),
-                      trailing: state.selectedDevice?.id != device.id
-                          ? TextButton(
+                      trailing: state.selectedDevice?.id == device.id
+                          ? const CurrentSelectedConnectionButton()
+                          : TextButton(
                               onPressed: () async {
                                 context.read<BleScanCubit>().select(device);
                                 await context.read<BleScanCubit>().stop();
                                 Navigator.of(context).pop();
                               },
                               child: const Text('Connect'),
-                            )
-                          : TextButton(
-                              child: const Text('Disconnect'),
-                              onPressed: () {
-                                context.read<BleScanCubit>().select(null);
-                              },
                             ),
                     );
                   },
@@ -61,4 +56,21 @@ class SelectDisplayServerView extends StatelessWidget {
       ),
     );
   }
+}
+
+class CurrentSelectedConnectionButton extends StatelessWidget {
+  const CurrentSelectedConnectionButton({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) =>
+      BlocBuilder<BleConnectionCubit, BleConnectionState>(
+        builder: (BuildContext context, BleConnectionState state) => TextButton(
+          child: Text(state.isConnected ? 'Disconnect' : 'Connecting'),
+          onPressed: state.isConnected
+              ? () async {
+                  context.read<BleScanCubit>().select(null);
+                }
+              : null,
+        ),
+      );
 }
