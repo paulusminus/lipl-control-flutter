@@ -8,6 +8,7 @@ import 'package:lipl_bloc/edit_playlist/edit_playlist.dart';
 import 'package:lipl_bloc/edit_preferences/edit_preferences.dart';
 import 'package:lipl_bloc/l10n/l10n.dart';
 import 'package:lipl_bloc/play/play.dart';
+import 'package:lipl_bloc/search/search_view.dart';
 import 'package:lipl_bloc/select_display_server/select_display_server.dart';
 import 'package:lipl_bloc/widget/widget.dart';
 import 'package:lipl_rest_bloc/lipl_rest_bloc.dart';
@@ -33,6 +34,13 @@ class LyricList extends StatelessWidget {
               ),
               title: Text(l10n.liplTitle),
               actions: <Widget>[
+                if (liplRestState.lyrics.length > 20)
+                  IconButton(
+                    onPressed: () {
+                      Navigator.of(context).push(SearchPage.route());
+                    },
+                    icon: const Icon(Icons.search),
+                  ),
                 if (context.isMobile) const BluetoothIndicator(),
                 if (selectedTab == SelectedTab.playlists)
                   IconButton(

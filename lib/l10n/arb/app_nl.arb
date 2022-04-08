@@ -116,6 +116,30 @@
     "@saveButtonLabel": {
         "description": "Opslaan knop label"
     },
+    "searchPageTitle": "Zoek tekst",
+    "@searchPageTitle": {
+        "description": "Zoek tekst pagina titel"
+    },
+    "searchButtonLabel": "Zoeken",
+    "@searchButtonLabel": {
+        "description": "Zoeken knop label"
+    },
+    "searchMinimalCharsError": "Minimaal 3 letter a.u.b.",
+    "@searchMinimalCharsError": {
+        "description": "Zoek tekst minimaal aantal letter fout"
+    },
+    "searchNoResults": "Geen",
+    "@searchNoResults": {
+        "description": "Geen resultaten voor zoeken"
+    },
+    "searchDoesHaveResults": "Zoek",
+    "@searchDoesHaveResults": {
+        "description": "Wel resultaten voor zoeken"
+    },
+    "searchResultsFor": "resultaten voor",
+    "@searchResultsFor": {
+        "description": "Tekst zoeken resultaten voor"
+    },
     "selectDisplayServerTitle": "Selecteer display server",
     "@selectDisplayServerTitle": {
         "description": "Selecteer display server pagina titel"

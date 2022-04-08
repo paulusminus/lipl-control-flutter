@@ -116,6 +116,30 @@
     "@saveButtonLabel": {
         "description": "Save button label"
     },
+    "searchPageTitle": "Search lyric",
+    "@searchPageTitle": {
+        "description": "Search lyric page title"
+    },
+    "searchButtonLabel": "Search",
+    "@searchButtonLabel": {
+        "description": "Search button label"
+    },
+    "searchMinimalCharsError": "Minimal of 3 letters please",
+    "@searchMinimalCharsError": {
+        "description": "Search lyric minimal characters error"
+    },
+    "searchNoResults": "No",
+    "@searchNoResults": {
+        "description": "Indicate no search results"
+    },
+    "searchDoesHaveResults": "Search",
+    "@searchDoesHaveResults": {
+        "description": "Indicate search results"
+    },
+    "searchResultsFor": "results for",
+    "@searchResultsFor": {
+        "description": "Lyric search results for"
+    },
     "selectDisplayServerTitle": "Select display server",
     "@selectDisplayServerTitle": {
         "description": "Select display server page title"

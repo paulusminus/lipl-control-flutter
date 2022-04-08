@@ -9,6 +9,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:lipl_ble/lipl_ble.dart';
 import 'package:lipl_bloc/app/app.dart';
 import 'package:lipl_bloc/l10n/l10n.dart';
+import 'package:lipl_bloc/search/search_cubit.dart';
 import 'package:lipl_rest_bloc/lipl_rest_bloc.dart';
 import 'package:logging/logging.dart';
 import 'package:preferences_bloc/preferences_bloc.dart';
@@ -212,6 +213,11 @@ class _BlocProvidersState extends State<BlocProviders> {
         ),
         BlocProvider<SelectedTabCubit>.value(
           value: SelectedTabCubit(),
+        ),
+        BlocProvider<SearchCubit>.value(
+          value: SearchCubit(
+            widget.liplRestCubit.stream.map((RestState state) => state.lyrics),
+          ),
         ),
       ],
       child: App(),
