@@ -134,8 +134,6 @@ class RepoProviders extends StatelessWidget {
 
 class BlocProviders extends StatefulWidget {
   BlocProviders({Key? key}) : super(key: key);
-  // ignore: always_specify_types
-  final ble = flutterReactiveBle();
   final PreferencesBloc<LiplPreferences> preferencesBloc =
       PreferencesBloc<LiplPreferences>(
     persist: PersistSharedPreferences<LiplPreferences>(
@@ -169,12 +167,12 @@ class _BlocProvidersState extends State<BlocProviders> {
         .listen((_) {});
     bleScanCubit = context.isMobile
         ? BleScanCubit(
-            flutterReactiveBle: widget.ble,
+            flutterReactiveBle: flutterReactiveBle(),
             logger: RepositoryProvider.of<Logger>(context))
         : BleNoScanCubit();
     bleConnectionCubit = context.isMobile
         ? BleConnectionCubit(
-            flutterReactiveBle: widget.ble,
+            flutterReactiveBle: flutterReactiveBle(),
             logger: RepositoryProvider.of<Logger>(context),
             stream: bleScanCubit.stream
                 .map((BleScanState state) => state.selectedDevice)
