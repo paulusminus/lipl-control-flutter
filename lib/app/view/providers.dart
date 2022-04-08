@@ -197,14 +197,12 @@ class _BlocProvidersState extends State<BlocProviders> {
         BlocProvider<BleConnectionCubit>.value(
           value: bleConnectionCubit,
         ),
-        BlocProvider<PreferencesBloc<LiplPreferences>>(
-          lazy: false,
-          create: (_) => widget.preferencesBloc
+        BlocProvider<PreferencesBloc<LiplPreferences>>.value(
+          value: widget.preferencesBloc
             ..add(PreferencesEventLoad<LiplPreferences>()),
         ),
-        BlocProvider<EditPreferencesBloc<LiplPreferences>>(
-          lazy: false,
-          create: (_) => EditPreferencesBloc<LiplPreferences>(
+        BlocProvider<EditPreferencesBloc<LiplPreferences>>.value(
+          value: EditPreferencesBloc<LiplPreferences>(
             changes: widget.preferencesBloc.stream,
             defaultValue: LiplPreferences.blank(),
           ),
@@ -212,8 +210,8 @@ class _BlocProvidersState extends State<BlocProviders> {
         BlocProvider<LiplRestCubit>.value(
           value: widget.liplRestCubit,
         ),
-        BlocProvider<SelectedTabCubit>(
-          create: (_) => SelectedTabCubit(),
+        BlocProvider<SelectedTabCubit>.value(
+          value: SelectedTabCubit(),
         ),
       ],
       child: App(),
