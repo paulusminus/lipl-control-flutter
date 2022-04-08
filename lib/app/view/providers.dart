@@ -131,49 +131,64 @@ class RepoProviders extends StatelessWidget {
   }
 }
 
-class BlocProviders extends StatelessWidget {
+class BlocProviders extends StatefulWidget {
+  BlocProviders({Key? key}) : super(key: key);
+  // ignore: always_specify_types
+  final ble = flutterReactiveBle();
+  final PreferencesBloc<LiplPreferences> preferencesBloc =
+      PreferencesBloc<LiplPreferences>(
+    persist: PersistSharedPreferences<LiplPreferences>(
+      deserialize: LiplPreferences.deserialize,
+      serialize: (LiplPreferences preferences) => preferences.serialize(),
+      key: '$LiplPreferences',
+    ),
+  );
+
+  final LiplRestCubit liplRestCubit = LiplRestCubit();
+
   @override
-  Widget build(BuildContext context) {
-    final PreferencesBloc<LiplPreferences> preferencesBloc =
-        PreferencesBloc<LiplPreferences>(
-      persist: PersistSharedPreferences<LiplPreferences>(
-        deserialize: LiplPreferences.deserialize,
-        serialize: (LiplPreferences preferences) => preferences.serialize(),
-        key: '$LiplPreferences',
-      ),
-    );
+  State<BlocProviders> createState() => _BlocProvidersState();
+}
 
-    final LiplRestCubit liplRestCubit = LiplRestCubit();
+class _BlocProvidersState extends State<BlocProviders> {
+  late StreamSubscription<void> subscription;
+  late BleScanCubit bleScanCubit;
+  late BleConnectionCubit bleConnectionCubit;
 
-    preferencesBloc.stream
+  @override
+  void initState() {
+    super.initState();
+    subscription = widget.preferencesBloc.stream
         .where(
           (PreferencesState<LiplPreferences> preferences) =>
               preferences.status == PreferencesStatus.succes,
         )
         .distinct()
-        .listen(
-          preferencesChanged(liplRestCubit),
-        );
-
-    // ignore: always_specify_types
-    final ble = flutterReactiveBle();
-    preferencesBloc.add(PreferencesEventLoad<LiplPreferences>());
-
-    final BleScanCubit bleScanCubit = context.isMobile
+        .asyncMap(preferencesChanged(widget.liplRestCubit))
+        .listen((_) {});
+    bleScanCubit = context.isMobile
         ? BleScanCubit(
-            flutterReactiveBle: ble,
+            flutterReactiveBle: widget.ble,
             logger: RepositoryProvider.of<Logger>(context))
         : BleNoScanCubit();
-
-    final BleConnectionCubit bleConnectionCubit = context.isMobile
+    bleConnectionCubit = context.isMobile
         ? BleConnectionCubit(
-            flutterReactiveBle: ble,
+            flutterReactiveBle: widget.ble,
             logger: RepositoryProvider.of<Logger>(context),
             stream: bleScanCubit.stream
                 .map((BleScanState state) => state.selectedDevice)
                 .distinct())
         : BleNoConnectionCubit();
+  }
 
+  @override
+  Future<void> dispose() async {
+    await subscription.cancel();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: <BlocProvider<dynamic>>[
         BlocProvider<BleScanCubit>.value(
@@ -182,17 +197,20 @@ class BlocProviders extends StatelessWidget {
         BlocProvider<BleConnectionCubit>.value(
           value: bleConnectionCubit,
         ),
-        BlocProvider<PreferencesBloc<LiplPreferences>>.value(
-          value: preferencesBloc,
+        BlocProvider<PreferencesBloc<LiplPreferences>>(
+          lazy: false,
+          create: (_) => widget.preferencesBloc
+            ..add(PreferencesEventLoad<LiplPreferences>()),
         ),
         BlocProvider<EditPreferencesBloc<LiplPreferences>>(
+          lazy: false,
           create: (_) => EditPreferencesBloc<LiplPreferences>(
-            changes: preferencesBloc.stream,
+            changes: widget.preferencesBloc.stream,
             defaultValue: LiplPreferences.blank(),
           ),
         ),
         BlocProvider<LiplRestCubit>.value(
-          value: liplRestCubit,
+          value: widget.liplRestCubit,
         ),
         BlocProvider<SelectedTabCubit>(
           create: (_) => SelectedTabCubit(),
