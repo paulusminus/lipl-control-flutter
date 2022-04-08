@@ -31,21 +31,29 @@ class SelectDisplayServerView extends StatelessWidget {
           children: state.devices
               .map(
                 // ignore: always_specify_types
-                (device) => ListTile(
-                  title: Text(device.name),
-                  subtitle: Text(device.id),
-                  trailing: state.selectedDevice?.id != device.id
-                      ? TextButton(
-                          onPressed: () async {
-                            await context
-                                .read<BleConnectionCubit>()
-                                .connect(device.id);
-                            await context.read<BleScanCubit>().stop();
-                            Navigator.of(context).pop();
-                          },
-                          child: const Text('Connect'),
-                        )
-                      : null,
+                (device) => BlocBuilder<BleConnectionCubit, BleConnectionState>(
+                  builder: (BuildContext context,
+                      BleConnectionState connectionState) {
+                    return ListTile(
+                      title: Text(device.name),
+                      subtitle: Text(device.id),
+                      trailing: state.selectedDevice?.id != device.id
+                          ? TextButton(
+                              onPressed: () async {
+                                context.read<BleScanCubit>().select(device);
+                                await context.read<BleScanCubit>().stop();
+                                Navigator.of(context).pop();
+                              },
+                              child: const Text('Connect'),
+                            )
+                          : TextButton(
+                              child: const Text('Disconnect'),
+                              onPressed: () {
+                                context.read<BleScanCubit>().select(null);
+                              },
+                            ),
+                    );
+                  },
                 ),
               )
               .toList(),

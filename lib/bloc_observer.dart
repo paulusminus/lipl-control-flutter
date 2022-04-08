@@ -1,9 +1,9 @@
 import 'package:bloc/bloc.dart';
 import 'package:logging/logging.dart';
 
-final Logger log = Logger('$LiplBlocObserver');
-
 class LiplBlocObserver extends BlocObserver {
+  final Logger log = Logger('$LiplBlocObserver');
+
   @override
   void onCreate(BlocBase<dynamic> bloc) {
     super.onCreate(bloc);
@@ -15,7 +15,7 @@ class LiplBlocObserver extends BlocObserver {
     super.onChange(bloc, change);
     final dynamic next = change.nextState;
     log.info(next.runtimeType);
-    log.info('onChange -- ${bloc.runtimeType}\n\n${next.props}\n');
+    log.info('onChange -- ${bloc.runtimeType}\n\n$next\n');
   }
 
   @override

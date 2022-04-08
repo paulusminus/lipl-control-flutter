@@ -11,10 +11,7 @@ import 'package:lipl_bloc/play/play.dart';
 import 'package:lipl_bloc/select_display_server/select_display_server.dart';
 import 'package:lipl_bloc/widget/widget.dart';
 import 'package:lipl_rest_bloc/lipl_rest_bloc.dart';
-import 'package:logging/logging.dart';
 import 'package:permission_handler/permission_handler.dart';
-
-final Logger log = Logger('$LyricList');
 
 class LyricList extends StatelessWidget {
   const LyricList();
@@ -22,11 +19,11 @@ class LyricList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final AppLocalizations l10n = context.l10n;
+
     return BlocBuilder<LiplRestCubit, RestState>(
       builder: (BuildContext context, RestState liplRestState) {
-        return BlocBuilder<SelectedTabCubit, SelectedTabState>(
-          builder: (BuildContext context, SelectedTabState selectedTabState) =>
-              Scaffold(
+        return BlocBuilder<SelectedTabCubit, SelectedTab>(
+          builder: (BuildContext context, SelectedTab selectedTab) => Scaffold(
             appBar: AppBar(
               leading: IconButton(
                 icon: const Icon(Icons.settings),
@@ -37,14 +34,14 @@ class LyricList extends StatelessWidget {
               title: Text(l10n.liplTitle),
               actions: <Widget>[
                 if (context.isMobile) const BluetoothIndicator(),
-                if (selectedTabState.selectedTab == SelectedTab.playlists)
+                if (selectedTab == SelectedTab.playlists)
                   IconButton(
                     icon: const Icon(Icons.text_snippet),
                     onPressed: () {
                       context.read<SelectedTabCubit>().selectLyrics();
                     },
                   ),
-                if (selectedTabState.selectedTab == SelectedTab.lyrics)
+                if (selectedTab == SelectedTab.lyrics)
                   IconButton(
                     icon: const Icon(Icons.folder),
                     onPressed: () {
@@ -76,7 +73,7 @@ class LyricList extends StatelessWidget {
               },
               child: liplRestState.status == RestStatus.success
                   ? IndexedStack(
-                      index: selectedTabState.selectedTab.index,
+                      index: selectedTab.index,
                       children: <Widget>[
                         renderLyricList(
                           context,
@@ -93,12 +90,12 @@ class LyricList extends StatelessWidget {
             ),
             floatingActionButton: FloatingActionButton(
               onPressed: () {
-                if (selectedTabState.selectedTab == SelectedTab.lyrics) {
+                if (selectedTab == SelectedTab.lyrics) {
                   Navigator.of(context).push(
                     EditLyricPage.route(),
                   );
                 }
-                if (selectedTabState.selectedTab == SelectedTab.playlists) {
+                if (selectedTab == SelectedTab.playlists) {
                   Navigator.of(context).push(
                     EditPlaylistPage.route(lyrics: liplRestState.lyrics),
                   );
@@ -291,23 +288,33 @@ class BluetoothIndicator extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<BleConnectionCubit, BleConnectionState>(
-      builder: (BuildContext context, BleConnectionState state) => IconButton(
+    return BlocBuilder<BleScanCubit, BleScanState>(
+      builder: (BuildContext context, BleScanState state) => IconButton(
         onPressed: () async {
-          if (context.isMobile &&
-              !context.read<BleScanCubit>().state.permissionGranted) {
+          if (context.isMobile && !state.permissionGranted) {
             if (await Permission.bluetooth.request() ==
                     PermissionStatus.granted &&
                 await Permission.location.request() ==
                     PermissionStatus.granted) {
               context.read<BleScanCubit>().permissionGranted();
-              await context.read<BleScanCubit>().start();
-              Navigator.of(context).push(SelectDisplayServerPage.route());
             }
           }
+          await context.read<BleScanCubit>().start();
+          Navigator.of(context).push(SelectDisplayServerPage.route());
         },
-        icon: Icon(
-            state.isConnected ? Icons.bluetooth_connected : Icons.bluetooth),
+        icon: BlocBuilder<BleConnectionCubit, BleConnectionState>(
+          builder: (BuildContext context, BleConnectionState state) {
+            return BlocBuilder<BleConnectionCubit, BleConnectionState>(
+              builder: (BuildContext context, BleConnectionState state) {
+                return Icon(
+                  state.isConnected
+                      ? Icons.bluetooth_connected
+                      : Icons.bluetooth,
+                );
+              },
+            );
+          },
+        ),
       ),
     );
   }

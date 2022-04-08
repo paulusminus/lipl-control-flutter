@@ -25,7 +25,7 @@ Future<void> main() async {
   BlocOverrides.runZoned(
     () {
       runApp(
-        BlocProviders(),
+        const RepoProviders(),
       );
     },
     blocObserver: LiplBlocObserver(),

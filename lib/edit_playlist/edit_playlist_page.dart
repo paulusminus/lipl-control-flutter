@@ -5,9 +5,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lipl_bloc/edit_playlist/edit_playlist_cubit.dart';
 import 'package:lipl_bloc/l10n/l10n.dart';
 import 'package:lipl_rest_bloc/lipl_rest_bloc.dart';
-import 'package:logging/logging.dart';
-
-final Logger log = Logger('$EditPlaylistPage');
 
 class SaveIntent extends Intent {}
 

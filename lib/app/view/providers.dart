@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:equatable/equatable.dart';
@@ -18,8 +19,6 @@ extension ContextExtension on BuildContext {
       Theme.of(this).platform == TargetPlatform.android ||
       Theme.of(this).platform == TargetPlatform.iOS;
 }
-
-final Logger blocProvidersLog = Logger('$BlocProviders');
 
 class LiplPreferences extends Equatable {
   const LiplPreferences({
@@ -70,6 +69,26 @@ class LiplPreferences extends Equatable {
   List<Object?> get props => <Object?>[username, password, baseUrl];
 }
 
+Future<void> Function(PreferencesState<LiplPreferences> preferences)
+    preferencesChanged(LiplRestCubit liplRestCubit) =>
+        (PreferencesState<LiplPreferences> preferences) async {
+          final Credentials? credentials = preferences.item == null
+              ? null
+              : preferences.item!.username.isEmpty ||
+                      preferences.item!.password.isEmpty
+                  ? null
+                  : Credentials(
+                      username: preferences.item!.username,
+                      password: preferences.item!.password,
+                    );
+          await liplRestCubit.load(
+            apiFromConfig(
+              credentials: credentials,
+              baseUrl: preferences.item?.baseUrl,
+            ),
+          );
+        };
+
 class PersistSharedPreferences<T> implements Persist<T> {
   PersistSharedPreferences({
     required this.key,
@@ -98,6 +117,20 @@ class PersistSharedPreferences<T> implements Persist<T> {
   }
 }
 
+class RepoProviders extends StatelessWidget {
+  const RepoProviders({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return MultiRepositoryProvider(
+      providers: <RepositoryProvider<Object>>[
+        RepositoryProvider<Logger>.value(value: Logger('$App')),
+      ],
+      child: BlocProviders(),
+    );
+  }
+}
+
 class BlocProviders extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -111,6 +144,7 @@ class BlocProviders extends StatelessWidget {
     );
 
     final LiplRestCubit liplRestCubit = LiplRestCubit();
+
     preferencesBloc.stream
         .where(
           (PreferencesState<LiplPreferences> preferences) =>
@@ -118,34 +152,23 @@ class BlocProviders extends StatelessWidget {
         )
         .distinct()
         .listen(
-      (PreferencesState<LiplPreferences> preferences) async {
-        final Credentials? credentials = preferences.item == null
-            ? null
-            : preferences.item!.username.isEmpty ||
-                    preferences.item!.password.isEmpty
-                ? null
-                : Credentials(
-                    username: preferences.item!.username,
-                    password: preferences.item!.password,
-                  );
-        await liplRestCubit.load(
-          apiFromConfig(
-            credentials: credentials,
-            baseUrl: preferences.item?.baseUrl,
-          ),
+          preferencesChanged(liplRestCubit),
         );
-      },
-    );
 
+    // ignore: always_specify_types
+    final ble = flutterReactiveBle();
     preferencesBloc.add(PreferencesEventLoad<LiplPreferences>());
 
     final BleScanCubit bleScanCubit = context.isMobile
-        ? BleScanCubit(flutterReactiveBle: flutterReactiveBle())
+        ? BleScanCubit(
+            flutterReactiveBle: ble,
+            logger: RepositoryProvider.of<Logger>(context))
         : BleNoScanCubit();
 
     final BleConnectionCubit bleConnectionCubit = context.isMobile
         ? BleConnectionCubit(
-            flutterReactiveBle: flutterReactiveBle(),
+            flutterReactiveBle: ble,
+            logger: RepositoryProvider.of<Logger>(context),
             stream: bleScanCubit.stream
                 .map((BleScanState state) => state.selectedDevice)
                 .distinct())

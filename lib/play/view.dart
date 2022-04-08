@@ -3,10 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lipl_ble/lipl_ble.dart';
 import 'package:lipl_bloc/l10n/l10n.dart';
-import 'package:logging/logging.dart';
 import 'play.dart';
-
-final Logger log = Logger('$PlayPage');
 
 class PreviousIntent extends Intent {}
 

@@ -21,7 +21,7 @@ dependencies:
   lipl_ble:
     git:
       url: git://paulmin.nl/dart/lipl-ble.git
-      ref: v0.7
+      ref: v0.8
   lipl_rest_bloc: 
     git:
       url: git://paulmin.nl/dart/lipl-rest-bloc.git

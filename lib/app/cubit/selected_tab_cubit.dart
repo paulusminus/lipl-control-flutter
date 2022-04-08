@@ -1,27 +1,15 @@
 import 'package:bloc/bloc.dart';
-import 'package:equatable/equatable.dart';
 
 enum SelectedTab { lyrics, playlists }
 
-class SelectedTabState extends Equatable {
-  const SelectedTabState({
-    this.selectedTab = SelectedTab.lyrics,
-  });
-
-  final SelectedTab selectedTab;
-
-  @override
-  List<Object?> get props => <Object?>[selectedTab];
-}
-
-class SelectedTabCubit extends Cubit<SelectedTabState> {
-  SelectedTabCubit() : super(const SelectedTabState());
+class SelectedTabCubit extends Cubit<SelectedTab> {
+  SelectedTabCubit() : super(SelectedTab.lyrics);
 
   void selectLyrics() {
-    emit(const SelectedTabState(selectedTab: SelectedTab.lyrics));
+    emit(SelectedTab.lyrics);
   }
 
   void selectPlaylists() {
-    emit(const SelectedTabState(selectedTab: SelectedTab.playlists));
+    emit(SelectedTab.playlists);
   }
 }

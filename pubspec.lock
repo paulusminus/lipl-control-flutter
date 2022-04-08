@@ -369,11 +369,11 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: "v0.7"
-      resolved-ref: "1313ff8ef0c7bf5c68d11d0b72f661a9d2038798"
+      ref: "v0.8"
+      resolved-ref: "04eb6da0744d9f1ebb36d88b9a53843e28914ad0"
       url: "git://paulmin.nl/dart/lipl-ble.git"
     source: git
-    version: "0.6.0"
+    version: "0.7.0"
   lipl_rest_bloc:
     dependency: "direct main"
     description:
