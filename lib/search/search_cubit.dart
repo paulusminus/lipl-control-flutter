@@ -16,6 +16,15 @@ class SearchState extends Equatable {
               lyric.title.toLowerCase().contains(searchTerm.toLowerCase()))
           .toList();
 
+  SearchState copyWith({
+    String? searchTerm,
+    List<Lyric>? lyrics,
+  }) =>
+      SearchState(
+        searchTerm: searchTerm ?? this.searchTerm,
+        lyrics: lyrics ?? this.lyrics,
+      );
+
   @override
   List<Object?> get props => <Object?>[searchTerm, lyrics];
 }
@@ -24,7 +33,7 @@ class SearchCubit extends Cubit<SearchState> {
   SearchCubit(Stream<List<Lyric>> stream)
       : super(const SearchState(searchTerm: '', lyrics: <Lyric>[])) {
     _subscription = stream.distinct().listen((List<Lyric> lyrics) {
-      emit(SearchState(searchTerm: state.searchTerm, lyrics: lyrics));
+      emit(state.copyWith(lyrics: lyrics));
     });
   }
 
@@ -37,6 +46,6 @@ class SearchCubit extends Cubit<SearchState> {
   }
 
   void search(String value) {
-    emit(SearchState(searchTerm: value, lyrics: state.lyrics));
+    emit(state.copyWith(searchTerm: value));
   }
 }

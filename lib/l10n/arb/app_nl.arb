@@ -124,9 +124,9 @@
     "@searchButtonLabel": {
         "description": "Zoeken knop label"
     },
-    "searchMinimalCharsError": "Minimaal 3 letter a.u.b.",
+    "searchMinimalCharsError": "Minimaal 3 tekens a.u.b.",
     "@searchMinimalCharsError": {
-        "description": "Zoek tekst minimaal aantal letter fout"
+        "description": "Zoek tekst minimaal aantal tekens fout"
     },
     "searchNoResults": "Geen",
     "@searchNoResults": {
