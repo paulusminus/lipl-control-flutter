@@ -20,7 +20,7 @@
     "@confirm": {
         "description": "Titel van bevestigen dialoog"
     },
-    "confirmPoweroff": "Uitschakelen Display server",
+    "confirmPoweroff": "Uitschakelen Display server?",
     "@confirmPoweroff": {
         "description": "Vragen om bevestiging uitschakelen Display server"
     },
@@ -119,6 +119,10 @@
     "searchPageTitle": "Zoek tekst",
     "@searchPageTitle": {
         "description": "Zoek tekst pagina titel"
+    },
+    "searchTitleContains": "Titel bevat",
+    "@searchTitleContains": {
+        "description": "Label voor titel bevat veld"
     },
     "searchButtonLabel": "Zoeken",
     "@searchButtonLabel": {

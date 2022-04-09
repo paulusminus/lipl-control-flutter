@@ -120,6 +120,10 @@
     "@searchPageTitle": {
         "description": "Search lyric page title"
     },
+    "searchTitleContains": "Title contains",
+    "@searchTitleContains": {
+        "description": "Label for title contains field"
+    },
     "searchButtonLabel": "Search",
     "@searchButtonLabel": {
         "description": "Search button label"

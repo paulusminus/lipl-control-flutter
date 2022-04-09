@@ -55,7 +55,7 @@ class _SearchFormState extends State<SearchForm> {
                       },
                       keyboardType: TextInputType.text,
                       decoration: InputDecoration(
-                        label: Text(l10n.searchButtonLabel),
+                        label: Text(l10n.searchTitleContains),
                       ),
                       validator: (String? value) {
                         if (value == null || value.trim().length < 3) {
