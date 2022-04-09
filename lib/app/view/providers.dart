@@ -10,6 +10,7 @@ import 'package:lipl_ble/lipl_ble.dart';
 import 'package:lipl_bloc/app/app.dart';
 import 'package:lipl_bloc/l10n/l10n.dart';
 import 'package:lipl_bloc/search/search_cubit.dart';
+import 'package:lipl_encrypt/lipl_encrypt.dart';
 import 'package:lipl_rest_bloc/lipl_rest_bloc.dart';
 import 'package:logging/logging.dart';
 import 'package:preferences_bloc/preferences_bloc.dart';
@@ -21,6 +22,7 @@ extension ContextExtension on BuildContext {
       Theme.of(this).platform == TargetPlatform.iOS;
 }
 
+// TODO(paul): store password encrypted
 class LiplPreferences extends Equatable {
   const LiplPreferences({
     required this.username,
@@ -137,8 +139,10 @@ class BlocProviders extends StatefulWidget {
   final PreferencesBloc<LiplPreferences> preferencesBloc =
       PreferencesBloc<LiplPreferences>(
     persist: PersistSharedPreferences<LiplPreferences>(
-      deserialize: LiplPreferences.deserialize,
-      serialize: (LiplPreferences preferences) => preferences.serialize(),
+      deserialize: (String s) =>
+          LiplPreferences.deserialize(FernetEncrypter().decrypt(s)),
+      serialize: (LiplPreferences preferences) =>
+          FernetEncrypter().encrypt(preferences.serialize()),
       key: '$LiplPreferences',
     ),
   );

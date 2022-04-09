@@ -22,6 +22,10 @@ dependencies:
     git:
       url: git://paulmin.nl/dart/lipl-ble.git
       ref: v0.8
+  lipl_encrypt:
+    git:
+      url: git://paulmin.nl/dart/lipl-encrypt.git
+      ref: v0.1
   lipl_rest_bloc: 
     git:
       url: git://paulmin.nl/dart/lipl-rest-bloc.git
