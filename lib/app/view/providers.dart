@@ -22,7 +22,6 @@ extension ContextExtension on BuildContext {
       Theme.of(this).platform == TargetPlatform.iOS;
 }
 
-// TODO(paul): store password encrypted
 class LiplPreferences extends Equatable {
   const LiplPreferences({
     required this.username,
@@ -97,16 +96,23 @@ class PersistSharedPreferences<T> implements Persist<T> {
     required this.key,
     required this.deserialize,
     required this.serialize,
+    this.encrypter,
   });
   final String key;
   final T Function(String) deserialize;
   final String Function(T) serialize;
+  final EncrypterBase? encrypter;
 
   @override
   Future<T?> load() async {
     final SharedPreferences preferences = await SharedPreferences.getInstance();
     final String? s = preferences.getString(key);
-    return s == null ? null : deserialize(s);
+    if (s == null) {
+      return null;
+    } else {
+      final String decripted = encrypter?.decrypt(s) ?? s;
+      return deserialize(decripted);
+    }
   }
 
   @override
@@ -115,7 +121,9 @@ class PersistSharedPreferences<T> implements Persist<T> {
     if (t == null) {
       preferences.remove(key);
     } else {
-      await preferences.setString(key, serialize(t));
+      final String s = serialize(t);
+      final String encrypted = encrypter?.encrypt(s) ?? s;
+      await preferences.setString(key, encrypted);
     }
   }
 }
@@ -139,11 +147,10 @@ class BlocProviders extends StatefulWidget {
   final PreferencesBloc<LiplPreferences> preferencesBloc =
       PreferencesBloc<LiplPreferences>(
     persist: PersistSharedPreferences<LiplPreferences>(
-      deserialize: (String s) =>
-          LiplPreferences.deserialize(FernetEncrypter().decrypt(s)),
-      serialize: (LiplPreferences preferences) =>
-          FernetEncrypter().encrypt(preferences.serialize()),
+      deserialize: LiplPreferences.deserialize,
+      serialize: (LiplPreferences preferences) => preferences.serialize(),
       key: '$LiplPreferences',
+      encrypter: FernetEncrypter(),
     ),
   );
 
