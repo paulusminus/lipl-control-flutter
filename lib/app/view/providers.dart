@@ -129,13 +129,14 @@ class PersistSharedPreferences<T> implements Persist<T> {
 }
 
 class RepoProviders extends StatelessWidget {
-  const RepoProviders({Key? key}) : super(key: key);
+  const RepoProviders({Key? key, required this.logger}) : super(key: key);
+  final Logger logger;
 
   @override
   Widget build(BuildContext context) {
     return MultiRepositoryProvider(
       providers: <RepositoryProvider<Object>>[
-        RepositoryProvider<Logger>(create: (_) => Logger('$App')),
+        RepositoryProvider<Logger>.value(value: logger),
       ],
       child: BlocProviders(),
     );

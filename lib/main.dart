@@ -22,12 +22,16 @@ Future<void> main() async {
         .setTrustedCertificatesBytes(data.buffer.asUint8List());
   }
 
+  final Logger logger = Logger('Lipl');
+
   BlocOverrides.runZoned(
     () {
       runApp(
-        const RepoProviders(),
+        RepoProviders(
+          logger: logger,
+        ),
       );
     },
-    blocObserver: LiplBlocObserver(),
+    blocObserver: LiplBlocObserver(kDebugMode ? logger : null),
   );
 }
