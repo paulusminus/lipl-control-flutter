@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -15,11 +16,10 @@ import 'package:lipl_rest_bloc/lipl_rest_bloc.dart';
 import 'package:logging/logging.dart';
 import 'package:preferences_bloc/preferences_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:universal_io/io.dart';
 
 extension ContextExtension on BuildContext {
-  bool get isMobile =>
-      Theme.of(this).platform == TargetPlatform.android ||
-      Theme.of(this).platform == TargetPlatform.iOS;
+  bool get isMobile => Platform.isAndroid || Platform.isIOS;
 }
 
 class LiplPreferences extends Equatable {
@@ -151,7 +151,7 @@ class BlocProviders extends StatefulWidget {
       deserialize: LiplPreferences.deserialize,
       serialize: (LiplPreferences preferences) => preferences.serialize(),
       key: '$LiplPreferences',
-      encrypter: FernetEncrypter(),
+      encrypter: kIsWeb ? null : FernetEncrypter(),
     ),
   );
 

@@ -1,9 +1,6 @@
-import 'dart:io';
-
 import 'package:bloc/bloc.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:lipl_bloc/app/view/providers.dart';
 import 'package:lipl_bloc/bloc_observer.dart';
 import 'package:logging/logging.dart';
@@ -15,12 +12,12 @@ Future<void> main() async {
   });
 
   WidgetsFlutterBinding.ensureInitialized();
-  if (Platform.isAndroid && kDebugMode) {
-    final ByteData data =
-        await PlatformAssetBundle().load('assets/ca/lets-encrypt-r3.pem');
-    SecurityContext.defaultContext
-        .setTrustedCertificatesBytes(data.buffer.asUint8List());
-  }
+  // if (Platform.isAndroid && kDebugMode) {
+  //   final ByteData data =
+  //       await PlatformAssetBundle().load('assets/ca/lets-encrypt-r3.pem');
+  //   SecurityContext.defaultContext
+  //       .setTrustedCertificatesBytes(data.buffer.asUint8List());
+  // }
 
   final Logger logger = Logger('Lipl');
 
