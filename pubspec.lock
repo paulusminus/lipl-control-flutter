@@ -429,11 +429,11 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: "v0.7"
-      resolved-ref: ca09d298964a518a98fd8c7e078fd6e2a3d9db59
+      ref: "v0.8"
+      resolved-ref: "2749f023fee94f92ea374e755c715e68b64b1a0b"
       url: "git://paulmin.nl/dart/lipl-rest-bloc.git"
     source: git
-    version: "0.7.0"
+    version: "0.8.0"
   logging:
     dependency: "direct main"
     description:

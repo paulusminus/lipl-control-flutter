@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:equatable/equatable.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -253,16 +252,7 @@ class App extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: BlocBuilder<PreferencesBloc<LiplPreferences>,
-          PreferencesState<LiplPreferences>>(
-        builder:
-            (BuildContext context, PreferencesState<LiplPreferences> state) =>
-                state.status == PreferencesStatus.succes
-                    ? const LyricList()
-                    : const Center(
-                        child: CupertinoActivityIndicator(),
-                      ),
-      ),
+      home: const LyricList(),
     );
   }
 }

@@ -59,16 +59,15 @@ class EditPlaylistPage extends StatelessWidget {
     String? id,
     String? title,
     List<Lyric>? members,
-    List<Lyric>? lyrics,
   }) {
     return MaterialPageRoute<void>(
       fullscreenDialog: true,
       builder: (_) => BlocProvider<EditPlaylistCubit>(
-        create: (_) => EditPlaylistCubit(
+        create: (BuildContext context) => EditPlaylistCubit(
           id: id,
           title: title,
           members: members,
-          lyrics: lyrics,
+          lyrics: context.read<LiplRestCubit>().state.lyrics,
         ),
         child: const EditPlaylistPage(),
       ),

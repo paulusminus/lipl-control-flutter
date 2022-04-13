@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lipl_ble/lipl_ble.dart';
@@ -14,6 +13,28 @@ import 'package:lipl_bloc/widget/widget.dart';
 import 'package:lipl_rest_bloc/lipl_rest_bloc.dart';
 import 'package:permission_handler/permission_handler.dart';
 
+void Function(BuildContext, RestState) onRestUnauthorized(
+  AppLocalizations l10n,
+) =>
+    (BuildContext context, RestState state) {
+      if (state.status == RestStatus.unauthorized) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(l10n.unauthorized),
+            action: SnackBarAction(
+              label: l10n.preferences,
+              onPressed: () {
+                Navigator.of(context).push(
+                  EditPreferencesPage.route(),
+                );
+              },
+            ),
+            duration: const Duration(days: 365),
+          ),
+        );
+      }
+    };
+
 class LyricList extends StatelessWidget {
   const LyricList();
 
@@ -21,97 +42,42 @@ class LyricList extends StatelessWidget {
   Widget build(BuildContext context) {
     final AppLocalizations l10n = context.l10n;
 
-    return BlocBuilder<LiplRestCubit, RestState>(
-      builder: (BuildContext context, RestState liplRestState) {
-        return BlocBuilder<SelectedTabCubit, SelectedTab>(
-          builder: (BuildContext context, SelectedTab selectedTab) => Scaffold(
-            appBar: AppBar(
-              leading: IconButton(
-                icon: const Icon(Icons.settings),
-                onPressed: () {
-                  Navigator.of(context).push(EditPreferencesPage.route());
-                },
-              ),
-              title: Text(l10n.liplTitle),
-              actions: <Widget>[
-                if (liplRestState.lyrics.length > 20)
-                  IconButton(
-                    onPressed: () {
-                      Navigator.of(context).push(SearchPage.route());
-                    },
-                    icon: const Icon(Icons.search),
-                  ),
-                if (context.isMobile) const BluetoothIndicator(),
-                if (selectedTab == SelectedTab.playlists)
-                  IconButton(
-                    icon: const Icon(Icons.text_snippet),
-                    onPressed: () {
-                      context.read<SelectedTabCubit>().selectLyrics();
-                    },
-                  ),
-                if (selectedTab == SelectedTab.lyrics)
-                  IconButton(
-                    icon: const Icon(Icons.folder),
-                    onPressed: () {
-                      context.read<SelectedTabCubit>().selectPlaylists();
-                    },
-                  ),
-              ],
+    return Scaffold(
+      appBar: AppBar(
+        leading: const PreferencesButton(),
+        title: Text(l10n.liplTitle),
+        actions: <Widget>[
+          const SearchButton(),
+          if (context.isMobile) const BluetoothIndicator(),
+          SelectTabButton(),
+        ],
+      ),
+      body: BlocListener<LiplRestCubit, RestState>(
+        listenWhen: (RestState previous, RestState current) =>
+            current.status != previous.status,
+        listener: onRestUnauthorized(l10n),
+        child: const LyricsOrPlaylistsView(),
+      ),
+      floatingActionButton: const AddNewFloatingActionButton(),
+    );
+  }
+}
+
+class LyricsOrPlaylistsView extends StatelessWidget {
+  const LyricsOrPlaylistsView({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<SelectedTabCubit, SelectedTab>(
+      builder: (BuildContext context, SelectedTab state) {
+        return IndexedStack(
+          index: state.index,
+          children: <Widget>[
+            renderLyricList(
+              context.read<LiplRestCubit>().lyricsStream,
             ),
-            body: BlocListener<LiplRestCubit, RestState>(
-              listenWhen: (RestState previous, RestState current) =>
-                  current.status != previous.status,
-              listener: (BuildContext context, RestState state) {
-                if (state.status == RestStatus.unauthorized) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(l10n.unauthorized),
-                      action: SnackBarAction(
-                        label: l10n.preferences,
-                        onPressed: () {
-                          Navigator.of(context).push(
-                            EditPreferencesPage.route(),
-                          );
-                        },
-                      ),
-                      duration: const Duration(days: 365),
-                    ),
-                  );
-                }
-              },
-              child: liplRestState.status == RestStatus.success
-                  ? IndexedStack(
-                      index: selectedTab.index,
-                      children: <Widget>[
-                        renderLyricList(
-                          context,
-                          liplRestState.lyrics,
-                        ),
-                        renderPlaylistList(
-                          context,
-                          liplRestState.playlists,
-                          liplRestState.lyrics,
-                        ),
-                      ],
-                    )
-                  : const Center(child: CupertinoActivityIndicator()),
-            ),
-            floatingActionButton: FloatingActionButton(
-              onPressed: () {
-                if (selectedTab == SelectedTab.lyrics) {
-                  Navigator.of(context).push(
-                    EditLyricPage.route(),
-                  );
-                }
-                if (selectedTab == SelectedTab.playlists) {
-                  Navigator.of(context).push(
-                    EditPlaylistPage.route(lyrics: liplRestState.lyrics),
-                  );
-                }
-              },
-              child: const Icon(Icons.add),
-            ),
-          ),
+            renderPlaylistList(),
+          ],
         );
       },
     );
@@ -165,129 +131,138 @@ Widget renderPlaylistSummary(
   );
 }
 
-Widget renderLyricList(BuildContext context, List<Lyric> lyrics) {
-  final AppLocalizations l10n = context.l10n;
-  return expansionPanelList<Lyric>(
-    items: lyrics,
-    selectId: selectLyricId,
-    selectTitle: renderLyricTitle,
-    selectSummary: renderLyricSummary,
-    buttons: <ButtonData<Lyric>>[
-      ButtonData<Lyric>(
-        label: l10n.playButtonLabel,
-        onPressed: (Lyric lyric) {
-          Navigator.of(context).push(
-            PlayPage.route(
-              lyricParts: <Lyric>[lyric].toLyricParts(),
-              title: lyric.title,
+Widget renderLyricList(Stream<List<Lyric>> lyricsStream) {
+  return StreamBuilder<List<Lyric>>(
+    stream: lyricsStream,
+    builder: (BuildContext context, AsyncSnapshot<List<Lyric>> lyrics) {
+      final AppLocalizations l10n = context.l10n;
+
+      if (lyrics.data == null) {
+        return const SizedBox.shrink();
+      } else {
+        return expansionPanelList<Lyric>(
+          items: lyrics.data!,
+          selectId: selectLyricId,
+          selectTitle: renderLyricTitle,
+          selectSummary: renderLyricSummary,
+          buttons: <ButtonData<Lyric>>[
+            ButtonData<Lyric>(
+              label: l10n.playButtonLabel,
+              onPressed: (Lyric lyric) {
+                Navigator.of(context).push(
+                  PlayPage.route(
+                    lyricParts: <Lyric>[lyric].toLyricParts(),
+                    title: lyric.title,
+                  ),
+                );
+              },
+              enabled: (Lyric lyric) => lyric.parts.isNotEmpty,
             ),
-          );
-        },
-        enabled: (Lyric lyric) => lyric.parts.isNotEmpty,
-      ),
-      ButtonData<Lyric>(
-        label: l10n.deleteButtonLabel,
-        onPressed: (Lyric lyric) async {
-          if (await confirm(
-            context,
-            title: l10n.confirm,
-            content: '${l10n.delete} "${lyric.title}"?',
-            textOK: l10n.okButtonLabel,
-            textCancel: l10n.cancelButtonLabel,
-          )) {
-            await context.read<LiplRestCubit>().deleteLyric(lyric.id);
-          }
-        },
-      ),
-      ButtonData<Lyric>(
-        label: l10n.editButtonLabel,
-        onPressed: (Lyric lyric) {
-          Navigator.of(context).push(
-            EditLyricPage.route(
-              id: lyric.id,
-              title: lyric.title,
-              parts: lyric.parts,
+            ButtonData<Lyric>(
+              label: l10n.deleteButtonLabel,
+              onPressed: (Lyric lyric) async {
+                if (await confirm(
+                  context,
+                  title: l10n.confirm,
+                  content: '${l10n.delete} "${lyric.title}"?',
+                  textOK: l10n.okButtonLabel,
+                  textCancel: l10n.cancelButtonLabel,
+                )) {
+                  await context.read<LiplRestCubit>().deleteLyric(lyric.id);
+                }
+              },
             ),
-          );
-        },
-      ),
-    ],
+            ButtonData<Lyric>(
+              label: l10n.editButtonLabel,
+              onPressed: (Lyric lyric) {
+                Navigator.of(context).push(
+                  EditLyricPage.route(
+                    id: lyric.id,
+                    title: lyric.title,
+                    parts: lyric.parts,
+                  ),
+                );
+              },
+            ),
+          ],
+        );
+      }
+    },
   );
 }
 
-Widget renderPlaylistList(
-  BuildContext context,
-  List<Playlist> playlists,
-  List<Lyric> lyrics,
-) {
-  final AppLocalizations l10n = context.l10n;
-  return expansionPanelList<Playlist>(
-    items: playlists,
-    selectId: selectPlaylistId,
-    selectTitle: renderPlaylistTitle,
-    selectSummary: (Playlist playlist) =>
-        renderPlaylistSummary(context, playlist, lyrics),
-    buttons: <ButtonData<Playlist>>[
-      ButtonData<Playlist>(
-        label: l10n.playButtonLabel,
-        onPressed: (Playlist playlist) {
-          Navigator.of(context).push(
-            PlayPage.route(
-              lyricParts: playlist.members
-                  .map(
-                    (String id) => lyrics.firstWhere(
-                      (Lyric lyric) => lyric.id == id,
-                      orElse: null,
-                    ),
-                  )
-                  .where(
-                    (Lyric? lyric) => lyric != null,
-                  )
-                  .toList()
-                  .toLyricParts(),
-              title: playlist.title,
-            ),
-          );
-        },
-        enabled: (Playlist playlist) => playlist.members.isNotEmpty,
-      ),
-      ButtonData<Playlist>(
-        label: l10n.deleteButtonLabel,
-        onPressed: (Playlist playlist) async {
-          if (await confirm(
-            context,
-            title: l10n.confirm,
-            content: '${l10n.delete} "${playlist.title}"?',
-            textOK: l10n.okButtonLabel,
-            textCancel: l10n.cancelButtonLabel,
-          )) {
-            await context.read<LiplRestCubit>().deletePlaylist(playlist.id);
-          }
-        },
-      ),
-      ButtonData<Playlist>(
-        label: l10n.editButtonLabel,
-        onPressed: (Playlist playlist) {
-          Navigator.of(context).push(
-            EditPlaylistPage.route(
-              id: playlist.id,
-              title: playlist.title,
-              members: <Lyric>[
-                ...playlist.members
-                    .map(
-                      (String lyricId) => lyrics.firstWhere(
-                        (Lyric lyric) => lyric.id == lyricId,
-                        orElse: null,
-                      ),
-                    )
-                    .where((Lyric? lyric) => lyric != null)
-              ],
-              lyrics: lyrics,
-            ),
-          );
-        },
-      ),
-    ],
+Widget renderPlaylistList() {
+  return BlocBuilder<LiplRestCubit, RestState>(
+    builder: (BuildContext context, RestState state) {
+      final AppLocalizations l10n = context.l10n;
+      return expansionPanelList<Playlist>(
+        items: state.playlists,
+        selectId: selectPlaylistId,
+        selectTitle: renderPlaylistTitle,
+        selectSummary: (Playlist playlist) =>
+            renderPlaylistSummary(context, playlist, state.lyrics),
+        buttons: <ButtonData<Playlist>>[
+          ButtonData<Playlist>(
+            label: l10n.playButtonLabel,
+            onPressed: (Playlist playlist) {
+              Navigator.of(context).push(
+                PlayPage.route(
+                  lyricParts: playlist.members
+                      .map(
+                        (String id) => state.lyrics.firstWhere(
+                          (Lyric lyric) => lyric.id == id,
+                          orElse: null,
+                        ),
+                      )
+                      .where(
+                        (Lyric? lyric) => lyric != null,
+                      )
+                      .toList()
+                      .toLyricParts(),
+                  title: playlist.title,
+                ),
+              );
+            },
+            enabled: (Playlist playlist) => playlist.members.isNotEmpty,
+          ),
+          ButtonData<Playlist>(
+            label: l10n.deleteButtonLabel,
+            onPressed: (Playlist playlist) async {
+              if (await confirm(
+                context,
+                title: l10n.confirm,
+                content: '${l10n.delete} "${playlist.title}"?',
+                textOK: l10n.okButtonLabel,
+                textCancel: l10n.cancelButtonLabel,
+              )) {
+                await context.read<LiplRestCubit>().deletePlaylist(playlist.id);
+              }
+            },
+          ),
+          ButtonData<Playlist>(
+            label: l10n.editButtonLabel,
+            onPressed: (Playlist playlist) {
+              Navigator.of(context).push(
+                EditPlaylistPage.route(
+                  id: playlist.id,
+                  title: playlist.title,
+                  members: <Lyric>[
+                    ...playlist.members
+                        .map(
+                          (String lyricId) => state.lyrics.firstWhere(
+                            (Lyric lyric) => lyric.id == lyricId,
+                            orElse: null,
+                          ),
+                        )
+                        .where((Lyric? lyric) => lyric != null)
+                  ],
+                ),
+              );
+            },
+          ),
+        ],
+      );
+    },
   );
 }
 
@@ -324,6 +299,95 @@ class BluetoothIndicator extends StatelessWidget {
           },
         ),
       ),
+    );
+  }
+}
+
+class SelectTabButton extends StatelessWidget {
+  SelectTabButton({Key? key}) : super(key: key);
+
+  final Map<SelectedTab, IconData> whichIcon = <SelectedTab, IconData>{
+    SelectedTab.lyrics: Icons.folder,
+    SelectedTab.playlists: Icons.text_snippet,
+  };
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<SelectedTabCubit, SelectedTab>(
+        builder: (BuildContext context, SelectedTab state) {
+      return IconButton(
+        onPressed: () {
+          if (state == SelectedTab.lyrics) {
+            context.read<SelectedTabCubit>().selectPlaylists();
+          }
+          if (state == SelectedTab.playlists) {
+            context.read<SelectedTabCubit>().selectLyrics();
+          }
+        },
+        icon: Icon(
+          whichIcon[state],
+        ),
+      );
+    });
+  }
+}
+
+class AddNewFloatingActionButton extends StatelessWidget {
+  const AddNewFloatingActionButton({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<SelectedTabCubit, SelectedTab>(
+      builder: (BuildContext context, SelectedTab state) {
+        return FloatingActionButton(
+          onPressed: () {
+            if (state == SelectedTab.lyrics) {
+              Navigator.of(context).push(
+                EditLyricPage.route(),
+              );
+            }
+            if (state == SelectedTab.playlists) {
+              Navigator.of(context).push(
+                EditPlaylistPage.route(),
+              );
+            }
+          },
+          child: const Icon(Icons.add),
+        );
+      },
+    );
+  }
+}
+
+class SearchButton extends StatelessWidget {
+  const SearchButton({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<LiplRestCubit, RestState>(
+      builder: (BuildContext context, RestState state) {
+        return state.lyrics.length > 20
+            ? IconButton(
+                onPressed: () {
+                  Navigator.of(context).push(SearchPage.route());
+                },
+                icon: const Icon(Icons.search))
+            : const SizedBox.shrink();
+      },
+    );
+  }
+}
+
+class PreferencesButton extends StatelessWidget {
+  const PreferencesButton({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return IconButton(
+      onPressed: () {
+        Navigator.of(context).push(EditPreferencesPage.route());
+      },
+      icon: const Icon(Icons.settings),
     );
   }
 }

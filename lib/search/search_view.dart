@@ -4,6 +4,7 @@ import 'package:lipl_bloc/app/app.dart';
 import 'package:lipl_bloc/l10n/l10n.dart';
 import 'package:lipl_bloc/search/search_cubit.dart';
 import 'package:lipl_bloc/widget/widget.dart';
+import 'package:lipl_rest_bloc/lipl_rest_bloc.dart';
 
 class SearchPage extends StatelessWidget {
   const SearchPage({Key? key}) : super(key: key);
@@ -112,6 +113,8 @@ class SearchResults extends StatelessWidget {
     final AppLocalizations l10n = context.l10n;
     return BlocBuilder<SearchCubit, SearchState>(
       builder: (BuildContext context, SearchState state) {
+        final Stream<List<Lyric>> stream =
+            Stream<List<Lyric>>.value(state.searchResult);
         return ListTile(
           title: Padding(
             padding: const EdgeInsets.symmetric(vertical: 12.0),
@@ -125,7 +128,7 @@ class SearchResults extends StatelessWidget {
                   state.searchTerm,
             ),
           ),
-          subtitle: renderLyricList(context, state.searchResult),
+          subtitle: renderLyricList(stream),
         );
       },
     );
