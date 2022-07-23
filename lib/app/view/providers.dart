@@ -229,12 +229,14 @@ class _BlocProvidersState extends State<BlocProviders> {
           ),
         ),
       ],
-      child: App(),
+      child: const App(),
     );
   }
 }
 
 class App extends StatelessWidget {
+  const App({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(

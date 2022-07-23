@@ -180,24 +180,24 @@ class _PlayPageState extends State<PlayPage> {
                         itemBuilder: (BuildContext context) =>
                             <PopupMenuItem<String>>[
                           PopupMenuItem<String>(
-                            child: Text(l10n.dark),
                             value: 'd',
+                            child: Text(l10n.dark),
                           ),
                           PopupMenuItem<String>(
-                            child: Text(l10n.light),
                             value: 'l',
+                            child: Text(l10n.light),
                           ),
                           PopupMenuItem<String>(
-                            child: Text(l10n.bigger),
                             value: '+',
+                            child: Text(l10n.bigger),
                           ),
                           PopupMenuItem<String>(
-                            child: Text(l10n.smaller),
                             value: '-',
+                            child: Text(l10n.smaller),
                           ),
                           PopupMenuItem<String>(
-                            child: Text(l10n.poweroff),
                             value: 'o',
+                            child: Text(l10n.poweroff),
                           ),
                         ],
                         onSelected: (String command) async {

@@ -36,7 +36,7 @@ void Function(BuildContext, RestState) onRestUnauthorized(
     };
 
 class LyricList extends StatelessWidget {
-  const LyricList();
+  const LyricList({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -119,8 +119,9 @@ Widget renderPlaylistSummary(
     subtitle: Text(
       playlist.members
           .map(
-            (String member) => lyrics
-                .firstWhere((Lyric lyric) => lyric.id == member, orElse: null),
+            (String member) => lyrics.firstWhere(
+                (Lyric lyric) => lyric.id == member,
+                orElse: () => null as Lyric),
           )
           .where(
             (Lyric? lyric) => lyric != null,
@@ -211,7 +212,7 @@ Widget renderPlaylistList() {
                       .map(
                         (String id) => state.lyrics.firstWhere(
                           (Lyric lyric) => lyric.id == id,
-                          orElse: null,
+                          orElse: () => null as Lyric,
                         ),
                       )
                       .where(
@@ -251,7 +252,7 @@ Widget renderPlaylistList() {
                         .map(
                           (String lyricId) => state.lyrics.firstWhere(
                             (Lyric lyric) => lyric.id == lyricId,
-                            orElse: null,
+                            orElse: () => null as Lyric,
                           ),
                         )
                         .where((Lyric? lyric) => lyric != null)

@@ -16,11 +16,13 @@ class SearchPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SearchForm();
+    return const SearchForm();
   }
 }
 
 class SearchForm extends StatefulWidget {
+  const SearchForm({Key? key}) : super(key: key);
+
   @override
   State<SearchForm> createState() => _SearchFormState();
 }
@@ -98,7 +100,7 @@ class _SearchFormState extends State<SearchForm> {
               ),
             ),
           ),
-          Expanded(
+          const Expanded(
             child: SearchResults(),
           ),
         ],
@@ -108,6 +110,8 @@ class _SearchFormState extends State<SearchForm> {
 }
 
 class SearchResults extends StatelessWidget {
+  const SearchResults({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     final AppLocalizations l10n = context.l10n;
@@ -119,13 +123,7 @@ class SearchResults extends StatelessWidget {
           title: Padding(
             padding: const EdgeInsets.symmetric(vertical: 12.0),
             child: Text(
-              (state.searchResult.isNotEmpty
-                      ? l10n.searchDoesHaveResults
-                      : l10n.searchNoResults) +
-                  ' ' +
-                  l10n.searchResultsFor +
-                  ' ' +
-                  state.searchTerm,
+              '${state.searchResult.isNotEmpty ? l10n.searchDoesHaveResults : l10n.searchNoResults} ${l10n.searchResultsFor} ${state.searchTerm}',
             ),
           ),
           subtitle: renderLyricList(stream),

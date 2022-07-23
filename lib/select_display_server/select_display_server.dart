@@ -43,6 +43,7 @@ class SelectDisplayServerView extends StatelessWidget {
                               onPressed: () async {
                                 context.read<BleScanCubit>().select(device);
                                 await context.read<BleScanCubit>().stop();
+
                                 Navigator.of(context).pop();
                               },
                               child: const Text('Connect'),
@@ -65,12 +66,12 @@ class CurrentSelectedConnectionButton extends StatelessWidget {
   Widget build(BuildContext context) =>
       BlocBuilder<BleConnectionCubit, BleConnectionState>(
         builder: (BuildContext context, BleConnectionState state) => TextButton(
-          child: Text(state.isConnected ? 'Disconnect' : 'Connecting'),
           onPressed: state.isConnected
               ? () async {
                   context.read<BleScanCubit>().select(null);
                 }
               : null,
+          child: Text(state.isConnected ? 'Disconnect' : 'Connecting'),
         ),
       );
 }

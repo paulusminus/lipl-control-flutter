@@ -4,11 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:lipl_bloc/app/view/providers.dart';
 import 'package:lipl_bloc/bloc_observer.dart';
 import 'package:logging/logging.dart';
+import 'package:universal_io/io.dart';
 
 Future<void> main() async {
   Logger.root.level = Level.ALL;
   Logger.root.onRecord.listen((LogRecord record) {
-    print('${record.level.name}: ${record.time}: ${record.message}');
+    stdout.writeln('${record.level.name}: ${record.time}: ${record.message}');
   });
 
   WidgetsFlutterBinding.ensureInitialized();
