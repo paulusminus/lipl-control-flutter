@@ -38,7 +38,7 @@ dependencies:
   preferences_bloc:
     git:
       url: git://paulmin.nl/dart/preferences-bloc.git
-      ref: v0.4
+      ref: v0.5
   shared_preferences: ^2.0.15
   permission_handler: ^10.0.0
   universal_io: ^2.0.4

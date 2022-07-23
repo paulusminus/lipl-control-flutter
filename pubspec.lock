@@ -7,14 +7,14 @@ packages:
       name: _fe_analyzer_shared
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "41.0.0"
+    version: "42.0.0"
   analyzer:
     dependency: transitive
     description:
       name: analyzer
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "4.2.0"
+    version: "4.3.0"
   archive:
     dependency: transitive
     description:
@@ -428,7 +428,7 @@ packages:
     description:
       path: "."
       ref: "v0.1"
-      resolved-ref: "3a93a7918a933119ed8a0a7d4e2d539e9acf689f"
+      resolved-ref: "23ee0ee12cea7a63c70e26cf15c6940e1ca0b64c"
       url: "git://paulmin.nl/dart/lipl-encrypt.git"
     source: git
     version: "1.0.0"
@@ -615,11 +615,11 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: "v0.4"
-      resolved-ref: f6a81a9ec504a1699297daf119c2c7dd7e4e7522
+      ref: "v0.5"
+      resolved-ref: "8b865c4b68330b7ccbcf4af853170f7e844ce941"
       url: "git://paulmin.nl/dart/preferences-bloc.git"
     source: git
-    version: "0.4.0"
+    version: "0.5.0"
   process:
     dependency: transitive
     description:
@@ -956,4 +956,4 @@ packages:
     version: "3.1.1"
 sdks:
   dart: ">=2.17.6 <3.0.0"
-  flutter: ">=3.0.0"
+  flutter: ">=3.0.5"
