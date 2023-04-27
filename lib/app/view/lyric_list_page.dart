@@ -162,18 +162,16 @@ Widget renderLyricList(Stream<List<Lyric>> lyricsStream) {
             ),
             ButtonData<Lyric>(
               label: l10n.deleteButtonLabel,
-              onPressed: (Lyric lyric) async {
-                final Future<bool> confirmDialog = confirm(
+              onPressed: (Lyric lyric) {
+                confirm(
                   context,
                   title: l10n.confirm,
                   content: '${l10n.delete} "${lyric.title}"?',
                   textOK: l10n.okButtonLabel,
                   textCancel: l10n.cancelButtonLabel,
-                );
-
-                if (await confirmDialog) {
-                  await liplRestCubit.deleteLyric(lyric.id);
-                }
+                ).then((result) => {
+                      if (result) {liplRestCubit.deleteLyric(lyric.id)}
+                    });
               },
             ),
             ButtonData<Lyric>(
@@ -283,18 +281,17 @@ class BluetoothIndicator extends StatelessWidget {
     return BlocBuilder<BleScanCubit, BleScanState>(
       builder: (BuildContext context, BleScanState state) => IconButton(
         onPressed: () async {
+          final BleScanCubit bleScanCubit = context.read<BleScanCubit>();
           if (context.isMobile && !state.permissionGranted) {
             if (await Permission.bluetooth.request() ==
                     PermissionStatus.granted &&
                 await Permission.location.request() ==
                     PermissionStatus.granted) {
-              if (context.mounted) {
-                context.read<BleScanCubit>().permissionGranted();
-              }
+              bleScanCubit.permissionGranted();
             }
           }
           if (context.mounted) {
-            await context.read<BleScanCubit>().start();
+            await bleScanCubit.start();
           }
           if (context.mounted) {
             Navigator.of(context).push(SelectDisplayServerPage.route());

@@ -9,13 +9,15 @@ import 'package:lipl_rest_bloc/lipl_rest_bloc.dart';
 class SaveIntent extends Intent {}
 
 class SaveAction extends Action<SaveIntent> {
-  SaveAction(this.context, this.isNew);
-  final BuildContext context;
+  SaveAction(this.editPlaylistCubit, this.liplRestCubit, this.isNew);
+  // final BuildContext context;
+  final EditPlaylistCubit editPlaylistCubit;
+  final LiplRestCubit liplRestCubit;
   final bool isNew;
 
   @override
   Object? invoke(SaveIntent intent) async {
-    final EditPlaylistState state = context.read<EditPlaylistCubit>().state;
+    final EditPlaylistState state = editPlaylistCubit.state;
     if (isNew) {
       final PlaylistPost playlistPost = PlaylistPost(
         title: state.title,
@@ -25,18 +27,16 @@ class SaveAction extends Action<SaveIntent> {
             )
             .toList(),
       );
-      await context.read<LiplRestCubit>().postPlaylist(playlistPost);
+      await liplRestCubit.postPlaylist(playlistPost);
     } else {
       final Playlist playlist = Playlist(
         id: state.id,
         title: state.title,
         members: state.members.map((Lyric lyric) => lyric.id).toList(),
       );
-      await context.read<LiplRestCubit>().putPlaylist(playlist);
+      await liplRestCubit.putPlaylist(playlist);
     }
-    if (context.mounted) {
-      context.read<EditPlaylistCubit>().submitted();
-    }
+    editPlaylistCubit.submitted();
     return null;
   }
 }
@@ -99,6 +99,9 @@ class EditPlaylistView extends StatelessWidget {
         context.select((EditPlaylistCubit cubit) => cubit.state.status);
     final bool isNew =
         context.select((EditPlaylistCubit cubit) => cubit.state.id == null);
+    final EditPlaylistCubit editPlaylistCubit =
+        context.read<EditPlaylistCubit>();
+    final LiplRestCubit liplRestCubit = context.read<LiplRestCubit>();
 
     return Shortcuts(
       shortcuts: <SingleActivator, Intent>{
@@ -108,7 +111,7 @@ class EditPlaylistView extends StatelessWidget {
       },
       child: Actions(
         actions: <Type, Action<Intent>>{
-          SaveIntent: SaveAction(context, isNew),
+          SaveIntent: SaveAction(editPlaylistCubit, liplRestCubit, isNew),
           CloseIntent: CloseAction(context),
         },
         child: Builder(

@@ -34,6 +34,9 @@ class SelectDisplayServerView extends StatelessWidget {
                 (device) => BlocBuilder<BleConnectionCubit, BleConnectionState>(
                   builder: (BuildContext context,
                       BleConnectionState connectionState) {
+                    final BleScanCubit bleScanCubit =
+                        context.read<BleScanCubit>();
+                    final NavigatorState navigator = Navigator.of(context);
                     return ListTile(
                       title: Text(device.name),
                       subtitle: Text(device.id),
@@ -41,12 +44,10 @@ class SelectDisplayServerView extends StatelessWidget {
                           ? const CurrentSelectedConnectionButton()
                           : TextButton(
                               onPressed: () async {
-                                context.read<BleScanCubit>().select(device);
-                                await context.read<BleScanCubit>().stop();
+                                bleScanCubit.select(device);
+                                await bleScanCubit.stop();
 
-                                if (context.mounted) {
-                                  Navigator.of(context).pop();
-                                }
+                                navigator.pop();
                               },
                               child: const Text('Connect'),
                             ),
@@ -65,15 +66,17 @@ class CurrentSelectedConnectionButton extends StatelessWidget {
   const CurrentSelectedConnectionButton({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) =>
-      BlocBuilder<BleConnectionCubit, BleConnectionState>(
-        builder: (BuildContext context, BleConnectionState state) => TextButton(
-          onPressed: state.isConnected
-              ? () async {
-                  context.read<BleScanCubit>().select(null);
-                }
-              : null,
-          child: Text(state.isConnected ? 'Disconnect' : 'Connecting'),
-        ),
-      );
+  Widget build(BuildContext context) {
+    final BleScanCubit bleScanCubit = context.read<BleScanCubit>();
+    return BlocBuilder<BleConnectionCubit, BleConnectionState>(
+      builder: (BuildContext context, BleConnectionState state) => TextButton(
+        onPressed: state.isConnected
+            ? () async {
+                bleScanCubit.select(null);
+              }
+            : null,
+        child: Text(state.isConnected ? 'Disconnect' : 'Connecting'),
+      ),
+    );
+  }
 }
