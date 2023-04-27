@@ -45,7 +45,9 @@ class SaveAction extends Action<SaveIntent> {
         ),
       );
     }
-    context.read<EditLyricCubit>().submitted();
+    if (context.mounted) {
+      context.read<EditLyricCubit>().submitted();
+    }
     return null;
   }
 }

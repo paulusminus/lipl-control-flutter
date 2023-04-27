@@ -34,7 +34,9 @@ class SaveAction extends Action<SaveIntent> {
       );
       await context.read<LiplRestCubit>().putPlaylist(playlist);
     }
-    context.read<EditPlaylistCubit>().submitted();
+    if (context.mounted) {
+      context.read<EditPlaylistCubit>().submitted();
+    }
     return null;
   }
 }

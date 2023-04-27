@@ -119,14 +119,14 @@ Widget renderPlaylistSummary(
     subtitle: Text(
       playlist.members
           .map(
-            (String member) => lyrics.firstWhere(
-                (Lyric lyric) => lyric.id == member,
-                orElse: () => null as Lyric),
+            (String member) => lyrics.cast<Lyric?>().firstWhere(
+                (Lyric? lyric) => lyric?.id == member,
+                orElse: () => null),
           )
           .where(
             (Lyric? lyric) => lyric != null,
           )
-          .map((Lyric lyric) => lyric.title)
+          .map((Lyric? lyric) => lyric!.title)
           .join('\n'),
     ),
   );
@@ -137,6 +137,7 @@ Widget renderLyricList(Stream<List<Lyric>> lyricsStream) {
     stream: lyricsStream,
     builder: (BuildContext context, AsyncSnapshot<List<Lyric>> lyrics) {
       final AppLocalizations l10n = context.l10n;
+      final LiplRestCubit liplRestCubit = context.read<LiplRestCubit>();
 
       if (lyrics.data == null) {
         return const SizedBox.shrink();
@@ -162,14 +163,16 @@ Widget renderLyricList(Stream<List<Lyric>> lyricsStream) {
             ButtonData<Lyric>(
               label: l10n.deleteButtonLabel,
               onPressed: (Lyric lyric) async {
-                if (await confirm(
+                final Future<bool> confirmDialog = confirm(
                   context,
                   title: l10n.confirm,
                   content: '${l10n.delete} "${lyric.title}"?',
                   textOK: l10n.okButtonLabel,
                   textCancel: l10n.cancelButtonLabel,
-                )) {
-                  await context.read<LiplRestCubit>().deleteLyric(lyric.id);
+                );
+
+                if (await confirmDialog) {
+                  await liplRestCubit.deleteLyric(lyric.id);
                 }
               },
             ),
@@ -210,14 +213,15 @@ Widget renderPlaylistList() {
                 PlayPage.route(
                   lyricParts: playlist.members
                       .map(
-                        (String id) => state.lyrics.firstWhere(
-                          (Lyric lyric) => lyric.id == id,
-                          orElse: () => null as Lyric,
-                        ),
+                        (String id) => state.lyrics.cast<Lyric?>().firstWhere(
+                              (Lyric? lyric) => lyric?.id == id,
+                              orElse: () => null,
+                            ),
                       )
                       .where(
                         (Lyric? lyric) => lyric != null,
                       )
+                      .cast<Lyric>()
                       .toList()
                       .toLyricParts(),
                   title: playlist.title,
@@ -229,14 +233,16 @@ Widget renderPlaylistList() {
           ButtonData<Playlist>(
             label: l10n.deleteButtonLabel,
             onPressed: (Playlist playlist) async {
-              if (await confirm(
+              final LiplRestCubit liplRestCubit = context.read<LiplRestCubit>();
+              final confirmDialog = confirm(
                 context,
                 title: l10n.confirm,
                 content: '${l10n.delete} "${playlist.title}"?',
                 textOK: l10n.okButtonLabel,
                 textCancel: l10n.cancelButtonLabel,
-              )) {
-                await context.read<LiplRestCubit>().deletePlaylist(playlist.id);
+              );
+              if (await confirmDialog) {
+                await liplRestCubit.deletePlaylist(playlist.id);
               }
             },
           ),
@@ -250,12 +256,14 @@ Widget renderPlaylistList() {
                   members: <Lyric>[
                     ...playlist.members
                         .map(
-                          (String lyricId) => state.lyrics.firstWhere(
-                            (Lyric lyric) => lyric.id == lyricId,
-                            orElse: () => null as Lyric,
-                          ),
+                          (String lyricId) =>
+                              state.lyrics.cast<Lyric?>().firstWhere(
+                                    (Lyric? lyric) => lyric?.id == lyricId,
+                                    orElse: () => null,
+                                  ),
                         )
                         .where((Lyric? lyric) => lyric != null)
+                        .cast<Lyric>()
                   ],
                 ),
               );
@@ -280,11 +288,17 @@ class BluetoothIndicator extends StatelessWidget {
                     PermissionStatus.granted &&
                 await Permission.location.request() ==
                     PermissionStatus.granted) {
-              context.read<BleScanCubit>().permissionGranted();
+              if (context.mounted) {
+                context.read<BleScanCubit>().permissionGranted();
+              }
             }
           }
-          await context.read<BleScanCubit>().start();
-          Navigator.of(context).push(SelectDisplayServerPage.route());
+          if (context.mounted) {
+            await context.read<BleScanCubit>().start();
+          }
+          if (context.mounted) {
+            Navigator.of(context).push(SelectDisplayServerPage.route());
+          }
         },
         icon: BlocBuilder<BleConnectionCubit, BleConnectionState>(
           builder: (BuildContext context, BleConnectionState state) {

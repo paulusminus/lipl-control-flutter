@@ -22,14 +22,10 @@ Future<void> main() async {
 
   final Logger logger = Logger('Lipl');
 
-  BlocOverrides.runZoned(
-    () {
-      runApp(
-        RepoProviders(
-          logger: logger,
-        ),
-      );
-    },
-    blocObserver: LiplBlocObserver(kDebugMode ? logger : null),
+  Bloc.observer = LiplBlocObserver(kDebugMode ? logger : null);
+  runApp(
+    RepoProviders(
+      logger: logger,
+    ),
   );
 }

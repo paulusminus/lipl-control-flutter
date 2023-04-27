@@ -129,8 +129,7 @@ void Function(int) updatePage(
   };
 }
 
-void updateCommand(BuildContext context, String command) {
-  final BleConnectionCubit cubit = context.read<BleConnectionCubit>();
+void updateCommand(BleConnectionCubit cubit, String command) {
   if (cubit.state.isConnected) {
     cubit.updateCommand(command);
     cubit.writeCommand();
@@ -200,19 +199,22 @@ class _PlayPageState extends State<PlayPage> {
                             child: Text(l10n.poweroff),
                           ),
                         ],
-                        onSelected: (String command) async {
+                        onSelected: (String command) {
+                          final BleConnectionCubit bleConnectionCubit =
+                              context.read<BleConnectionCubit>();
                           if (command == 'o') {
-                            if (await confirm(
+                            confirm(
                               context,
                               title: l10n.poweroff,
                               content: l10n.confirmPoweroff,
                               textOK: l10n.okButtonLabel,
                               textCancel: l10n.cancelButtonLabel,
-                            )) {
-                              updateCommand(context, command);
-                            }
+                            ).then((result) => {
+                                  if (result)
+                                    {updateCommand(bleConnectionCubit, command)}
+                                });
                           } else {
-                            updateCommand(context, command);
+                            updateCommand(bleConnectionCubit, command);
                           }
                         },
                         icon: const Icon(Icons.settings_display),

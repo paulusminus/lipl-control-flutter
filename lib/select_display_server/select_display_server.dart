@@ -44,7 +44,9 @@ class SelectDisplayServerView extends StatelessWidget {
                                 context.read<BleScanCubit>().select(device);
                                 await context.read<BleScanCubit>().stop();
 
-                                Navigator.of(context).pop();
+                                if (context.mounted) {
+                                  Navigator.of(context).pop();
+                                }
                               },
                               child: const Text('Connect'),
                             ),
