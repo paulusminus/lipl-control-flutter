@@ -1,8 +1,8 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:lipl_bloc/app/view/providers.dart';
-import 'package:lipl_bloc/bloc_observer.dart';
+import 'package:lipl_control/app/view/providers.dart';
+import 'package:lipl_control/bloc_observer.dart';
 import 'package:logging/logging.dart';
 import 'package:universal_io/io.dart';
 

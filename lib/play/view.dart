@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lipl_ble/lipl_ble.dart';
-import 'package:lipl_bloc/l10n/l10n.dart';
-import 'package:lipl_bloc/widget/confirm.dart';
+import 'package:lipl_control/l10n/l10n.dart';
+import 'package:lipl_control/widget/confirm.dart';
 import 'play.dart';
 
 class PreviousIntent extends Intent {}

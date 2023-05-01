@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:lipl_bloc/app/app.dart';
-import 'package:lipl_bloc/l10n/l10n.dart';
+import 'package:lipl_control/app/app.dart';
+import 'package:lipl_control/l10n/l10n.dart';
 import 'package:preferences_bloc/preferences_bloc.dart';
 
 class CloseIntent extends Intent {}

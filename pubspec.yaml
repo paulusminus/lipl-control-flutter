@@ -1,5 +1,5 @@
-name: lipl_bloc
-description: A new Flutter project.
+name: lipl_control
+description: App that is used to maintain lyrics and playlists and send output to lipl-display
 publish_to: 'none'
 version: 1.2.0
 

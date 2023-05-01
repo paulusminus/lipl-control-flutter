@@ -1,4 +1,4 @@
-import 'package:lipl_bloc/widget/widget.dart';
+import 'package:lipl_control/widget/widget.dart';
 
 class ButtonData<T> {
   ButtonData({

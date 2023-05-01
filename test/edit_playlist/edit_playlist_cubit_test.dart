@@ -1,6 +1,6 @@
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:lipl_bloc/edit_playlist/edit_playlist_cubit.dart';
+import 'package:lipl_control/edit_playlist/edit_playlist_cubit.dart';
 import 'package:lipl_rest_bloc/lipl_rest_bloc.dart';
 
 void main() {

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:lipl_bloc/app/app.dart';
-import 'package:lipl_bloc/l10n/l10n.dart';
-import 'package:lipl_bloc/search/search_cubit.dart';
-import 'package:lipl_bloc/widget/widget.dart';
+import 'package:lipl_control/app/app.dart';
+import 'package:lipl_control/l10n/l10n.dart';
+import 'package:lipl_control/search/search_cubit.dart';
+import 'package:lipl_control/widget/widget.dart';
 import 'package:lipl_rest_bloc/lipl_rest_bloc.dart';
 
 class SearchPage extends StatelessWidget {

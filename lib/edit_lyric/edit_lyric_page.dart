@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:lipl_bloc/l10n/l10n.dart';
+import 'package:lipl_control/l10n/l10n.dart';
 import 'package:lipl_rest_bloc/lipl_rest_bloc.dart';
 import 'package:parts/parts.dart';
 import 'edit_lyric_cubit.dart';

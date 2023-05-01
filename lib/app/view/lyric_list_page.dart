@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lipl_ble/lipl_ble.dart';
-import 'package:lipl_bloc/app/app.dart';
-import 'package:lipl_bloc/edit_lyric/edit_lyric.dart';
-import 'package:lipl_bloc/edit_playlist/edit_playlist.dart';
-import 'package:lipl_bloc/edit_preferences/edit_preferences.dart';
-import 'package:lipl_bloc/l10n/l10n.dart';
-import 'package:lipl_bloc/play/play.dart';
-import 'package:lipl_bloc/search/search_view.dart';
-import 'package:lipl_bloc/select_display_server/select_display_server.dart';
-import 'package:lipl_bloc/widget/widget.dart';
+import 'package:lipl_control/app/app.dart';
+import 'package:lipl_control/edit_lyric/edit_lyric.dart';
+import 'package:lipl_control/edit_playlist/edit_playlist.dart';
+import 'package:lipl_control/edit_preferences/edit_preferences.dart';
+import 'package:lipl_control/l10n/l10n.dart';
+import 'package:lipl_control/play/play.dart';
+import 'package:lipl_control/search/search_view.dart';
+import 'package:lipl_control/select_display_server/select_display_server.dart';
+import 'package:lipl_control/widget/widget.dart';
 import 'package:lipl_rest_bloc/lipl_rest_bloc.dart';
 import 'package:permission_handler/permission_handler.dart';
 
@@ -138,6 +138,7 @@ Widget renderLyricList(Stream<List<Lyric>> lyricsStream) {
     builder: (BuildContext context, AsyncSnapshot<List<Lyric>> lyrics) {
       final AppLocalizations l10n = context.l10n;
       final LiplRestCubit liplRestCubit = context.read<LiplRestCubit>();
+      final NavigatorState navigator = Navigator.of(context);
 
       if (lyrics.data == null) {
         return const SizedBox.shrink();
@@ -151,7 +152,7 @@ Widget renderLyricList(Stream<List<Lyric>> lyricsStream) {
             ButtonData<Lyric>(
               label: l10n.playButtonLabel,
               onPressed: (Lyric lyric) {
-                Navigator.of(context).push(
+                navigator.push(
                   PlayPage.route(
                     lyricParts: <Lyric>[lyric].toLyricParts(),
                     title: lyric.title,
@@ -177,7 +178,7 @@ Widget renderLyricList(Stream<List<Lyric>> lyricsStream) {
             ButtonData<Lyric>(
               label: l10n.editButtonLabel,
               onPressed: (Lyric lyric) {
-                Navigator.of(context).push(
+                navigator.push(
                   EditLyricPage.route(
                     id: lyric.id,
                     title: lyric.title,
@@ -197,6 +198,7 @@ Widget renderPlaylistList() {
   return BlocBuilder<LiplRestCubit, RestState>(
     builder: (BuildContext context, RestState state) {
       final AppLocalizations l10n = context.l10n;
+      final NavigatorState navigator = Navigator.of(context);
       return expansionPanelList<Playlist>(
         items: state.playlists,
         selectId: selectPlaylistId,
@@ -207,7 +209,7 @@ Widget renderPlaylistList() {
           ButtonData<Playlist>(
             label: l10n.playButtonLabel,
             onPressed: (Playlist playlist) {
-              Navigator.of(context).push(
+              navigator.push(
                 PlayPage.route(
                   lyricParts: playlist.members
                       .map(
@@ -247,7 +249,7 @@ Widget renderPlaylistList() {
           ButtonData<Playlist>(
             label: l10n.editButtonLabel,
             onPressed: (Playlist playlist) {
-              Navigator.of(context).push(
+              navigator.push(
                 EditPlaylistPage.route(
                   id: playlist.id,
                   title: playlist.title,
@@ -282,6 +284,7 @@ class BluetoothIndicator extends StatelessWidget {
       builder: (BuildContext context, BleScanState state) => IconButton(
         onPressed: () async {
           final BleScanCubit bleScanCubit = context.read<BleScanCubit>();
+          final NavigatorState navigator = Navigator.of(context);
           if (context.isMobile && !state.permissionGranted) {
             if (await Permission.bluetooth.request() ==
                     PermissionStatus.granted &&
@@ -290,12 +293,8 @@ class BluetoothIndicator extends StatelessWidget {
               bleScanCubit.permissionGranted();
             }
           }
-          if (context.mounted) {
-            await bleScanCubit.start();
-          }
-          if (context.mounted) {
-            Navigator.of(context).push(SelectDisplayServerPage.route());
-          }
+          await bleScanCubit.start();
+          navigator.push(SelectDisplayServerPage.route());
         },
         icon: BlocBuilder<BleConnectionCubit, BleConnectionState>(
           builder: (BuildContext context, BleConnectionState state) {

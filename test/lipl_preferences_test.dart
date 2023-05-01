@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:lipl_bloc/app/app.dart';
+import 'package:lipl_control/app/app.dart';
 
 void main() {
   group('LiplPreferences', () {

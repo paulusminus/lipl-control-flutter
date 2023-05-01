@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lipl_ble/lipl_ble.dart';
-import 'package:lipl_bloc/l10n/l10n.dart';
+import 'package:lipl_control/l10n/l10n.dart';
 
 class SelectDisplayServerPage extends StatelessWidget {
   const SelectDisplayServerPage({Key? key}) : super(key: key);

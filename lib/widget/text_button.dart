@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:lipl_bloc/widget/widget.dart';
+import 'package:lipl_control/widget/widget.dart';
 
 TextButton textButton<T>({
   required T item,
