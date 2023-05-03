@@ -33,9 +33,7 @@ dependencies:
       ref: v1.2
   logging: ^1.1.1
   parts: 
-    git:
-      url: git://paulmin.nl/dart/parts.git
-      ref: v1.3
+    path: packages/parts
   preferences_bloc:
     git:
       url: git://paulmin.nl/dart/preferences-bloc.git
