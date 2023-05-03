@@ -471,29 +471,23 @@ packages:
   lipl_ble:
     dependency: "direct main"
     description:
-      path: "."
-      ref: "v1.2"
-      resolved-ref: "6a3abd35c5a35c93c5ffda8efaa70e2b68006582"
-      url: "git://paulmin.nl/dart/lipl-ble.git"
-    source: git
+      path: "packages/lipl-ble"
+      relative: true
+    source: path
     version: "1.2.0"
   lipl_encrypt:
     dependency: "direct main"
     description:
-      path: "."
-      ref: "v1.2"
-      resolved-ref: f30afef253346b6c1eab58420dedc80cfa69003b
-      url: "git://paulmin.nl/dart/lipl-encrypt.git"
-    source: git
+      path: "packages/lipl-encrypt"
+      relative: true
+    source: path
     version: "1.2.0"
   lipl_rest_bloc:
     dependency: "direct main"
     description:
-      path: "."
-      ref: "v1.2"
-      resolved-ref: "0249334d5610354394e8f4f9ffbd6d6c751e0116"
-      url: "git://paulmin.nl/dart/lipl-rest-bloc.git"
-    source: git
+      path: "packages/lipl-rest-bloc"
+      relative: true
+    source: path
     version: "1.2.0"
   logging:
     dependency: "direct main"
@@ -689,11 +683,9 @@ packages:
   preferences_bloc:
     dependency: "direct main"
     description:
-      path: "."
-      ref: "v1.2"
-      resolved-ref: "57f65bb4b7f2bdcc486ca1dcfb7f2a07631d08db"
-      url: "git://paulmin.nl/dart/preferences-bloc.git"
-    source: git
+      path: "packages/preferences_bloc"
+      relative: true
+    source: path
     version: "1.2.0"
   process:
     dependency: transitive
@@ -1069,5 +1061,5 @@ packages:
     source: hosted
     version: "3.1.1"
 sdks:
-  dart: ">=2.19.0 <3.0.0"
-  flutter: ">=3.7.0"
+  dart: ">=2.19.6 <3.0.0"
+  flutter: ">=3.7.12"

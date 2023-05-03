@@ -1,0 +1,32 @@
+name: lipl_rest_bloc
+description: Library request and handle response from Lipl Service
+publish_to: none
+version: 1.2.0
+
+environment:
+  sdk: ">=2.18.2 <3.0.0"
+
+dependencies:
+  bloc: ^8.1.1
+  dio: ^5.1.1
+  equatable: ^2.0.5
+  json_annotation: ^4.8.0
+  logging: ^1.1.1
+  retrofit: ^4.0.1
+
+dev_dependencies:
+  bloc_test: ^9.1.1
+  build_runner: ^2.3.3
+  build_test: ^2.1.7
+  http_mock_adapter: ^0.4.2
+  retrofit_generator: ^6.0.0+3
+  flutter_lints: ^2.0.1
+  json_serializable: ^6.6.1
+  mocktail: ^0.3.0
+  path: ^1.8.3
+  parts:
+    path: ../parts
+  test: ^1.24.2
+  uuid: ^3.0.7
+  fast_base58: ^0.2.1
+
