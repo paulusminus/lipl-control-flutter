@@ -1,6 +1,5 @@
-# lipl_bloc
+# Lipl Control Flutter version
 
-Lipl is an application that display lyrics and playlists. Optionally displays lyrics to a bluetooth connect display computer.
+Lipl Control Flutter is an application that display lyrics and playlists. Optionally displays lyrics to a bluetooth connect display computer.
 
-## Getting Started
 
